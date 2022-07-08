@@ -36,8 +36,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button 
+                Name="ApplyNewNoteButton"
                 Grid.Column="0" 
-                Command="{Binding CreateNewNote}"
+                Click="OnClickCreateNewNote"
                 Background="Green" 
                 >
                 Add Note
@@ -46,7 +47,7 @@
                 Grid.Column="2" 
                 Click="OnClickCancel"
                 Background="Red" 
-                >
+            >
                 Cancel
             </Button>
         </Grid>
