@@ -1,7 +1,9 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -20,11 +22,14 @@ public partial class NoteListView : UserControl
     Data = ServicesOfApp.Resolver.GetRequiredService<NoteListViewModel>();
     DataContext = Data;
   }
-
   
-
   private void InitializeComponent()
   {
     AvaloniaXamlLoader.Load(this);
+  }
+
+  private void Button_OnClick(object? sender, RoutedEventArgs e)
+  {
+    Console.WriteLine($"Clicked");
   }
 }

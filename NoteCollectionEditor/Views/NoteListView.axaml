@@ -3,9 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:NoteCollectionEditor.Models"
+             xmlns:noteCollectionEditor="clr-namespace:NoteCollectionEditor"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteCollectionEditor.Views.NoteListView"
              >
+    
     
     <UserControl.Styles>
         <Style Selector="StackPanel.NoteContainer">
@@ -15,6 +17,11 @@
     </UserControl.Styles>
     
     <StackPanel>
+        <Button
+            Margin="10"
+            Click="Button_OnClick" HorizontalAlignment="Right"
+            Content="{DynamicResource AddIcon}"
+            />
         
         <ItemsControl Items="{Binding Notes}" Background="Black">
             <ItemsControl.ItemTemplate>
