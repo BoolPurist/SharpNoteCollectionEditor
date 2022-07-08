@@ -1,4 +1,9 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Windows.Input;
+using DynamicData.Binding;
+using NoteCollectionEditor.Models;
 using ReactiveUI;
 using Tmds.DBus;
 
@@ -9,51 +14,46 @@ public class AddNoteViewModel : ViewModelBase
   private string _newTitle;
   private string _newContent;
   private bool _isSumittable = false;
+  
+  public event EventHandler<NoteModel>? Submit;
 
-  public event EventHandler<bool>? AbilityToSubmitHasChanged;
+  public IReactiveCommand SubmitNewNote { get; private set; }
 
   public string NewTitle
   {
     get => _newTitle;
-    set
-    {
-      _newTitle = value;
-      CheckAbilityForSubmitHasChanged();
-      this.RaiseAndSetIfChanged(ref _newTitle, value);
-    }
+    set => this.RaiseAndSetIfChanged(ref _newTitle, value);
   }
 
   public string NewContent
   {
     get => _newContent;
-    set
-    {
-      _newContent = value;
-      CheckAbilityForSubmitHasChanged();
-      this.RaiseAndSetIfChanged(ref _newContent, value);
-    }
+    set => this.RaiseAndSetIfChanged(ref _newContent, value);
   }
 
   public AddNoteViewModel()
   {
     _newTitle = "";
     _newContent = "";
+
+    var canBeSubmitted = this.WhenAnyValue(
+      data => data.NewTitle,
+      data => data.NewContent,
+      (title, content) =>
+        !string.IsNullOrWhiteSpace(title)
+        && !string.IsNullOrWhiteSpace(content)
+      );
+
+    SubmitNewNote = ReactiveCommand.Create(
+      () => Submit?.Invoke(null, new NoteModel
+      {
+        Title = NewTitle,
+        Content = NewContent
+      }),
+      canBeSubmitted
+    );
   }
-
-  public bool HasValidTitle => !string.IsNullOrWhiteSpace(NewTitle);
-  public bool HasValidContent => !string.IsNullOrWhiteSpace(NewContent);
-
-  public bool HasValidDataForNote => HasValidContent && HasValidTitle;
-
-  private void CheckAbilityForSubmitHasChanged()
-  {
-    bool currentStatus = HasValidDataForNote;
-    if (_isSumittable != currentStatus)
-    {
-      AbilityToSubmitHasChanged?.Invoke(this, currentStatus);
-    }
-    _isSumittable = currentStatus;
-  }
+  
 
   public override string ToString()
   {

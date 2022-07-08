@@ -38,7 +38,7 @@
             <Button 
                 Name="ApplyNewNoteButton"
                 Grid.Column="0" 
-                Click="OnClickCreateNewNote"
+                Command="{Binding Data.SubmitNewNote}"
                 Background="Green" 
                 >
                 Add Note

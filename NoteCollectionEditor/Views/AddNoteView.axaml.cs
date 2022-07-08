@@ -29,46 +29,23 @@ public partial class AddNoteView : Window
     {
       Data = new AddNoteViewModel();
       DataContext = this;
-      ApplyNewNoteButton = this.FindControl<Button>(nameof(ApplyNewNoteButton));
-      ToggleApplyButton(null, false);
-      Data.AbilityToSubmitHasChanged += ToggleApplyButton;
+      Data.Submit += OnSubmit;
     }
   }
-  
-  
+
+  private void OnSubmit(object? sender, NoteModel toSubmit)
+  {
+    Close(toSubmit);
+  }
+
+  private void OnClickCancel(object? sender, RoutedEventArgs e)
+  {
+    Close(null);
+  }
 
   private void InitializeComponent()
   {
     AvaloniaXamlLoader.Load(this);
   }
 
-  private void ToggleApplyButton(object? sender, bool newToggleValue)
-  {
-    if (ApplyNewNoteButton == null)
-    {
-      Console.WriteLine("asdfasdf");
-    }
-    else
-    {
-      ApplyNewNoteButton.IsEnabled = newToggleValue;
-      Console.WriteLine($"AddNewButton.IsEnabled: {ApplyNewNoteButton.IsEnabled}");
-    }
-
-
-  }
-
-  public void OnClickCreateNewNote(object? parameter, RoutedEventArgs routedEventArgs)
-  {
-    var newNote = new NoteModel()
-    {
-      Title = Data.NewTitle,
-      Content = Data.NewContent
-    };
-    
-    Close(newNote);
-  }
-  private void OnClickCancel(object? sender, RoutedEventArgs e)
-  {
-    Close(null);
-  }
 }
