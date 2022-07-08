@@ -1,24 +1,20 @@
 using System.Collections.Generic;
 using NoteCollectionEditor.Models;
+using NoteCollectionEditor.ViewModels;
 
 namespace NoteCollectionEditor.Services;
 
 public class NoteListInMemorySource : INoteListRepository
 {
+  private IEnumerable<NoteModel> _data;
+
+  public NoteListInMemorySource(IEnumerable<NoteModel> data)
+  {
+    _data = data;
+  }
+
   public IEnumerable<NoteModel> LoadAll()
   {
-    return new List<NoteModel>()
-    {
-      new NoteModel()
-      {
-        Title = "The very 1. Note",
-        Content = "More to come."
-      },
-      new NoteModel()
-      {
-        Title = "The very 2. Note",
-        Content = "Some more content."
-      }
-    };
+    return _data;
   }
 }

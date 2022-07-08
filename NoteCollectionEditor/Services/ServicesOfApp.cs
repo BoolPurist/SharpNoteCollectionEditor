@@ -1,4 +1,5 @@
 using NoteCollectionEditor.Extensions;
+using NoteCollectionEditor.Models;
 using NoteCollectionEditor.ViewModels;
 using NoteCollectionEditor.Views;
 using Splat;
@@ -35,6 +36,10 @@ public static class ServicesOfApp
 
   private static INoteListRepository CreateINoteListRepository()
   {
-    return new NoteListInMemorySource();
+    return new NoteListInMemorySource(new []
+    {
+      new NoteModel() {Title = "First", Content = "First Content"},
+      new NoteModel() {Title = "Second", Content = "Second Content"}
+    });
   }
 }
