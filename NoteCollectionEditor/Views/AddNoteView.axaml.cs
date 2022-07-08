@@ -29,7 +29,7 @@ public partial class AddNoteView : Window
     {
       Data = new AddNoteViewModel();
       DataContext = this;
-      ApplyNewNoteButton = this.FindControl<Button>("ApplyNewNoteButton");
+      ApplyNewNoteButton = this.FindControl<Button>(nameof(ApplyNewNoteButton));
       ToggleApplyButton(null, false);
       Data.AbilityToSubmitHasChanged += ToggleApplyButton;
     }
