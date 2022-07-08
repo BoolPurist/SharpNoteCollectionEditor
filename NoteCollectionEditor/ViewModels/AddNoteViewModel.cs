@@ -16,7 +16,7 @@ public class AddNoteViewModel : ViewModelBase
 
   public event EventHandler<NoteModel>? Submit;
 
-  public IReactiveCommand SubmitNewNote { get; private set; }
+  public ICommand SubmitNewNote { get; private set; }
 
   public string NewTitle
   {

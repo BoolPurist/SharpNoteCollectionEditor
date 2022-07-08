@@ -31,11 +31,14 @@ namespace NoteCollectionEditor
       base.OnFrameworkInitializationCompleted();
     }
 
+    private static bool _isSetup = false;
+
     public static void RegisterAppServices()
     {
       IMutableDependencyResolver services = Locator.CurrentMutable;
       IReadonlyDependencyResolver resolver = Locator.Current;
       ServicesOfApp.Register(services, resolver);
+      _isSetup = true;
     }
   }
 }
