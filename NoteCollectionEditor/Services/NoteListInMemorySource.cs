@@ -13,6 +13,11 @@ public class NoteListInMemorySource : INoteListRepository
       {
         Title = "The very 1. Note",
         Content = "More to come."
+      },
+      new NoteModel()
+      {
+        Title = "The very 2. Note",
+        Content = "Some more content."
       }
     };
   }

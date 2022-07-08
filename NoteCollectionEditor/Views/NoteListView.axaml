@@ -2,7 +2,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:NoteCollectionEditor.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="NoteCollectionEditor.Views.NoteListView">
+             x:Class="NoteCollectionEditor.Views.NoteListView"
+             >
+    
+    <UserControl.Styles>
+        <Style Selector="StackPanel.NoteContainer">
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Spacing" Value="15"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <StackPanel>
+        
+        <ItemsControl Items="{Binding Notes}" Background="Black">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="models:NoteModel">
+                    <StackPanel Classes="NoteContainer" Background="Gray">
+                        <TextBlock TextAlignment="Center" Text="{Binding Title}"></TextBlock>
+                        <TextBlock TextAlignment="Center" Text="{Binding Content}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+    
     
 </UserControl>

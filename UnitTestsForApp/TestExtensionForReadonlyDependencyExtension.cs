@@ -8,7 +8,6 @@ public class TestExtensionForReadonlyDependencyExtension
   [Fact]
   public void TestIfThrowsForNull()
   {
-    IMutableDependencyResolver services = Locator.CurrentMutable;
     IReadonlyDependencyResolver resolver = Locator.Current;
 
     Assert.Throws<InvalidOperationException>(() =>
