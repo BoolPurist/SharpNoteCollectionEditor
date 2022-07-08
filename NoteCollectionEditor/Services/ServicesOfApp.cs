@@ -21,6 +21,7 @@ public static class ServicesOfApp
   private static void RegisterStandAloneServices(IMutableDependencyResolver services)
   {
     services.Register(CreateMainWindow, typeof(MainWindow));
+    services.Register(CreateAddNoteViewModel, typeof(AddNoteViewModel));
     services.Register(CreateINoteListRepository, typeof(INoteListRepository));
   }
 
@@ -32,6 +33,11 @@ public static class ServicesOfApp
   private static NoteListViewModel CreateNoteListViewModel()
   {
     return new NoteListViewModel(Resolver.GetRequiredService<INoteListRepository>());
+  }
+
+  private static AddNoteViewModel CreateAddNoteViewModel()
+  {
+    return new AddNoteViewModel();
   }
 
   private static INoteListRepository CreateINoteListRepository()

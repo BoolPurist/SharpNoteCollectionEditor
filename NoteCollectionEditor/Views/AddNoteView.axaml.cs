@@ -5,7 +5,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Metadata;
+using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
+using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
 using ReactiveUI;
 
@@ -27,7 +29,7 @@ public partial class AddNoteView : Window
 
     void SetupContextAndEvents()
     {
-      Data = new AddNoteViewModel();
+      Data = ServicesOfApp.Resolver.GetRequiredService<AddNoteViewModel>();
       DataContext = this;
       Data.Submit += OnSubmit;
     }

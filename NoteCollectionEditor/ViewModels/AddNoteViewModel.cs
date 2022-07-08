@@ -13,8 +13,7 @@ public class AddNoteViewModel : ViewModelBase
 {
   private string _newTitle;
   private string _newContent;
-  private bool _isSumittable = false;
-  
+
   public event EventHandler<NoteModel>? Submit;
 
   public IReactiveCommand SubmitNewNote { get; private set; }

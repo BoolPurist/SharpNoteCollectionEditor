@@ -21,6 +21,13 @@ public class TestForRegisteringServices
   {
     AssertForOneService<INoteListRepository>();
   }
+  
+  [Fact]
+  public void ShouldRetrieveAddNoteViewModel()
+  {
+    AssertForOneService<AddNoteViewModel>();
+  }
+
 
   private static void AssertForOneService<T>()
   {
