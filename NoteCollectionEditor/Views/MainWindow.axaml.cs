@@ -1,4 +1,7 @@
+
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using NoteCollectionEditor.Models;
 
 namespace NoteCollectionEditor.Views
 {
@@ -7,6 +10,23 @@ namespace NoteCollectionEditor.Views
     public MainWindow()
     {
       InitializeComponent();
+      DataContext = this;
     }
+
+
+    private async void OnClickSpawnAddNoteWindow(object? sender, RoutedEventArgs e)
+    {
+      var windowAddingNote = new AddNoteView();
+      var newNote = await windowAddingNote.ShowDialog<NoteModel>(this);
+      if (newNote != null)
+      {
+        // Add new note to view model.
+        ListOfNotes.Data.Notes.Add(newNote);
+      }
+      
+
+    }
+
+    
   }
 }

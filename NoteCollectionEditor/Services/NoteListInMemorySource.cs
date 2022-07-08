@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using NoteCollectionEditor.Models;
-using NoteCollectionEditor.ViewModels;
 
 namespace NoteCollectionEditor.Services;
 
 public class NoteListInMemorySource : INoteListRepository
 {
-  private IEnumerable<NoteModel> _data;
+  private readonly IEnumerable<NoteModel> _data;
 
   public NoteListInMemorySource(IEnumerable<NoteModel> data)
   {

@@ -27,9 +27,5 @@ public partial class NoteListView : UserControl
   {
     AvaloniaXamlLoader.Load(this);
   }
-
-  private void Button_OnClick(object? sender, RoutedEventArgs e)
-  {
-    Console.WriteLine($"Clicked");
-  }
+  
 }

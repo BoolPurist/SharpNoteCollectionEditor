@@ -12,7 +12,10 @@
     </Application.Styles>
     <Application.Resources>
         <Image 
-            Width="64" Height="64" 
-            x:Key="AddIcon" Source="../Assets/AddIcon.png"/>
+            Width="64" 
+            Height="64" 
+            x:Key="AddIcon" 
+            Source="./Assets/AddIcon.png"
+            />
     </Application.Resources>
 </Application>

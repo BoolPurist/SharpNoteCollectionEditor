@@ -8,11 +8,18 @@
         x:Class="NoteCollectionEditor.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="NoteCollectionEditor">
+    
+    
+    <StackPanel>
+        <Button
+            Margin="10"
+            HorizontalAlignment="Right"
+            Click="OnClickSpawnAddNoteWindow"
+            Content="{DynamicResource AddIcon}"
+        />
+        <views:NoteListView Name="ListOfNotes"></views:NoteListView>
+    </StackPanel>
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
-    <views:NoteListView></views:NoteListView>
+    
 
 </Window>

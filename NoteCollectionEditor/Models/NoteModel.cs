@@ -1,7 +1,8 @@
 namespace NoteCollectionEditor.Models;
 
-public class NoteModel
+public partial class NoteModel
 {
   public string Title { get; set; }
   public string Content { get; set; }
+  
 }
