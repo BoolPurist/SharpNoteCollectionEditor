@@ -31,7 +31,7 @@ namespace NoteCollectionEditor
       base.OnFrameworkInitializationCompleted();
     }
 
-    private static void RegisterAppServices()
+    public static void RegisterAppServices()
     {
       IMutableDependencyResolver services = Locator.CurrentMutable;
       IReadonlyDependencyResolver resolver = Locator.Current;
