@@ -21,18 +21,14 @@ public partial class AddNoteView : Window
   {
     InitializeComponent();
     
-    SetupContextAndEvents();
+    Data = ServicesOfApp.Resolver.GetRequiredService<AddNoteViewModel>();
+    DataContext = this;
+    Data.Submit += OnSubmit;
 
 #if DEBUG
     this.AttachDevTools();
 #endif
-
-    void SetupContextAndEvents()
-    {
-      Data = ServicesOfApp.Resolver.GetRequiredService<AddNoteViewModel>();
-      DataContext = this;
-      Data.Submit += OnSubmit;
-    }
+    
   }
 
   private void OnSubmit(object? sender, NoteModel toSubmit)

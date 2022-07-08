@@ -1,11 +1,8 @@
 using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Windows.Input;
-using DynamicData.Binding;
 using NoteCollectionEditor.Models;
 using ReactiveUI;
-using Tmds.DBus;
+
 
 namespace NoteCollectionEditor.ViewModels;
 
