@@ -24,11 +24,11 @@
         <TextBlock Classes="HeadLine">
             Title:
         </TextBlock>
-        <TextBox Classes="InputField" Text="{Binding NewTitle}" />
+        <TextBox Classes="InputField" Text="{Binding Data.NewTitle}" />
         <TextBlock Classes="HeadLine">
             Content:
         </TextBlock>
-        <TextBox Classes="InputField"  Text="{Binding NewContent}" />
+        <TextBox Classes="InputField"  Text="{Binding Data.NewContent}" />
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -37,7 +37,7 @@
             </Grid.ColumnDefinitions>
             <Button 
                 Grid.Column="0" 
-                Click="OnClickCreateNewNote"
+                Command="{Binding CreateNewNote}"
                 Background="Green" 
                 >
                 Add Note

@@ -16,7 +16,7 @@ public partial class AddNoteView : Window
   {
     InitializeComponent();
     Data = new AddNoteViewModel();
-    DataContext = Data;
+    DataContext = this;
 #if DEBUG
     this.AttachDevTools();
 #endif
@@ -27,7 +27,7 @@ public partial class AddNoteView : Window
     AvaloniaXamlLoader.Load(this);
   }
 
-  private void OnClickCreateNewNote(object? sender, RoutedEventArgs e)
+  public void CreateNewNote()
   {
     var newNote = new NoteModel()
     {
@@ -36,6 +36,11 @@ public partial class AddNoteView : Window
     };
     
     Close(newNote);
+  }
+
+  public bool CanCreateNewNote(object parameter)
+  {
+    return true;
   }
 
   private void OnClickCancel(object? sender, RoutedEventArgs e)

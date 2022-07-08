@@ -29,8 +29,8 @@ public class AddNoteViewModel : ReactiveObject
 
   public AddNoteViewModel()
   {
-    NewTitle = "Jonny";
-    NewContent = "bla bla";
+    _newTitle = "Jonny";
+    _newContent = "bla bla";
   }
 
   public override string ToString()

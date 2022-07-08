@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:NoteCollectionEditor.Views"
+        xmlns:models="clr-namespace:NoteCollectionEditor.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NoteCollectionEditor.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="NoteCollectionEditor">
     
-    
+        
     <StackPanel>
         <Button
             Margin="10"
@@ -21,5 +22,4 @@
     </StackPanel>
 
     
-
 </Window>

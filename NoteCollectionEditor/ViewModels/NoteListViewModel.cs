@@ -15,5 +15,5 @@ public class NoteListViewModel : ReactiveObject
     Notes = new ObservableCollection<NoteModel>(_dataSource.LoadAll());
   }
   
-  public ObservableCollection<NoteModel> Notes { get; set; }
+  public ObservableCollection<NoteModel> Notes { get; private set; }
 }
