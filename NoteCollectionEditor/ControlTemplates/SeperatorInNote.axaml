@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Add Resources Here -->
+    <ControlTemplate 
+        x:Key="SeparatorInNoteTemplate" 
+        TargetType="Separator">
+        <Separator
+            Margin="20" 
+            Height="5" 
+            Background="#181C62">
+        </Separator>
+    </ControlTemplate>
+</ResourceDictionary>

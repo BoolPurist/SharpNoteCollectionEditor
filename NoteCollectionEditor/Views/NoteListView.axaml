@@ -12,17 +12,42 @@
     <UserControl.Styles>
         <Style Selector="StackPanel.NoteContainer">
             <Setter Property="Margin" Value="0,10,0,0"/>
-            <Setter Property="Spacing" Value="15"/>
         </Style>
+        <StyleInclude Source="/Styles/ReadOnlyText.axaml" />
+        <StyleInclude Source="/Styles/NoteStyles.axaml"/>
     </UserControl.Styles>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     
     <StackPanel>
-        <ItemsControl Items="{Binding Notes}" Background="Black">
+        <ItemsControl Items="{Binding Notes}" Padding="15">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="models:NoteModel">
-                    <StackPanel Classes="NoteContainer" Background="Gray">
-                        <TextBlock TextAlignment="Center" Text="{Binding Title}"></TextBlock>
-                        <TextBlock TextAlignment="Center" Text="{Binding Content}"></TextBlock>
+                    <StackPanel>
+                        <Separator Height="20"/>
+                        <Border Classes="NoteBorder">
+                            <StackPanel Classes="NoteContainer">
+                                <TextBox 
+                                    Classes="ReadOnlyTextBox"
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Text="{Binding Title}"/>
+                                <Separator
+                                    Template="{DynamicResource SeparatorInNoteTemplate}"/>
+                                <TextBox 
+                                    Classes="ReadOnlyTextBox"
+                                    TextAlignment="Left"
+                                    FontSize="15"
+                                    Margin="0,0,0,15"
+                                    Text="{Binding Content}"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
