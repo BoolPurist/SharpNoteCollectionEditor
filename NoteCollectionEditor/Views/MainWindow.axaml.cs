@@ -25,7 +25,7 @@ namespace NoteCollectionEditor.Views
       if (newNote != null)
       {
         // Add new note to view model.
-        ListOfNotes.Data.Notes.Add(newNote);
+        ListOfNotes.Data.AddNoteCommand.Execute(newNote);
       }
       
     }

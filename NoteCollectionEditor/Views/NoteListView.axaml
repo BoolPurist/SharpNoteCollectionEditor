@@ -28,7 +28,7 @@
     </UserControl.Resources>
 
     
-    <ScrollViewer Name="Scroller"
+    <ScrollViewer
         VerticalScrollBarVisibility="Auto"
         AllowAutoHide="True"
         Height="{Binding VisualData.ViewHeight}"

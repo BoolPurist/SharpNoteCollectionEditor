@@ -25,7 +25,6 @@ public partial class NoteListView : UserControl
     Data = ServicesOfApp.Resolver.GetRequiredService<NoteListViewModel>();
     VisualData = new NoteListVisualBindings();
     DataContext = this;
-    Scroller = this.FindControl<ScrollViewer>(nameof(Scroller));
   }
   
   private void InitializeComponent()
