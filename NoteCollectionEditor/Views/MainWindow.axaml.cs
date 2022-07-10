@@ -18,8 +18,6 @@ namespace NoteCollectionEditor.Views
     {
       InitializeComponent();
       DataContext = this;
-      var logger = ServicesOfApp.Resolver.GetRequiredService<ILogger>();
-      logger.Write("Hello from logging", LogLevel.Fatal);
     }
 
 
