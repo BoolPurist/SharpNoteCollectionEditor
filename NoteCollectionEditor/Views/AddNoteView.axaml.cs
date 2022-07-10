@@ -15,7 +15,7 @@ namespace NoteCollectionEditor.Views;
 
 public partial class AddNoteView : Window
 {
-  public AddNoteViewModel Data { get; set; }
+  public AddNoteViewModel Data { get; private set; }
 
   public AddNoteView()
   {
@@ -44,6 +44,12 @@ public partial class AddNoteView : Window
   private void InitializeComponent()
   {
     AvaloniaXamlLoader.Load(this);
+  }
+  
+  protected override void OnClosed(EventArgs e)
+  {
+    base.OnClosed(e);
+    Data.Submit -= OnSubmit;
   }
 
 }

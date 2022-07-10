@@ -46,7 +46,8 @@ public static class ServicesOfApp
     {
       new NoteModel() {Title = "First", Content = "First Content"},
       new NoteModel() {Title = "Second", Content = "Second Content"},
-      new NoteModel() {Title = "Second", Content = new string('x', 200)}
+      new NoteModel() {Title = "Second", Content = new string('x', 200)},
+      new NoteModel() {Title = "Second", Content = new string('x', 400)}
     });
   }
 }

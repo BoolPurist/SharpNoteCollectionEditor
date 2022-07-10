@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -12,15 +13,19 @@ using NoteCollectionEditor.ViewModels;
 
 namespace NoteCollectionEditor.Views;
 
-public partial class NoteListView : UserControl
+public partial class NoteListView : UserControl 
 {
-  public NoteListViewModel Data { get; set; }
+  
+  public NoteListViewModel Data { get; private set; }
 
+  public NoteListVisualBindings VisualData { get; private set; }
   public NoteListView()
   {
     InitializeComponent();
     Data = ServicesOfApp.Resolver.GetRequiredService<NoteListViewModel>();
-    DataContext = Data;
+    VisualData = new NoteListVisualBindings();
+    DataContext = this;
+    Scroller = this.FindControl<ScrollViewer>(nameof(Scroller));
   }
   
   private void InitializeComponent()

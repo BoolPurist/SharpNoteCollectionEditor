@@ -7,11 +7,14 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteCollectionEditor.Views.NoteListView"
              >
-    
-    
     <UserControl.Styles>
         <Style Selector="StackPanel.NoteContainer">
             <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+        
+        <Style Selector="ScrollViewer[IsExpanded=False] /template/ ScrollBar#PART_VerticalScrollBar">
+            <Setter Property="Background" Value="Gray"/>
+            <Setter Property="Opacity" Value="0.30"></Setter>
         </Style>
         <StyleInclude Source="/Styles/ReadOnlyText.axaml" />
         <StyleInclude Source="/Styles/NoteStyles.axaml"/>
@@ -25,34 +28,40 @@
     </UserControl.Resources>
 
     
-    <StackPanel>
-        <ItemsControl Items="{Binding Notes}" Padding="15">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="models:NoteModel">
-                    <StackPanel>
-                        <Separator Height="20"/>
-                        <Border Classes="NoteBorder">
-                            <StackPanel Classes="NoteContainer">
-                                <TextBox 
-                                    Classes="ReadOnlyTextBox"
-                                    FontSize="20"
-                                    FontWeight="Bold"
-                                    Text="{Binding Title}"/>
-                                <Separator
-                                    Template="{DynamicResource SeparatorInNoteTemplate}"/>
-                                <TextBox 
-                                    Classes="ReadOnlyTextBox"
-                                    TextAlignment="Left"
-                                    FontSize="15"
-                                    Margin="0,0,0,15"
-                                    Text="{Binding Content}"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+    <ScrollViewer Name="Scroller"
+        VerticalScrollBarVisibility="Auto"
+        AllowAutoHide="True"
+        Height="{Binding VisualData.ViewHeight}"
+        Margin="20">
+        <StackPanel>
+            <ItemsControl Items="{Binding Data.Notes}" Padding="15">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:NoteModel">
+                        <StackPanel>
+                            <Border Classes="NoteBorder" Margin="20">
+                                <StackPanel Classes="NoteContainer">
+                                    <TextBox 
+                                        Classes="ReadOnlyTextBox"
+                                        FontSize="20"
+                                        FontWeight="Bold"
+                                        Text="{Binding Title}"/>
+                                    <Separator
+                                        Template="{DynamicResource SeparatorInNoteTemplate}"/>
+                                    <TextBox 
+                                        Classes="ReadOnlyTextBox"
+                                        TextAlignment="Left"
+                                        FontSize="15"
+                                        Margin="0,0,0,15"
+                                        Text="{Binding Content}"/>
+                                </StackPanel>
+                            </Border>
+                            
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
     
     
 </UserControl>
