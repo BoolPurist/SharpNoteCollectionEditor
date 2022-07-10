@@ -2,7 +2,10 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
+using NoteCollectionEditor.Services;
+using Splat;
 
 namespace NoteCollectionEditor.Views
 {
@@ -15,6 +18,8 @@ namespace NoteCollectionEditor.Views
     {
       InitializeComponent();
       DataContext = this;
+      var logger = ServicesOfApp.Resolver.GetRequiredService<ILogger>();
+      logger.Write("Hello from logging", LogLevel.Fatal);
     }
 
 

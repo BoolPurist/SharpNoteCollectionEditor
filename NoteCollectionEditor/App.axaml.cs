@@ -18,7 +18,7 @@ namespace NoteCollectionEditor
 
     public override void OnFrameworkInitializationCompleted()
     {
-      RegisterAppServices();
+      ServicesOfApp.RegisterAppServices();
       
       if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
       {
@@ -31,11 +31,6 @@ namespace NoteCollectionEditor
       base.OnFrameworkInitializationCompleted();
     }
 
-    public static void RegisterAppServices()
-    {
-      IMutableDependencyResolver services = Locator.CurrentMutable;
-      IReadonlyDependencyResolver resolver = Locator.Current;
-      ServicesOfApp.Register(services, resolver);
-    }
+    
   }
 }

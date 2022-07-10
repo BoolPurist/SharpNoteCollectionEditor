@@ -9,6 +9,13 @@ namespace NoteCollectionEditor.Services;
 public static class ServicesOfApp
 {
   public static IReadonlyDependencyResolver Resolver { get; private set; } = null!;
+  
+  public static void RegisterAppServices()
+  {
+    IMutableDependencyResolver services = Locator.CurrentMutable;
+    IReadonlyDependencyResolver resolver = Locator.Current;
+    ServicesOfApp.Register(services, resolver);
+  }
 
   public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
   {
@@ -20,6 +27,7 @@ public static class ServicesOfApp
 
   private static void RegisterStandAloneServices(IMutableDependencyResolver services)
   {
+    services.RegisterConstant<ILogger>(new ConsoleLogger() { Level = LogLevel.Info });
     services.Register(CreateMainWindow, typeof(MainWindow));
     services.Register(CreateAddNoteViewModel, typeof(AddNoteViewModel));
     services.Register(CreateINoteListRepository, typeof(INoteListRepository));
