@@ -3,10 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:NoteCollectionEditor.Models"
-             xmlns:noteCollectionEditor="clr-namespace:NoteCollectionEditor"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1000"
              x:Class="NoteCollectionEditor.Views.NoteListView"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
              >
+    
     <UserControl.Styles>
         <Style Selector="StackPanel.NoteContainer">
             <Setter Property="Margin" Value="0,10,0,0"/>
@@ -19,14 +20,17 @@
         <StyleInclude Source="/Styles/ReadOnlyText.axaml" />
         <StyleInclude Source="/Styles/NoteStyles.axaml"/>
     </UserControl.Styles>
+    
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml"/>
+                <ResourceInclude Source="/ControlTemplates/WarningBox.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
+    
     
     <ScrollViewer
         VerticalScrollBarVisibility="Auto"
@@ -34,7 +38,15 @@
         Height="{Binding VisualData.ViewHeight}"
         Margin="20">
         <StackPanel>
-            <ItemsControl Items="{Binding Data.Notes}" Padding="15">
+            <ContentControl
+                Template="{DynamicResource WarningBox}"
+                Tag="{Binding Data.ErrorLoadingMessage}"
+                IsVisible="{Binding Data.ErrorInLoading}"/>
+            
+            <ItemsControl 
+                Items="{Binding Data.Notes}"
+                
+                Padding="15">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="models:NoteModel">
                         <StackPanel>

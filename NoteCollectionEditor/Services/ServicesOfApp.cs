@@ -60,7 +60,10 @@ public static class ServicesOfApp
 
   private static NoteListViewModel CreateNoteListViewModel()
   {
-    return new NoteListViewModel(Resolver.GetRequiredService<INoteListRepository>());
+    return new NoteListViewModel(
+      Resolver.GetRequiredService<INoteListRepository>(), 
+      Resolver.GetRequiredService<ILogger>()
+      );
   }
 
   private static AddNoteViewModel CreateAddNoteViewModel()
@@ -70,12 +73,12 @@ public static class ServicesOfApp
 
   private static INoteListRepository CreateINoteListRepository()
   {
-    return new NoteListInMemorySource(new []
+    return new NoteListFakeInMemorySource(new []
     {
       new NoteModel() {Title = "First", Content = "First Content"},
       new NoteModel() {Title = "Second", Content = "Second Content"},
       new NoteModel() {Title = "Second", Content = new string('x', 200)},
       new NoteModel() {Title = "Second", Content = new string('x', 400)}
-    });
+    }, throwErrorInLoading: true);
   }
 }

@@ -21,6 +21,5 @@ public class LogException : IErrorHandler
       _logger.LogFatal(errorMessage);
     }
     _logger.LogFatal(exception.ToString());
-    
   }
 }

@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
+using ReactiveUI;
 using Splat;
 
 namespace NoteCollectionEditor.Views

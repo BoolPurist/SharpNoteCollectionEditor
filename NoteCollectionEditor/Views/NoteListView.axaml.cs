@@ -1,13 +1,6 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Reactive.Linq;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using NoteCollectionEditor.Extensions;
-using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
 
@@ -21,11 +14,10 @@ public partial class NoteListView : UserControl
   public NoteListVisualBindings VisualData { get; private set; }
   public NoteListView()
   {
-    InitializeComponent();
     Data = ServicesOfApp.Resolver.GetRequiredService<NoteListViewModel>();
     VisualData = new NoteListVisualBindings();
-    DataContext = this;
     
+    InitializeComponent();
   }
   
   private void InitializeComponent()

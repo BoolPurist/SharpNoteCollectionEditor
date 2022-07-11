@@ -1,3 +1,4 @@
+using System;
 using Splat;
 
 namespace NoteCollectionEditor.Extensions;
@@ -27,5 +28,18 @@ public static class ExtensionILogger
   public static void LogDebug(this ILogger logger, string message)
   {
     logger.Write(message, LogLevel.Debug);
+  }
+
+  public static void LogExceptionAsError(
+    this ILogger logger, 
+    Exception exception, 
+    string? errorMessage = null
+    )
+  {
+    if (errorMessage != null)
+    {
+      logger.LogError(errorMessage);
+    }
+    logger.LogError(exception.ToString());
   }
 }

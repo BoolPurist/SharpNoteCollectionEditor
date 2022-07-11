@@ -26,9 +26,10 @@ public class TestLogException
     }
   }
 
+#pragma warning disable CS1998
   public async Task WillThrow()
+#pragma warning restore CS1998
   {
     throw new Exception();
-    await Task.CompletedTask;
   }
 }

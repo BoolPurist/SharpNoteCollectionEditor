@@ -6,6 +6,8 @@
         <entry key="NoteCollectionEditor/App.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/SeparatorInNote.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/SeperatorInNote.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/ControlTemplates/WarningBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/DesingMocks/NoteListViewMock.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Styles/NoteStyles.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Styles/ReadOnlyText.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AddNoteView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
