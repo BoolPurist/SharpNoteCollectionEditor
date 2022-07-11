@@ -7,7 +7,7 @@ namespace UnitTestsForApp;
 public class TestNoteListViewModel
 {
   [Fact]
-  public void ShouldContainCollectionAfterLoading()
+  public async Task ShouldContainCollectionAfterLoading()
   {
     var data = new NoteListInMemorySource(new[]
     {
@@ -15,8 +15,9 @@ public class TestNoteListViewModel
       new NoteModel { Title = "Second", Content = "2. Content"},
       new NoteModel { Title = "Third", Content = "3. Content"}
     });
-    var expected = data.LoadAll();
+    var expected = await data.LoadAll();
     var viewModel = new NoteListViewModel(data);
+    await viewModel.LoadNotes();
     
     Assert.Equal(viewModel.Notes, expected);
   }

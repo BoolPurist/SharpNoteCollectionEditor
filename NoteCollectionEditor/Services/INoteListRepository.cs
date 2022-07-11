@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using NoteCollectionEditor.Models;
 
 namespace NoteCollectionEditor.Services;
@@ -6,5 +7,5 @@ namespace NoteCollectionEditor.Services;
 
 public interface INoteListRepository
 {
-  IEnumerable<NoteModel> LoadAll();
+  Task<IEnumerable<NoteModel>> LoadAll();
 }

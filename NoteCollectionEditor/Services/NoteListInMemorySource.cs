@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using NoteCollectionEditor.Models;
 
 namespace NoteCollectionEditor.Services;
@@ -12,8 +13,8 @@ public class NoteListInMemorySource : INoteListRepository
     _data = data;
   }
 
-  public IEnumerable<NoteModel> LoadAll()
+  public async Task<IEnumerable<NoteModel>> LoadAll()
   {
-    return _data;
+    return await Task.FromResult(_data);
   }
 }
