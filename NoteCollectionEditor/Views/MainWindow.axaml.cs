@@ -18,7 +18,10 @@ namespace NoteCollectionEditor.Views
     {
       InitializeComponent();
       DataContext = this;
+      
     }
+    
+    
 
 
     private async void OnClickSpawnAddNoteWindow(object? sender, RoutedEventArgs e)
@@ -38,6 +41,11 @@ namespace NoteCollectionEditor.Views
     {
       double newViewHeightOfNotes = Math.Max(0, Height - OffsetHeightScrollViewerNotes);
       ListOfNotes.VisualData.ViewHeight = newViewHeightOfNotes;
+    }
+
+    private void TopLevel_OnOpened(object? sender, EventArgs e)
+    {
+      ListOfNotes.Data.LoadNotesIn.Execute();
     }
   }
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DynamicData;
 using DynamicData.Binding;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
@@ -13,35 +15,29 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class NoteListViewModel : ReactiveObject
 {
-  private readonly INoteListRepository _dataSource;
-  private IErrorHandler _asyncErrorHandler;
+  public IObservableCollection<NoteModel> Notes { get; }
   
+  private readonly INoteListRepository _dataSource;
+
   public NoteListViewModel(INoteListRepository repository)
   {
     _dataSource = repository;
-    _asyncErrorHandler = ServicesOfApp.GetDefaultErrorHandler();
     
     Notes = new ObservableCollectionExtended<NoteModel>();
     
     AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
-
-    RxApp.MainThreadScheduler.Schedule(LoadAtStartUp);
+    LoadNotesIn = ReactiveCommand.CreateFromTask(LoadNotes);
   }
 
-  private async void LoadAtStartUp()
-  {
-    LoadNotes().FireAndForgetSafeAsync(
-      _asyncErrorHandler, 
-      "Notes could not be loaded."
-      );
-  }
+  public ReactiveCommand<Unit, Unit> LoadNotesIn { get; private set; }
 
-  public async Task LoadNotes()
+  private async Task LoadNotes()
   {
     var notes = await _dataSource.LoadAll();
-    Notes = new ObservableCollectionExtended<NoteModel>(notes);
+    Notes.Clear();
+    Notes.AddRange(notes);
   }
-
+  
   private void AddNote(NoteModel toAdd) => Notes.Add(toAdd);
 
   /// <summary>
@@ -50,5 +46,5 @@ public class NoteListViewModel : ReactiveObject
   /// </summary>
   public ICommand AddNoteCommand { get; private set; }
 
-  public IObservableCollection<NoteModel> Notes { get; private set; }
+
 }

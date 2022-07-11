@@ -9,6 +9,7 @@
         x:Class="NoteCollectionEditor.Views.MainWindow"
         Width="640"
         Height="480"
+        Opened="TopLevel_OnOpened"
         Icon="/Assets/avalonia-logo.ico"
         Title="NoteCollectionEditor"
         LayoutUpdated="OnWindowSizeChanged">
