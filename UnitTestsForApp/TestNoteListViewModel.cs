@@ -9,6 +9,7 @@ public class TestNoteListViewModel
   [Fact]
   public async Task ShouldContainCollectionAfterLoading()
   {
+    ServicesOfApp.RegisterAppServices();
     var data = new NoteListInMemorySource(new[]
     {
       new NoteModel { Title = "First", Content = "1. Content"},

@@ -1,3 +1,4 @@
+using System;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.ViewModels;
@@ -8,6 +9,10 @@ namespace NoteCollectionEditor.Services;
 
 public static class ServicesOfApp
 {
+  public const string DefaultErrorHandler = "DefaultErrorHandler";
+
+  private static Object _locker = new ();
+  
   public static IReadonlyDependencyResolver Resolver { get; private set; } = null!;
   
   public static void RegisterAppServices()
@@ -19,10 +24,18 @@ public static class ServicesOfApp
 
   public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
   {
-    Resolver = resolver;
-    RegisterStandAloneServices(services);
+    lock (_locker)
+    {
+      Resolver = resolver;
+      RegisterStandAloneServices(services);
     
-    services.Register(CreateNoteListViewModel, typeof(NoteListViewModel));
+      services.Register(CreateNoteListViewModel, typeof(NoteListViewModel));
+    }
+  }
+
+  public static IErrorHandler GetDefaultErrorHandler()
+  {
+    return Resolver.GetService<IErrorHandler>(DefaultErrorHandler);
   }
 
   private static void RegisterStandAloneServices(IMutableDependencyResolver services)
@@ -31,6 +44,13 @@ public static class ServicesOfApp
     services.Register(CreateMainWindow, typeof(MainWindow));
     services.Register(CreateAddNoteViewModel, typeof(AddNoteViewModel));
     services.Register(CreateINoteListRepository, typeof(INoteListRepository));
+    
+    services.Register(CreateDefaultErrorHandler, DefaultErrorHandler);
+  }
+
+  public static IErrorHandler CreateDefaultErrorHandler()
+  {
+    return new LogException(Resolver.GetRequiredService<ILogger>());
   }
 
   private static MainWindow CreateMainWindow()

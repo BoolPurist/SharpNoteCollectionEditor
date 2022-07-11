@@ -13,9 +13,9 @@ using NoteCollectionEditor.ViewModels;
 
 namespace NoteCollectionEditor.Views;
 
-public partial class NoteListView : UserControl 
+public partial class NoteListView : UserControl
 {
-  
+
   public NoteListViewModel Data { get; private set; }
 
   public NoteListVisualBindings VisualData { get; private set; }
@@ -25,6 +25,7 @@ public partial class NoteListView : UserControl
     Data = ServicesOfApp.Resolver.GetRequiredService<NoteListViewModel>();
     VisualData = new NoteListVisualBindings();
     DataContext = this;
+    
   }
   
   private void InitializeComponent()

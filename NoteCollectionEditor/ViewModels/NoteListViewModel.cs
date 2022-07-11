@@ -14,24 +14,26 @@ namespace NoteCollectionEditor.ViewModels;
 public class NoteListViewModel : ReactiveObject
 {
   private readonly INoteListRepository _dataSource;
+  private IErrorHandler _asyncErrorHandler;
   
   public NoteListViewModel(INoteListRepository repository)
   {
     _dataSource = repository;
+    _asyncErrorHandler = ServicesOfApp.GetDefaultErrorHandler();
+    
     Notes = new ObservableCollectionExtended<NoteModel>();
-    InitializeCommands();
+    
+    AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
 
     RxApp.MainThreadScheduler.Schedule(LoadAtStartUp);
-
-    void InitializeCommands()
-    {
-      AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
-    }
   }
 
   private async void LoadAtStartUp()
   {
-    await LoadNotes();
+    LoadNotes().FireAndForgetSafeAsync(
+      _asyncErrorHandler, 
+      "Notes could not be loaded."
+      );
   }
 
   public async Task LoadNotes()
