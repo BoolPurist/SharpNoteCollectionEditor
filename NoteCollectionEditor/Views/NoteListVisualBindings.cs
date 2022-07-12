@@ -4,7 +4,7 @@ namespace NoteCollectionEditor.Views;
 
 public class NoteListVisualBindings : ReactiveObject
 {
-  private double _viewHeight = 640;
+  private double _viewHeight = 1000;
 
   public double ViewHeight
   {

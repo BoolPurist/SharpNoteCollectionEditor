@@ -9,7 +9,8 @@ namespace NoteCollectionEditor.Services;
 
 public static class ServicesOfApp
 {
-  public const string DefaultErrorHandler = "DefaultErrorHandler";
+  private const string DefaultErrorHandler = "DefaultErrorHandler";
+  private const bool ThrowErrorInLoading = false;
 
   private static Object _locker = new ();
   
@@ -79,6 +80,6 @@ public static class ServicesOfApp
       new NoteModel() {Title = "Second", Content = "Second Content"},
       new NoteModel() {Title = "Second", Content = new string('x', 200)},
       new NoteModel() {Title = "Second", Content = new string('x', 400)}
-    }, throwErrorInLoading: true);
+    }, throwErrorInLoading: ThrowErrorInLoading);
   }
 }

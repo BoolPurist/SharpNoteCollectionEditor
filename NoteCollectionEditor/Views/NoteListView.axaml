@@ -44,7 +44,8 @@
                 IsVisible="{Binding Data.ErrorInLoading}"/>
             
             <ItemsControl 
-                Items="{Binding Data.Notes}"
+                DataContext="{Binding Data}"
+                Items="{Binding Notes}"
                 
                 Padding="15">
                 <ItemsControl.ItemTemplate>

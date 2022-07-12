@@ -46,7 +46,10 @@ namespace NoteCollectionEditor.Views
 
     private void TopLevel_OnOpened(object? sender, EventArgs e)
     {
-      ListOfNotes.Data.LoadNotesIn.Execute();
+      if (!Design.IsDesignMode)
+      {
+        ListOfNotes.Data.LoadNotesIn.Execute();
+      }
     }
   }
 }

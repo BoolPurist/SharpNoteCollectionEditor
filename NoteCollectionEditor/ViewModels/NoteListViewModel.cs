@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,15 +13,19 @@ using Splat;
 
 namespace NoteCollectionEditor.ViewModels;
 
+
+
 public class NoteListViewModel : ReactiveObject
 {
-  public IObservableCollection<NoteModel> Notes { get; }
-  public string ErrorLoadingMessage { get; private set; } = "Unable to load notes";
+  
+  public IObservableCollection<NoteModel> Notes { get; set; } = new ObservableCollectionExtended<NoteModel>();
+
+  public string ErrorLoadingMessage { get; } = "Unable to load notes";
 
   public bool ErrorInLoading
   {
     get => _errorInLoading;
-    private set => this.RaiseAndSetIfChanged(ref _errorInLoading, value);
+    set => this.RaiseAndSetIfChanged(ref _errorInLoading, value);
   }
 
   private readonly INoteListRepository _dataSource;
@@ -31,7 +36,6 @@ public class NoteListViewModel : ReactiveObject
   {
     _dataSource = repository;
     _logger = logger;
-    Notes = new ObservableCollectionExtended<NoteModel>();
     AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
     LoadNotesIn = ReactiveCommand.CreateFromTask(LoadNotes);
   }
