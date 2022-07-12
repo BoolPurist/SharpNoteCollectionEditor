@@ -15,17 +15,17 @@ public class TestNoteListViewModel
     NoteListViewModel ViewModel
     );
 
-  private List<NoteModel> ExampleNotesForLoading => new List<NoteModel>
+  private static List<NoteModel> ExampleNotesForLoading => new List<NoteModel>
   {
     new NoteModel {Title = "First", Content = "1. Content"},
     new NoteModel {Title = "Second", Content = "2. Content"},
     new NoteModel {Title = "Third", Content = "3. Content"}
   };
 
-  private EnvironmentForNoteListViewModel CreateEnvironment() 
+  private static EnvironmentForNoteListViewModel CreateEnvironment() 
     => CreateEnvironment(ExampleNotesForLoading);
 
-  private EnvironmentForNoteListViewModel CreateEnvironment(IEnumerable<NoteModel> toLoad)
+  private static EnvironmentForNoteListViewModel CreateEnvironment(IEnumerable<NoteModel> toLoad)
   {
     var data = new NoteListFakeInMemorySource(toLoad);
     var fakeLogger = new InMemoryLogger();
