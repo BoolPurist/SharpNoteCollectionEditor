@@ -30,7 +30,7 @@ public class InMemoryLogger : ILogger
     }
   }
   
-  public InMemoryLogger(LogLevel level) => Level = level;
+  public InMemoryLogger(LogLevel level = LogLevel.Debug) => Level = level;
 
   public void Write(string message, LogLevel logLevel) => LogMessageIf(message, logLevel);
 

@@ -9,20 +9,40 @@ namespace UnitTestsForApp;
 
 public class TestNoteListViewModel
 {
-  private NoteListFakeInMemorySource CreateFakeProvider() => 
-    new (new[]
+  private record EnvironmentForNoteListViewModel(
+    InMemoryLogger Logger,
+    NoteListFakeInMemorySource FakeSource,
+    NoteListViewModel ViewModel
+    );
+
+  private List<NoteModel> ExampleNotesForLoading => new List<NoteModel>
   {
-    new NoteModel { Title = "First", Content = "1. Content"},
-    new NoteModel { Title = "Second", Content = "2. Content"},
-    new NoteModel { Title = "Third", Content = "3. Content"}
-  });
+    new NoteModel {Title = "First", Content = "1. Content"},
+    new NoteModel {Title = "Second", Content = "2. Content"},
+    new NoteModel {Title = "Third", Content = "3. Content"}
+  };
+
+  private EnvironmentForNoteListViewModel CreateEnvironment() 
+    => CreateEnvironment(ExampleNotesForLoading);
+
+  private EnvironmentForNoteListViewModel CreateEnvironment(IEnumerable<NoteModel> toLoad)
+  {
+    var data = new NoteListFakeInMemorySource(toLoad);
+    var fakeLogger = new InMemoryLogger();
+    var viewModel = new NoteListViewModel(data, fakeLogger);
+    return new EnvironmentForNoteListViewModel(
+      fakeLogger,
+      data,
+      viewModel
+    );
+  }
 
   [Fact]
   public async Task ShouldContainCollectionAfterLoading()
   {
-    var data = CreateFakeProvider();
-    var expected = await data.LoadAll();
-    var viewModel = new NoteListViewModel(data, new InMemoryLogger(LogLevel.Debug));
+    var env = CreateEnvironment();
+    var viewModel = env.ViewModel;
+    var expected = await env.FakeSource.LoadAll();
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
     Assert.Equal(viewModel.Notes, expected);
   }
@@ -30,9 +50,9 @@ public class TestNoteListViewModel
   [Fact]
   public async Task ShouldIndicateLoadingError()
   {
-    var data = CreateFakeProvider();
-    var fakeLogger = new InMemoryLogger(LogLevel.Debug);
-    var viewModel = new NoteListViewModel(data, fakeLogger);
+    var env = CreateEnvironment();
+    var data = env.FakeSource;
+    var viewModel = env.ViewModel;
     data.ThrowErrorInLoading = true;
     bool errorStateBeforeLoading = viewModel.ErrorInLoading;
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
@@ -43,9 +63,7 @@ public class TestNoteListViewModel
   [Fact]
   public void ShouldAddNote()
   {
-    var data = CreateFakeProvider();
-    var fakeLogger = new InMemoryLogger(LogLevel.Debug);
-    var viewModel = new NoteListViewModel(data, fakeLogger);
+    var viewModel = CreateEnvironment().ViewModel;
     var expectedAdded = new NoteModel { Title = "Added", Content = "Content"};
     viewModel.AddNoteCommand.Execute(expectedAdded);
     Assert.False(viewModel.ErrorInLoading, "No loading error should happened");
@@ -58,18 +76,12 @@ public class TestNoteListViewModel
   {
     // Data
     var toAdd = new NoteModel { Title = "Added", Content = "Content"};
-    var loadedDate = new List<NoteModel>
-    {
-      new NoteModel {Title = "First", Content = "1. Content"},
-      new NoteModel {Title = "Second", Content = "2. Content"},
-      new NoteModel {Title = "Third", Content = "3. Content"}
-    };
+    var loadedDate = ExampleNotesForLoading;
     var expectedEndResult = loadedDate.Concat(new [] { toAdd });
     
     // Set up
-    var data = new NoteListFakeInMemorySource(loadedDate);
-    var fakeLogger = new InMemoryLogger(LogLevel.Debug);
-    var viewModel = new NoteListViewModel(data, fakeLogger);
+    var env = CreateEnvironment(loadedDate);
+    var viewModel = env.ViewModel;
     
     // Act
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
