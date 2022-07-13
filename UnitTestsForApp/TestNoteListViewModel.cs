@@ -1,5 +1,6 @@
 using System.Reactive.Linq;
 using Avalonia.Shared.PlatformSupport;
+using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
@@ -27,7 +28,7 @@ public class TestNoteListViewModel
 
   private static EnvironmentForNoteListViewModel CreateEnvironment(IEnumerable<NoteModel> toLoad)
   {
-    var data = new NoteListFakeInMemorySource(toLoad);
+    var data = new NoteListFakeInMemorySource(toLoad, AppConfigs.CreateNotFromFile());
     var fakeLogger = new InMemoryLogger();
     var viewModel = new NoteListViewModel(data, fakeLogger);
     return new EnvironmentForNoteListViewModel(

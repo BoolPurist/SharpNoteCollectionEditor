@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Models;
 
 namespace NoteCollectionEditor.Services;
@@ -12,10 +13,10 @@ public class NoteListFakeInMemorySource : INoteListRepository
 
   public NoteListFakeInMemorySource(
     IEnumerable<NoteModel> data, 
-    bool throwErrorInLoading = false)
+    IAppConfigs configs)
   {
     _data = data;
-    ThrowErrorInLoading = throwErrorInLoading;
+    ThrowErrorInLoading = configs.DataSource.LoadCrashes;
   }
 
   public async Task<IEnumerable<NoteModel>> LoadAll()

@@ -1,4 +1,5 @@
 using System;
+using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.ViewModels;
@@ -10,7 +11,7 @@ namespace NoteCollectionEditor.Services;
 public static class ServicesOfApp
 {
   private const string DefaultErrorHandler = "DefaultErrorHandler";
-  private const bool ThrowErrorInLoading = false;
+  private static bool _unitTests = false;
 
   private static Object _locker = new ();
   
@@ -20,7 +21,8 @@ public static class ServicesOfApp
   {
     IMutableDependencyResolver services = Locator.CurrentMutable;
     IReadonlyDependencyResolver resolver = Locator.Current;
-    ServicesOfApp.Register(services, resolver);
+    Register(services, resolver);
+    _unitTests = false;
   }
 
   public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -34,6 +36,12 @@ public static class ServicesOfApp
     }
   }
 
+  public static void RegisterForUnitTest()
+  {
+    _unitTests = true;
+    RegisterAppServices();
+  }
+
   public static IErrorHandler GetDefaultErrorHandler()
   {
     return Resolver.GetService<IErrorHandler>(DefaultErrorHandler);
@@ -42,6 +50,7 @@ public static class ServicesOfApp
   private static void RegisterStandAloneServices(IMutableDependencyResolver services)
   {
     services.RegisterConstant<ILogger>(new ConsoleLogger() { Level = LogLevel.Info });
+    services.RegisterConstant<IAppConfigs>(_unitTests ? AppConfigs.CreateNotFromFile() : AppConfigs.Create());
     services.Register(CreateMainWindow, typeof(MainWindow));
     services.Register(CreateAddNoteViewModel, typeof(AddNoteViewModel));
     services.Register(CreateINoteListRepository, typeof(INoteListRepository));
@@ -80,6 +89,8 @@ public static class ServicesOfApp
       new NoteModel() {Title = "Second", Content = "Second Content"},
       new NoteModel() {Title = "Second", Content = new string('x', 200)},
       new NoteModel() {Title = "Second", Content = new string('x', 400)}
-    }, throwErrorInLoading: ThrowErrorInLoading);
+    }, 
+    Resolver.GetRequiredService<IAppConfigs>()
+    );
   }
 }

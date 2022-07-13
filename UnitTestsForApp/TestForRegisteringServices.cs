@@ -47,7 +47,7 @@ public class TestForRegisteringServices
 
   private static void AssertForOneService<T>()
   {
-    ServicesOfApp.RegisterAppServices();
+    ServicesOfApp.RegisterForUnitTest();
     Debug.Assert(ServicesOfApp.Resolver != null, "ServicesOfApp.Resolver != null");
     var service = ServicesOfApp.Resolver.GetRequiredService<T>();
     Assert.NotNull(service);
