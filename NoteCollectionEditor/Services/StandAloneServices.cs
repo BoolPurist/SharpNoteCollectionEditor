@@ -4,7 +4,6 @@ using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.ViewModels;
-using NoteCollectionEditor.Views;
 using Splat;
 
 namespace NoteCollectionEditor.Services;
@@ -19,7 +18,7 @@ public static partial class ServicesOfApp
     }
     else
     {
-      container.RegisterConstant<ILogger>( new ConsoleLogger() { Level = LogLevel.Info });
+      container.RegisterConstant<ILogger>( new ConsoleLogger() { Level = LogLevel.Debug });
     }
   }
 
@@ -41,7 +40,9 @@ public static partial class ServicesOfApp
       Resolver.GetRequiredService<IAppConfigs>()
     );
 
+#pragma warning disable CS8321
     IEnumerable<NoteModel> FakeData()
+#pragma warning restore CS8321
     {
       return new[]
       {

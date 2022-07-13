@@ -78,6 +78,7 @@ public class NoteListViewModel : ReactiveObject
     try
     {
       OnStartLoading();
+      
       var notes = await _dataSource.LoadAll();
       Notes.Clear();
       Notes.AddRange(notes);
@@ -92,6 +93,7 @@ public class NoteListViewModel : ReactiveObject
   private void AddNote(NoteModel toAdd)
   {
     Notes.Add(toAdd);
+    _logger.LogDebug("Note has been added.");
     OnNotesChanged();
   }
 
@@ -104,6 +106,7 @@ public class NoteListViewModel : ReactiveObject
 
   private void OnStartLoading()
   {
+    _logger.LogInfo("Loading notes.");
     IsLoading = true;
     ErrorInLoading = false;
     NotifyIfNotesWereFound();
@@ -111,6 +114,7 @@ public class NoteListViewModel : ReactiveObject
 
   private void OnLoadingFinished()
   {
+    _logger.LogInfo("Loading of notes completed successively.");
     IsLoading = false;
     ErrorInLoading = false;
     NotifyIfNotesWereFound();
