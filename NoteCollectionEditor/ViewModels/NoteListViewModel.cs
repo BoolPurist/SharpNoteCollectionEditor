@@ -58,6 +58,7 @@ public class NoteListViewModel : ReactiveObject
   private void HandleLoadingError(Exception thrown)
   {
     ErrorInLoading = true;
+    IsLoading = false;
     _logger.LogExceptionAsError(thrown, "Error in loading");
   }
   

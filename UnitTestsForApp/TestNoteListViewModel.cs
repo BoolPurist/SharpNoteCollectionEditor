@@ -55,10 +55,10 @@ public class TestNoteListViewModel
     var data = env.FakeSource;
     var viewModel = env.ViewModel;
     data.ThrowErrorInLoading = true;
-    bool errorStateBeforeLoading = viewModel.ErrorInLoading;
+    
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
-    Assert.False(errorStateBeforeLoading);
-    Assert.True(viewModel.ErrorInLoading);
+    Assert.False(viewModel.IsLoading, "Should not indicate loading if error happened.");
+    Assert.True(viewModel.ErrorInLoading, "Should indicate error.");
   }
 
   [Fact]
@@ -89,8 +89,31 @@ public class TestNoteListViewModel
     viewModel.AddNoteCommand.Execute(toAdd);
     
     // Assert
-    Assert.False(viewModel.ErrorInLoading);
+    Assert.False(viewModel.ErrorInLoading, "No error in loading should happened.");
     Assert.Equal(expectedEndResult, viewModel.Notes);
+  }
+
+  [Fact]
+  public async Task ShouldIndicateLoading()
+  {
+    // Set up
+    var testEnvironment = CreateEnvironment();
+    const int waitingTime = 1000;
+    testEnvironment.FakeSource.LoadDelay = waitingTime;
+    var notes = testEnvironment.ViewModel; 
+    
+    // Assert before act.
+    Assert.False(notes.IsLoading, "Should indicate loading if loading has not started yet !");
+    
+    // Act
+    var loadingState = notes.LoadNotesIn.Execute().GetAwaiter();
+    await Task.Delay(waitingTime / 2);
+    // Assert during act
+    Assert.True(notes.IsLoading, "Should indicate loading while still loading.");
+    await loadingState;
+    
+    // Assert after act
+    Assert.False(notes.IsLoading, "Should not indicate loading after loading has finished.");
   }
 
 }
