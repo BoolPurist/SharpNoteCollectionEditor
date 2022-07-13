@@ -4,7 +4,9 @@
     <option name="projectPerEditor">
       <map>
         <entry key="NoteCollectionEditor/App.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/ControlTemplates/InfoTextBoxIndicator.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/LoadingBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/ControlTemplates/NoNotesFoundBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/SeparatorInNote.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/SeperatorInNote.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/WarningBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
@@ -34,6 +35,17 @@ public class NoteListViewModel : ReactiveObject
     set => this.RaiseAndSetIfChanged(ref _errorInLoading, value);
   }
 
+  /// <summary>
+  /// True if no notes are found in a normal case.
+  /// Normal case means no notes are loaded/saved and no error occured during loading/saving.
+  /// </summary>
+  public bool NoNotesFoundInNormalCase => !ErrorInLoading && !IsLoading && Notes.Count == 0;
+
+  private void NotifyIfNotesWereFound() 
+    => this.RaisePropertyChanged(nameof(NoNotesFoundInNormalCase));
+
+
+
   private readonly INoteListRepository _dataSource;
   private readonly ILogger _logger;
   private bool _errorInLoading;
@@ -57,8 +69,7 @@ public class NoteListViewModel : ReactiveObject
 
   private void HandleLoadingError(Exception thrown)
   {
-    ErrorInLoading = true;
-    IsLoading = false;
+    OnLoadingError();
     _logger.LogExceptionAsError(thrown, "Error in loading");
   }
   
@@ -66,11 +77,11 @@ public class NoteListViewModel : ReactiveObject
   {
     try
     {
-      IsLoading = true;
+      OnStartLoading();
       var notes = await _dataSource.LoadAll();
       Notes.Clear();
       Notes.AddRange(notes);
-      IsLoading = false;
+      OnLoadingFinished();
     }
     catch (Exception exception)
     {
@@ -80,8 +91,35 @@ public class NoteListViewModel : ReactiveObject
 
   private void AddNote(NoteModel toAdd)
   {
+    Notes.Add(toAdd);
+    OnNotesChanged();
+  }
+
+  private void OnNotesChanged()
+  {
     ErrorInLoading = false;
     IsLoading = false;
-    Notes.Add(toAdd);
+    NotifyIfNotesWereFound();
+  }
+
+  private void OnStartLoading()
+  {
+    IsLoading = true;
+    ErrorInLoading = false;
+    NotifyIfNotesWereFound();
+  }
+
+  private void OnLoadingFinished()
+  {
+    IsLoading = false;
+    ErrorInLoading = false;
+    NotifyIfNotesWereFound();
+  }
+
+  private void OnLoadingError()
+  {
+    IsLoading = false;
+    ErrorInLoading = true;
+    NotifyIfNotesWereFound();
   }
 }

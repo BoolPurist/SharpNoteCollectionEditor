@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTemplate x:Key="NoNotesFoundBox" TargetType="ContentControl">
+        <Border Background="Chartreuse"
+                Padding="20"
+                BorderThickness="5"
+                BorderBrush="Green"
+                Opacity="0.5"
+                HorizontalAlignment="Center">
+            <TextBlock
+                FontWeight="Bold"
+                FontSize="25"
+                Text="{TemplateBinding Tag}"
+            />
+        </Border>
+    </ControlTemplate>
+</ResourceDictionary>

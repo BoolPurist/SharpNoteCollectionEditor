@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -34,15 +36,21 @@ public static partial class ServicesOfApp
   private static void RegisterINoteListRepository(IMutableDependencyResolver container)
   {
     container.Register<INoteListRepository>(CreateFakeSource);
-    NoteListFakeInMemorySource CreateFakeSource() => new NoteListFakeInMemorySource(new []
+    NoteListFakeInMemorySource CreateFakeSource() => new (
+      Enumerable.Empty<NoteModel>(), 
+      Resolver.GetRequiredService<IAppConfigs>()
+    );
+
+    IEnumerable<NoteModel> FakeData()
+    {
+      return new[]
       {
         new NoteModel {Title = "First", Content = "First Content"},
         new NoteModel {Title = "Second", Content = "Second Content"},
         new NoteModel {Title = "Second", Content = new string('x', 200)},
         new NoteModel {Title = "Second", Content = new string('x', 400)}
-      }, 
-      Resolver.GetRequiredService<IAppConfigs>()
-    );
+      };
+    }
   }
 
 }

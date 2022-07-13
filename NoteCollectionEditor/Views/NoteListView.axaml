@@ -27,6 +27,7 @@
                 <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml"/>
                 <ResourceInclude Source="/ControlTemplates/WarningBox.axaml"/>
                 <ResourceInclude Source="/ControlTemplates/LoadingBox.axaml" />
+                <ResourceInclude Source="/ControlTemplates/NoNotesFoundBox.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -39,6 +40,10 @@
         Height="{Binding VisualData.ViewHeight}"
         Margin="20">
         <StackPanel>
+            <ContentControl
+                Template="{DynamicResource NoNotesFoundBox}"
+                Tag="No notes created yet"
+                IsVisible="{Binding Data.NoNotesFoundInNormalCase}"/>
             <ContentControl
                 Template="{DynamicResource WarningBox}"
                 Tag="{Binding Data.ErrorLoadingMessage}"

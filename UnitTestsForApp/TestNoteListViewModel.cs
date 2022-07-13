@@ -44,8 +44,10 @@ public class TestNoteListViewModel
     var env = CreateEnvironment();
     var viewModel = env.ViewModel;
     var expected = await env.FakeSource.LoadAll();
+    Assert.True(viewModel.NoNotesFoundInNormalCase);
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
     Assert.Equal(viewModel.Notes, expected);
+    Assert.False(viewModel.NoNotesFoundInNormalCase);
   }
 
   [Fact]
@@ -59,6 +61,7 @@ public class TestNoteListViewModel
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
     Assert.False(viewModel.IsLoading, "Should not indicate loading if error happened.");
     Assert.True(viewModel.ErrorInLoading, "Should indicate error.");
+    Assert.False(viewModel.NoNotesFoundInNormalCase);
   }
 
   [Fact]
@@ -70,6 +73,7 @@ public class TestNoteListViewModel
     Assert.False(viewModel.ErrorInLoading, "No loading error should happened");
     Assert.Single(viewModel.Notes);
     Assert.Equal(expectedAdded, viewModel.Notes.First());
+    Assert.False(viewModel.NoNotesFoundInNormalCase);
   }
   
   [Fact]
@@ -90,6 +94,7 @@ public class TestNoteListViewModel
     
     // Assert
     Assert.False(viewModel.ErrorInLoading, "No error in loading should happened.");
+    Assert.False(viewModel.NoNotesFoundInNormalCase);
     Assert.Equal(expectedEndResult, viewModel.Notes);
   }
 
@@ -104,16 +109,18 @@ public class TestNoteListViewModel
     
     // Assert before act.
     Assert.False(notes.IsLoading, "Should indicate loading if loading has not started yet !");
-    
+    Assert.True(notes.NoNotesFoundInNormalCase);
     // Act
     var loadingState = notes.LoadNotesIn.Execute().GetAwaiter();
     await Task.Delay(waitingTime / 2);
     // Assert during act
     Assert.True(notes.IsLoading, "Should indicate loading while still loading.");
+    Assert.False(notes.NoNotesFoundInNormalCase, "Notes are being loaded");
     await loadingState;
     
     // Assert after act
     Assert.False(notes.IsLoading, "Should not indicate loading after loading has finished.");
+    Assert.False(notes.NoNotesFoundInNormalCase, "Notes were loaded");
   }
 
 }
