@@ -11,36 +11,41 @@ namespace NoteCollectionEditor.Services;
 public static class ServicesOfApp
 {
   private const string DefaultErrorHandler = "DefaultErrorHandler";
-  private static bool _unitTests = false;
+  private static bool _unitTests;
 
-  private static Object _locker = new ();
+  private static readonly Object Locker = new ();
   
   public static IReadonlyDependencyResolver Resolver { get; private set; } = null!;
   
   public static void RegisterAppServices()
   {
-    IMutableDependencyResolver services = Locator.CurrentMutable;
-    IReadonlyDependencyResolver resolver = Locator.Current;
-    Register(services, resolver);
     _unitTests = false;
+    Register();
+  }
+  
+  public static void RegisterForUnitTest()
+  {
+    _unitTests = true;
+    RegisterAppServices();
   }
 
-  public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+  private static void Register()
   {
-    lock (_locker)
+    lock (Locker)
     {
+      IMutableDependencyResolver services = Locator.CurrentMutable;
+      IReadonlyDependencyResolver resolver = Locator.Current;
+      
       Resolver = resolver;
       RegisterStandAloneServices(services);
     
       services.Register(CreateNoteListViewModel, typeof(NoteListViewModel));
     }
   }
+  
+  
 
-  public static void RegisterForUnitTest()
-  {
-    _unitTests = true;
-    RegisterAppServices();
-  }
+
 
   public static IErrorHandler GetDefaultErrorHandler()
   {

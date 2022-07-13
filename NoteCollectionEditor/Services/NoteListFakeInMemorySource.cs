@@ -10,6 +10,8 @@ public class NoteListFakeInMemorySource : INoteListRepository
 {
   private readonly IEnumerable<NoteModel> _data;
   public bool ThrowErrorInLoading { get; set; }
+  public int LoadDelay { get; set; } = 0;
+  public bool HasLoadDelay => LoadDelay != 0;
 
   public NoteListFakeInMemorySource(
     IEnumerable<NoteModel> data, 
@@ -17,6 +19,7 @@ public class NoteListFakeInMemorySource : INoteListRepository
   {
     _data = data;
     ThrowErrorInLoading = configs.DataSource.LoadCrashes;
+    LoadDelay = configs.DataSource.LoadDelay;
   }
 
   public async Task<IEnumerable<NoteModel>> LoadAll()
@@ -24,6 +27,11 @@ public class NoteListFakeInMemorySource : INoteListRepository
     if (ThrowErrorInLoading)
     {
       throw new InvalidOperationException("Error in loading");
+    }
+
+    if (HasLoadDelay)
+    {
+      await Task.Delay(LoadDelay);
     }
 
     return await Task.FromResult(_data);
