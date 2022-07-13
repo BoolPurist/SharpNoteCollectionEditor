@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -31,6 +32,7 @@ public partial class NoteListView : UserControl
     if (Design.IsDesignMode)
     {
       Data.ErrorInLoading = true;
+      Data.IsLoading = false;
       Data.Notes = new ObservableCollectionExtended<NoteModel>(
         new[]
         {

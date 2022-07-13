@@ -26,7 +26,9 @@ public class AppConfigs : IAppConfigs
     
     var config = new ConfigurationBuilder()
       .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+#if DEBUG
       .AddJsonFile("appsettings.develop.json")
+#endif
       .Build();
     
     appConfig.DataSource = GetSectionAsBinding<NoteDataSourceConfig>(config);

@@ -22,6 +22,12 @@ public class NoteListViewModel : ReactiveObject
 
   public string ErrorLoadingMessage { get; } = "Unable to load notes";
 
+  public bool IsLoading
+  {
+    get => _isLoading;
+    set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+  }
+
   public bool ErrorInLoading
   {
     get => _errorInLoading;
@@ -31,6 +37,7 @@ public class NoteListViewModel : ReactiveObject
   private readonly INoteListRepository _dataSource;
   private readonly ILogger _logger;
   private bool _errorInLoading;
+  private bool _isLoading;
 
   public NoteListViewModel(INoteListRepository repository, ILogger logger)
   {
@@ -58,9 +65,11 @@ public class NoteListViewModel : ReactiveObject
   {
     try
     {
+      IsLoading = true;
       var notes = await _dataSource.LoadAll();
       Notes.Clear();
       Notes.AddRange(notes);
+      IsLoading = false;
     }
     catch (Exception exception)
     {
@@ -71,6 +80,7 @@ public class NoteListViewModel : ReactiveObject
   private void AddNote(NoteModel toAdd)
   {
     ErrorInLoading = false;
+    IsLoading = false;
     Notes.Add(toAdd);
   }
 }

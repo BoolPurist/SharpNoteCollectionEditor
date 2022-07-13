@@ -26,6 +26,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml"/>
                 <ResourceInclude Source="/ControlTemplates/WarningBox.axaml"/>
+                <ResourceInclude Source="/ControlTemplates/LoadingBox.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -42,6 +43,10 @@
                 Template="{DynamicResource WarningBox}"
                 Tag="{Binding Data.ErrorLoadingMessage}"
                 IsVisible="{Binding Data.ErrorInLoading}"/>
+            <ContentControl
+                Template="{DynamicResource LoadingBox}"
+                Tag="Loading Notes."
+                IsVisible="{Binding Data.IsLoading}"/>
             
             <ItemsControl 
                 DataContext="{Binding Data}"
