@@ -37,7 +37,6 @@ public class AppConfigs : IAppConfigs
 
   private static T GetSectionAsBinding<T>(IConfigurationRoot root)
   {
-    string name = typeof(T).Name;
     var boundSection = root.GetSection(typeof(T).Name).Get<T>();
     Debug.Assert(boundSection != null);
     return boundSection;

@@ -8,7 +8,7 @@ public class InMemoryLogger : ILogger
 {
 
   public IEnumerable<string> Logs => _logs;
-  public LogLevel Level { get; }
+  public LogLevel Level { get; set; }
   
   private readonly List<string> _logs = new();
 

@@ -22,10 +22,7 @@ namespace NoteCollectionEditor
       
       if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
       {
-        desktop.MainWindow = new MainWindow
-        {
-          DataContext = ServicesOfApp.Resolver.GetRequiredService<MainWindow>(),
-        };
+        desktop.MainWindow = new MainWindow();
       }
 
       base.OnFrameworkInitializationCompleted();
