@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,8 +19,16 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class NoteListViewModel : ReactiveObject
 {
-
-  public IObservableCollection<NoteModel> Notes { get; set; } = new ObservableCollectionExtended<NoteModel>();
+  public ObservableCollection<NoteModel> Notes
+  {
+    get => _notes;
+    set
+    {
+      AdjustIdToPosition(value);
+      _notes = value;
+      this.RaisePropertyChanged(nameof(Notes));
+    }
+  }
 
   public string ErrorLoadingMessage { get; } = "Unable to load notes";
 
@@ -42,12 +53,11 @@ public class NoteListViewModel : ReactiveObject
   private void NotifyIfNotesWereFound()
     => this.RaisePropertyChanged(nameof(NoNotesFoundInNormalCase));
 
-
-
   private readonly INoteListRepository _dataSource;
   private readonly ILogger _logger;
   private bool _errorInLoading;
   private bool _isLoading;
+  private ObservableCollection<NoteModel> _notes = new ObservableCollection<NoteModel>();
 
   public NoteListViewModel(INoteListRepository repository, ILogger logger)
   {
@@ -65,6 +75,15 @@ public class NoteListViewModel : ReactiveObject
 
   public ReactiveCommand<Unit, Unit> LoadNotesIn { get; private set; }
 
+  private void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
+  {
+    int newNextId = 0;
+    foreach (var note in toAdjust)
+    {
+      note.Id = newNextId++;
+    }
+  }
+
   private void HandleLoadingError(Exception thrown)
   {
     OnLoadingError();
@@ -78,8 +97,7 @@ public class NoteListViewModel : ReactiveObject
       OnStartLoading();
 
       var notes = await _dataSource.LoadAll();
-      Notes.Clear();
-      Notes.AddRange(notes);
+      Notes = new ObservableCollectionExtended<NoteModel>(notes);
       OnLoadingFinished();
     }
     catch (Exception exception)
@@ -90,6 +108,7 @@ public class NoteListViewModel : ReactiveObject
 
   private void AddNote(NoteModel toAdd)
   {
+    toAdd.Id = _notes.Count;
     Notes.Add(toAdd);
     _logger.LogDebug("Note has been added.");
     OnNotesChanged();

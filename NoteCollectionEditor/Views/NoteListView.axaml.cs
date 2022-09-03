@@ -1,4 +1,6 @@
+using System;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
@@ -42,5 +44,10 @@ public partial class NoteListView : UserControl
   private void InitializeComponent()
   {
     AvaloniaXamlLoader.Load(this);
+  }
+
+  private void OnClick_EditNode(object? sender, RoutedEventArgs e)
+  {
+    Console.WriteLine((sender as Button)?.Tag);
   }
 }

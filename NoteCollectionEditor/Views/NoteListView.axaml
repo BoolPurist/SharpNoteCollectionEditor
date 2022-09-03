@@ -5,91 +5,93 @@
              xmlns:models="clr-namespace:NoteCollectionEditor.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1000"
              x:Class="NoteCollectionEditor.Views.NoteListView"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}"
-             >
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-    <UserControl.Styles>
-        <Style Selector="StackPanel.NoteContainer">
-            <Setter Property="Margin" Value="0,10,0,0"/>
-        </Style>
+  <UserControl.Styles>
+    <Style Selector="StackPanel.NoteContainer">
+      <Setter Property="Margin" Value="0,10,0,0" />
+    </Style>
 
-        <Style Selector="ScrollViewer[IsExpanded=False] /template/ ScrollBar#PART_VerticalScrollBar">
-            <Setter Property="Background" Value="Gray"/>
-            <Setter Property="Opacity" Value="0.30"></Setter>
-        </Style>
-        <StyleInclude Source="/Styles/ReadOnlyText.axaml" />
-        <StyleInclude Source="/Styles/NoteStyles.axaml"/>
-    </UserControl.Styles>
+    <Style Selector="ScrollViewer[IsExpanded=False] /template/ ScrollBar#PART_VerticalScrollBar">
+      <Setter Property="Background" Value="Gray" />
+      <Setter Property="Opacity" Value="0.30"></Setter>
+    </Style>
+    <StyleInclude Source="/Styles/ReadOnlyText.axaml" />
+    <StyleInclude Source="/Styles/NoteStyles.axaml" />
+  </UserControl.Styles>
 
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml"/>
-                <ResourceInclude Source="/ControlTemplates/WarningBox.axaml"/>
-                <ResourceInclude Source="/ControlTemplates/LoadingBox.axaml" />
-                <ResourceInclude Source="/ControlTemplates/NoNotesFoundBox.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml" />
+        <ResourceInclude Source="/ControlTemplates/WarningBox.axaml" />
+        <ResourceInclude Source="/ControlTemplates/LoadingBox.axaml" />
+        <ResourceInclude Source="/ControlTemplates/NoNotesFoundBox.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
 
-    <ScrollViewer
-        VerticalScrollBarVisibility="Auto"
-        AllowAutoHide="True"
-        Height="{Binding VisualData.ViewHeight}"
-        Margin="20">
-        <StackPanel>
-            <ContentControl
-                Template="{DynamicResource NoNotesFoundBox}"
-                Tag="No notes created yet"
-                IsVisible="{Binding Data.NoNotesFoundInNormalCase}"/>
-            <ContentControl
-                Template="{DynamicResource WarningBox}"
-                Tag="{Binding Data.ErrorLoadingMessage}"
-                IsVisible="{Binding Data.ErrorInLoading}"/>
-            <ContentControl
-                Template="{DynamicResource LoadingBox}"
-                Tag="Loading Notes."
-                IsVisible="{Binding Data.IsLoading}"/>
+  <ScrollViewer
+    VerticalScrollBarVisibility="Auto"
+    AllowAutoHide="True"
+    Height="{Binding VisualData.ViewHeight}"
+    Margin="20">
+    <StackPanel>
+      <ContentControl
+        Template="{DynamicResource NoNotesFoundBox}"
+        Tag="No notes created yet"
+        IsVisible="{Binding Data.NoNotesFoundInNormalCase}" />
+      <ContentControl
+        Template="{DynamicResource WarningBox}"
+        Tag="{Binding Data.ErrorLoadingMessage}"
+        IsVisible="{Binding Data.ErrorInLoading}" />
+      <ContentControl
+        Template="{DynamicResource LoadingBox}"
+        Tag="Loading Notes."
+        IsVisible="{Binding Data.IsLoading}" />
 
-            <ItemsControl
-                DataContext="{Binding Data}"
-                Items="{Binding Notes}"
+      <ItemsControl
+        DataContext="{Binding Data}"
+        Items="{Binding Notes}"
 
-                Padding="15">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="models:NoteModel">
-                        <StackPanel>
-                            <Border Classes="NoteBorder" Margin="20">
-                                <StackPanel Classes="NoteContainer">
-                                  <Button
-                                    Margin="10"
-                                    HorizontalAlignment="Right"
-                                    Content="{DynamicResource PencilIcon}"
-                                  />
-                                  <TextBox
-                                        Classes="ReadOnlyTextBox"
-                                        FontSize="20"
-                                        FontWeight="Bold"
-                                        Text="{Binding Title}"/>
-                                    <Separator
-                                        Template="{DynamicResource SeparatorInNoteTemplate}"/>
-                                    <TextBox
-                                        Classes="ReadOnlyTextBox"
-                                        TextAlignment="Left"
-                                        FontSize="15"
-                                        Margin="0,0,0,15"
-                                        Text="{Binding Content}"/>
-                                </StackPanel>
-                            </Border>
+        Padding="15">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="models:NoteModel">
+            <StackPanel>
+              <Border Classes="NoteBorder" Margin="20">
+                <StackPanel Classes="NoteContainer">
+                  <Button
+                    Width="64"
+                    Height="64"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Tag="{Binding Id}"
+                    Click="OnClick_EditNode">
+                    <Image Source="../Assets/pencil-solid.png"></Image>
+                  </Button>
+                  <TextBox
+                    Classes="ReadOnlyTextBox"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Text="{Binding Title}" />
+                  <Separator
+                    Template="{DynamicResource SeparatorInNoteTemplate}" />
+                  <TextBox
+                    Classes="ReadOnlyTextBox"
+                    TextAlignment="Left"
+                    FontSize="15"
+                    Margin="0,0,0,15"
+                    Text="{Binding Content}" />
+                </StackPanel>
+              </Border>
 
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-    </ScrollViewer>
+            </StackPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </ScrollViewer>
 
 
 </UserControl>

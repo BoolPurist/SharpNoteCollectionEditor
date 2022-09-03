@@ -40,9 +40,9 @@ public partial class AlterNoteWindow : Window
 
   public void SetAcceptButtonText(string newText) => Data.AcceptButtonText = newText;
 
-  protected void OnSubmit(object? sender, NoteModel toSubmit)
+  private void OnSubmit(object? sender, NoteModel toSubmit)
   {
-    Close(toSubmit);
+    Close(new NoteModel() { Content = toSubmit.Content, Title = toSubmit.Title} );
   }
 
   // ReSharper disable once UnusedParameter.Local

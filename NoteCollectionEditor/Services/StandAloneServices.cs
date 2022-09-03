@@ -29,7 +29,7 @@ public static partial class ServicesOfApp
   {
     container.Register<INoteListRepository>(CreateFakeSource);
     NoteListFakeInMemorySource CreateFakeSource() => new (
-      new [] { new NoteModel { Title = "First node", Content = "....."} },
+      FakeData(),
       Resolver.GetRequiredService<IAppConfigs>()
     );
 

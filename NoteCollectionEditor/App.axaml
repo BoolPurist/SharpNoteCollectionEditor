@@ -16,11 +16,6 @@
       Height="64"
       x:Key="AddIcon"
       Source="./Assets/AddIcon.png" />
-    <Image
-      Width="32"
-      Height="32"
-      x:Key="PencilIcon"
-      Source="./Assets/pencil-solid.png" />
     <SolidColorBrush x:Key="NoteColor" Color="#FF9200" />
   </Application.Resources>
 </Application>
