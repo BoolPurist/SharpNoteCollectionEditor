@@ -12,21 +12,14 @@ public static partial class ServicesOfApp
 {
   private static void RegisterLogger(IMutableDependencyResolver container)
   {
-    if (_unitTests)
-    {
-      container.Register<ILogger>(() => new InMemoryLogger());
-    }
-    else
-    {
-      container.RegisterConstant<ILogger>( new ConsoleLogger() { Level = LogLevel.Debug });
-    }
+    container.RegisterConstant<ILogger>( new ConsoleLogger() { Level = LogLevel.Debug });
   }
 
   private static void RegisterAppConfig(IMutableDependencyResolver container)
   {
-    container.RegisterConstant<IAppConfigs>(_unitTests ? AppConfigs.CreateNotFromFile() : AppConfigs.Create());
+    container.RegisterConstant<IAppConfigs>(AppConfigs.Create());
   }
-  
+
   private static void RegisterAddNoteViewModel(IMutableDependencyResolver container)
   {
     container.Register(() => new AddNoteViewModel());
@@ -36,7 +29,7 @@ public static partial class ServicesOfApp
   {
     container.Register<INoteListRepository>(CreateFakeSource);
     NoteListFakeInMemorySource CreateFakeSource() => new (
-      Enumerable.Empty<NoteModel>(), 
+      Enumerable.Empty<NoteModel>(),
       Resolver.GetRequiredService<IAppConfigs>()
     );
 

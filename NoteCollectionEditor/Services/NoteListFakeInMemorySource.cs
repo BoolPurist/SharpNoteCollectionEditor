@@ -10,11 +10,11 @@ public class NoteListFakeInMemorySource : INoteListRepository
 {
   private readonly IEnumerable<NoteModel> _data;
   public bool ThrowErrorInLoading { get; set; }
-  public int LoadDelay { get; set; } = 0;
-  public bool HasLoadDelay => LoadDelay != 0;
+  public int LoadDelay { get; set; }
+  private bool HasLoadDelay => LoadDelay != 0;
 
   public NoteListFakeInMemorySource(
-    IEnumerable<NoteModel> data, 
+    IEnumerable<NoteModel> data,
     IAppConfigs configs)
   {
     _data = data;

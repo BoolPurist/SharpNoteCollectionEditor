@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
@@ -18,7 +16,7 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class NoteListViewModel : ReactiveObject
 {
-  
+
   public IObservableCollection<NoteModel> Notes { get; set; } = new ObservableCollectionExtended<NoteModel>();
 
   public string ErrorLoadingMessage { get; } = "Unable to load notes";
@@ -41,7 +39,7 @@ public class NoteListViewModel : ReactiveObject
   /// </summary>
   public bool NoNotesFoundInNormalCase => !ErrorInLoading && !IsLoading && Notes.Count == 0;
 
-  private void NotifyIfNotesWereFound() 
+  private void NotifyIfNotesWereFound()
     => this.RaisePropertyChanged(nameof(NoNotesFoundInNormalCase));
 
 
@@ -58,13 +56,13 @@ public class NoteListViewModel : ReactiveObject
     AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
     LoadNotesIn = ReactiveCommand.CreateFromTask(LoadNotes);
   }
-  
+
   /// <summary>
   /// Takes a NoteModel as parameter and
   /// adds it as new entity to the collection of notes.
   /// </summary>
   public ICommand AddNoteCommand { get; private set; }
-  
+
   public ReactiveCommand<Unit, Unit> LoadNotesIn { get; private set; }
 
   private void HandleLoadingError(Exception thrown)
@@ -72,13 +70,13 @@ public class NoteListViewModel : ReactiveObject
     OnLoadingError();
     _logger.LogExceptionAsError(thrown, "Error in loading");
   }
-  
+
   private async Task LoadNotes()
   {
     try
     {
       OnStartLoading();
-      
+
       var notes = await _dataSource.LoadAll();
       Notes.Clear();
       Notes.AddRange(notes);

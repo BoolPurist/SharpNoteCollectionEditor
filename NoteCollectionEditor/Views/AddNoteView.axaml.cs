@@ -1,26 +1,23 @@
 using System;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Metadata;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
-using ReactiveUI;
 
 namespace NoteCollectionEditor.Views;
 
 public partial class AddNoteView : Window
 {
-  public AddNoteViewModel Data { get; private set; }
+  private AddNoteViewModel Data { get; set; }
 
   public AddNoteView()
   {
     InitializeComponent();
-    
+
     Data = ServicesOfApp.Resolver.GetRequiredService<AddNoteViewModel>();
     DataContext = this;
     Data.Submit += OnSubmit;
@@ -28,7 +25,7 @@ public partial class AddNoteView : Window
 #if DEBUG
     this.AttachDevTools();
 #endif
-    
+
   }
 
   private void OnSubmit(object? sender, NoteModel toSubmit)
@@ -36,6 +33,7 @@ public partial class AddNoteView : Window
     Close(toSubmit);
   }
 
+  // ReSharper disable once UnusedParameter.Local
   private void OnClickCancel(object? sender, RoutedEventArgs e)
   {
     Close(null);
@@ -45,7 +43,7 @@ public partial class AddNoteView : Window
   {
     AvaloniaXamlLoader.Load(this);
   }
-  
+
   protected override void OnClosed(EventArgs e)
   {
     base.OnClosed(e);
