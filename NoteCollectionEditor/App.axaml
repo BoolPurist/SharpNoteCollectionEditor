@@ -3,20 +3,19 @@
              xmlns:local="using:NoteCollectionEditor"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="NoteCollectionEditor.App">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
 
-    <Application.Styles>
-        <FluentTheme Mode="Light"/>
-    </Application.Styles>
-    <Application.Resources>
-        <Image 
-            Width="64" 
-            Height="64" 
-            x:Key="AddIcon" 
-            Source="./Assets/AddIcon.png"
-            />
-        <SolidColorBrush x:Key="NoteColor" Color="#FF9200"/>
-    </Application.Resources>
+  <Application.Styles>
+    <FluentTheme Mode="Light" />
+  </Application.Styles>
+  <Application.Resources>
+    <Image
+      Width="64"
+      Height="64"
+      x:Key="AddIcon"
+      Source="./Assets/AddIcon.png" />
+    <SolidColorBrush x:Key="NoteColor" Color="#FF9200" />
+  </Application.Resources>
 </Application>
