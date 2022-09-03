@@ -23,12 +23,12 @@ public class TestNoteListViewModel
     new NoteModel {Title = "Third", Content = "3. Content"}
   };
 
-  private static EnvironmentForNoteListViewModel CreateEnvironment() 
+  private static EnvironmentForNoteListViewModel CreateEnvironment()
     => CreateEnvironment(ExampleNotesForLoading);
 
   private static EnvironmentForNoteListViewModel CreateEnvironment(IEnumerable<NoteModel> toLoad)
   {
-    var data = new NoteListFakeInMemorySource(toLoad, AppConfigs.CreateNotFromFile());
+    var data = new NoteListFakeInMemorySource(toLoad, AppConfigs.CreateNotesFromFile());
     var fakeLogger = new InMemoryLogger();
     var viewModel = new NoteListViewModel(data, fakeLogger);
     return new EnvironmentForNoteListViewModel(
@@ -57,7 +57,7 @@ public class TestNoteListViewModel
     var data = env.FakeSource;
     var viewModel = env.ViewModel;
     data.ThrowErrorInLoading = true;
-    
+
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
     Assert.False(viewModel.IsLoading, "Should not indicate loading if error happened.");
     Assert.True(viewModel.ErrorInLoading, "Should indicate error.");
@@ -75,7 +75,7 @@ public class TestNoteListViewModel
     Assert.Equal(expectedAdded, viewModel.Notes.First());
     Assert.False(viewModel.NoNotesFoundInNormalCase);
   }
-  
+
   [Fact]
   public async Task ShouldAddNoteToLoadedOnes()
   {
@@ -83,15 +83,15 @@ public class TestNoteListViewModel
     var toAdd = new NoteModel { Title = "Added", Content = "Content"};
     var loadedDate = ExampleNotesForLoading;
     var expectedEndResult = loadedDate.Concat(new [] { toAdd });
-    
+
     // Set up
     var env = CreateEnvironment(loadedDate);
     var viewModel = env.ViewModel;
-    
+
     // Act
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
     viewModel.AddNoteCommand.Execute(toAdd);
-    
+
     // Assert
     Assert.False(viewModel.ErrorInLoading, "No error in loading should happened.");
     Assert.False(viewModel.NoNotesFoundInNormalCase);
@@ -105,8 +105,8 @@ public class TestNoteListViewModel
     var testEnvironment = CreateEnvironment();
     const int waitingTime = 1000;
     testEnvironment.FakeSource.LoadDelay = waitingTime;
-    var notes = testEnvironment.ViewModel; 
-    
+    var notes = testEnvironment.ViewModel;
+
     // Assert before act.
     Assert.False(notes.IsLoading, "Should indicate loading if loading has not started yet !");
     Assert.True(notes.NoNotesFoundInNormalCase);
@@ -117,7 +117,7 @@ public class TestNoteListViewModel
     Assert.True(notes.IsLoading, "Should indicate loading while still loading.");
     Assert.False(notes.NoNotesFoundInNormalCase, "Notes are being loaded");
     await loadingState;
-    
+
     // Assert after act
     Assert.False(notes.IsLoading, "Should not indicate loading after loading has finished.");
     Assert.False(notes.NoNotesFoundInNormalCase, "Notes were loaded");

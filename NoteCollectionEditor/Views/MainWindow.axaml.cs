@@ -9,6 +9,7 @@ namespace NoteCollectionEditor.Views
   {
     // TODO: Find a way to calculate this depending on the layout.
     private const double OffsetHeightScrollViewerNotes = 150;
+    private const string AddNoteButtonText = "Add Note.";
 
     public MainWindow()
     {
@@ -20,7 +21,7 @@ namespace NoteCollectionEditor.Views
     private async void OnClickSpawnAddNoteWindow(object? sender, RoutedEventArgs e)
     {
       var windowAddingNote = new AlterNoteWindow();
-      windowAddingNote.SetAcceptButtonText("Add Note.");
+      windowAddingNote.SetAcceptButtonText(AddNoteButtonText);
       var newNote = await windowAddingNote.ShowDialog<NoteModel>(this);
       if (newNote != null)
       {

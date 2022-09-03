@@ -37,6 +37,8 @@ public partial class NoteListView : UserControl
     );
   }
 
+
+
   private void InitializeComponent()
   {
     AvaloniaXamlLoader.Load(this);
