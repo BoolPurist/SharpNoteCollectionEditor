@@ -58,18 +58,20 @@ public partial class NoteListView : UserControl
   {
     if (sender is Button {Tag: int} button )
     {
-      int editId = (int) button.Tag;
-      var toEdit = Data.Notes[editId];
-
       var mainWindow = ApplicationExtension.GetCurrentMainWindow();
       if (mainWindow == null)
       {
         _logger.LogError($"{nameof(OnClick_EditNode)}: Could not retrieve window of a note list user control.");
+        return;
       }
+
+      int editId = (int) button.Tag;
+      var toEdit = Data.Notes[editId];
 
       var edited = await AlterNoteWindow.CreateForEdit(toEdit)
         .ShowDialog<NoteModel>(mainWindow);
       edited.Id = editId;
+
       Data.EditNoteCommand.Execute(edited);
     }
     else

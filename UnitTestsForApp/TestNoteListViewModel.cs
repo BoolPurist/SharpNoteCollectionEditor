@@ -1,4 +1,5 @@
 using System.Reactive.Linq;
+using Avalonia;
 using Avalonia.Shared.PlatformSupport;
 using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Models;
@@ -23,10 +24,10 @@ public class TestNoteListViewModel
     new NoteModel {Title = "Third", Content = "3. Content"}
   };
 
-  private static EnvironmentForNoteListViewModel CreateEnvironment()
-    => CreateEnvironment(ExampleNotesForLoading);
+  private static EnvironmentForNoteListViewModel CreateEnvironmentForTests()
+    => CreateEnvironmentForTests(ExampleNotesForLoading);
 
-  private static EnvironmentForNoteListViewModel CreateEnvironment(IEnumerable<NoteModel> toLoad)
+  private static EnvironmentForNoteListViewModel CreateEnvironmentForTests(IEnumerable<NoteModel> toLoad)
   {
     var data = new NoteListFakeInMemorySource(toLoad, AppConfigs.CreateNotesFromFile());
     var fakeLogger = new InMemoryLogger();
@@ -41,19 +42,40 @@ public class TestNoteListViewModel
   [Fact]
   public async Task ShouldContainCollectionAfterLoading()
   {
-    var env = CreateEnvironment();
+    var env = CreateEnvironmentForTests();
     var viewModel = env.ViewModel;
     var expected = await env.FakeSource.LoadAll();
-    Assert.True(viewModel.NoNotesFoundInNormalCase);
+
     await viewModel.LoadNotesIn.Execute().GetAwaiter();
-    Assert.Equal(viewModel.Notes, expected);
+    Assert.Equal(expected, viewModel.Notes);
     Assert.False(viewModel.NoNotesFoundInNormalCase);
+    AssertIfIdAscending(viewModel.Notes);
+
+  }
+
+  private void AssertIfIdAscending(IEnumerable<NoteModel> toAssert)
+  {
+    int currentExpectedId = 0;
+    foreach (var singleNote in toAssert)
+    {
+      Assert.Equal(currentExpectedId, singleNote.Id);
+      currentExpectedId++;
+    }
+  }
+
+  [Fact]
+  public void ShouldIndicateNotLoadedYet()
+  {
+    var env = CreateEnvironmentForTests();
+    var viewModel = env.ViewModel;
+
+    Assert.True(viewModel.NoNotesFoundInNormalCase);
   }
 
   [Fact]
   public async Task ShouldIndicateLoadingError()
   {
-    var env = CreateEnvironment();
+    var env = CreateEnvironmentForTests();
     var data = env.FakeSource;
     var viewModel = env.ViewModel;
     data.ThrowErrorInLoading = true;
@@ -67,13 +89,15 @@ public class TestNoteListViewModel
   [Fact]
   public void ShouldAddNote()
   {
-    var viewModel = CreateEnvironment().ViewModel;
+    var viewModel = CreateEnvironmentForTests().ViewModel;
     var expectedAdded = new NoteModel { Title = "Added", Content = "Content"};
+    var actualNotes = viewModel.Notes;
     viewModel.AddNoteCommand.Execute(expectedAdded);
     Assert.False(viewModel.ErrorInLoading, "No loading error should happened");
-    Assert.Single(viewModel.Notes);
-    Assert.Equal(expectedAdded, viewModel.Notes.First());
+    Assert.Single(actualNotes);
+    Assert.Equal(expectedAdded, actualNotes.First());
     Assert.False(viewModel.NoNotesFoundInNormalCase);
+    AssertIfIdAscending(actualNotes);
   }
 
   [Fact]
@@ -85,7 +109,7 @@ public class TestNoteListViewModel
     var expectedEndResult = loadedDate.Concat(new [] { toAdd });
 
     // Set up
-    var env = CreateEnvironment(loadedDate);
+    var env = CreateEnvironmentForTests(loadedDate);
     var viewModel = env.ViewModel;
 
     // Act
@@ -102,7 +126,7 @@ public class TestNoteListViewModel
   public async Task ShouldIndicateLoading()
   {
     // Set up
-    var testEnvironment = CreateEnvironment();
+    var testEnvironment = CreateEnvironmentForTests();
     const int waitingTime = 1000;
     testEnvironment.FakeSource.LoadDelay = waitingTime;
     var notes = testEnvironment.ViewModel;
@@ -122,5 +146,7 @@ public class TestNoteListViewModel
     Assert.False(notes.IsLoading, "Should not indicate loading after loading has finished.");
     Assert.False(notes.NoNotesFoundInNormalCase, "Notes were loaded");
   }
+
+
 
 }
