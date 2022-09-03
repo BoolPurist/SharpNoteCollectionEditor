@@ -1,3 +1,5 @@
+using System;
+
 namespace NoteCollectionEditor.Models;
 
 public partial class NoteModel
@@ -6,4 +8,6 @@ public partial class NoteModel
   public string? Content { get; set; }
 
   public int Id { get; set; } = -1;
+
+
 }

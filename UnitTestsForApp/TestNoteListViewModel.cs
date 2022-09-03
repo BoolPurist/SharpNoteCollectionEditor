@@ -1,17 +1,15 @@
 using System.Reactive.Linq;
-using Avalonia;
-using Avalonia.Shared.PlatformSupport;
 using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
-using Splat;
 
 namespace UnitTestsForApp;
 
 public class TestNoteListViewModel
 {
   private record EnvironmentForNoteListViewModel(
+    // ReSharper disable once NotAccessedPositionalProperty.Local
     InMemoryLogger Logger,
     NoteListFakeInMemorySource FakeSource,
     NoteListViewModel ViewModel
@@ -145,6 +143,27 @@ public class TestNoteListViewModel
     // Assert after act
     Assert.False(notes.IsLoading, "Should not indicate loading after loading has finished.");
     Assert.False(notes.NoNotesFoundInNormalCase, "Notes were loaded");
+  }
+
+  [Fact]
+  public async Task ShouldEditOnNote()
+  {
+    const int editId = 1;
+
+    var testEnvironment = CreateEnvironmentForTests();
+    var viewModel = testEnvironment.ViewModel;
+    await viewModel.LoadNotesIn.Execute().GetAwaiter();
+    var replacement = CreateEdited();
+
+
+    viewModel.EditNoteCommand.Execute(replacement);
+
+    var actualNote = viewModel.Notes[editId];
+    Assert.Equal(editId, replacement.Id);
+    Assert.Equal(actualNote.Title, replacement.Title);
+    Assert.Equal(actualNote.Content, replacement.Content);
+
+    static NoteModel CreateEdited() => new NoteModel {Title = "New Title", Content = "New Content", Id = editId};
   }
 
 
