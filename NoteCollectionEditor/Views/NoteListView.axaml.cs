@@ -1,11 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DynamicData.Binding;
-
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
@@ -13,7 +13,6 @@ using NoteCollectionEditor.ViewModels;
 using Splat;
 
 namespace NoteCollectionEditor.Views;
-
 
 public partial class NoteListView : UserControl
 {
@@ -48,7 +47,6 @@ public partial class NoteListView : UserControl
   }
 
 
-
   private void InitializeComponent()
   {
     AvaloniaXamlLoader.Load(this);
@@ -56,7 +54,7 @@ public partial class NoteListView : UserControl
 
   private async void OnClick_EditNode(object? sender, RoutedEventArgs e)
   {
-    if (sender is Button {Tag: int} button )
+    if (sender is Button {Tag: int} button)
     {
       var mainWindow = ApplicationExtension.GetCurrentMainWindow();
       if (mainWindow == null)
@@ -70,8 +68,10 @@ public partial class NoteListView : UserControl
 
       var edited = await AlterNoteWindow.CreateForEdit(toEdit)
         .ShowDialog<NoteModel>(mainWindow);
-      edited.Id = editId;
 
+      if (edited == null) return;
+
+      edited.Id = editId;
       Data.EditNoteCommand.Execute(edited);
     }
     else
@@ -80,5 +80,16 @@ public partial class NoteListView : UserControl
     }
   }
 
-
+  private void OnClick_DeleteNode(object? sender, RoutedEventArgs e)
+  {
+    if (sender is Button {Tag: int} button)
+    {
+      int deleteId = (int) button.Tag;
+      Data.DeleteCommand.Execute(deleteId);
+    }
+    else
+    {
+      _logger.LogError($"{nameof(OnClick_DeleteNode)}: sender is not of type button with tag property of type int.");
+    }
+  }
 }

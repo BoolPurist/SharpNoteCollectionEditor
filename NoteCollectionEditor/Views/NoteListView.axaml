@@ -61,15 +61,28 @@
             <StackPanel>
               <Border Classes="NoteBorder" Margin="20">
                 <StackPanel Classes="NoteContainer">
-                  <Button
-                    Width="64"
-                    Height="64"
-                    Margin="10"
-                    HorizontalAlignment="Right"
-                    Tag="{Binding Id}"
-                    Click="OnClick_EditNode">
-                    <Image Source="../Assets/pencil-solid.png"></Image>
-                  </Button>
+                  <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right" >
+                    <Button
+                      Width="64"
+                      Height="64"
+                      Margin="10"
+                      HorizontalAlignment="Right"
+                      Tag="{Binding Id}"
+                      Click="OnClick_EditNode">
+                      <Image Source="../Assets/pencil-solid.png"></Image>
+                    </Button>
+                    <Button
+                      Width="64"
+                      Height="64"
+                      Margin="10"
+                      HorizontalAlignment="Right"
+                      Tag="{Binding Id}"
+                      Click="OnClick_DeleteNode">
+                      <Image Source="../Assets/trash-solid.png"></Image>
+                    </Button>
+                  </StackPanel>
                   <TextBox
                     Classes="ReadOnlyTextBox"
                     FontSize="20"

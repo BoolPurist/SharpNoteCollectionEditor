@@ -61,8 +61,10 @@ public class NoteListViewModel : ReactiveObject
   {
     _dataSource = repository;
     _logger = logger;
+
     AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
     EditNoteCommand = ReactiveCommand.Create<NoteModel>(EditNote);
+    DeleteCommand = ReactiveCommand.Create<int>(DeleteNote);
     LoadNotesIn = ReactiveCommand.CreateFromTask(LoadNotes);
   }
 
@@ -73,6 +75,8 @@ public class NoteListViewModel : ReactiveObject
   public ICommand AddNoteCommand { get;  }
 
   public ICommand EditNoteCommand { get; }
+
+  public ICommand DeleteCommand { get; }
 
   public ReactiveCommand<Unit, Unit> LoadNotesIn { get; private set; }
 
@@ -119,6 +123,14 @@ public class NoteListViewModel : ReactiveObject
   {
     _notes[toEdit.Id] = toEdit;
     _logger.LogDebug($"Changed note at {toEdit.Id} to \n{toEdit}");
+    OnNotesChanged();
+  }
+
+  private void DeleteNote(int deleteId)
+  {
+    _notes.RemoveAt(deleteId);
+    AdjustIdToPosition(_notes);
+    _logger.LogDebug($"Removed note at {deleteId}");
     OnNotesChanged();
   }
 

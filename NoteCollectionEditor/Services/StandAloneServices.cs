@@ -41,8 +41,8 @@ public static partial class ServicesOfApp
       {
         new NoteModel {Title = "First", Content = "First Content"},
         new NoteModel {Title = "Second", Content = "Second Content"},
-        new NoteModel {Title = "Second", Content = new string('x', 200)},
-        new NoteModel {Title = "Second", Content = new string('x', 400)}
+        new NoteModel {Title = "Third", Content = new string('x', 200)},
+        new NoteModel {Title = "Fourth", Content = new string('x', 400)}
       };
     }
   }
