@@ -6,16 +6,16 @@ using NoteCollectionEditor.ViewModels;
 
 namespace UnitTestsForApp;
 
-public class TestAddNoteViewModel
+public class TestAlterNoteViewModel
 {
   [Fact]
   public void ShouldCanExecuteIfBothFieldsAreFilled()
   {
-    var viewModel = new AddNoteViewModel();
+    var viewModel = new AlterNoteViewModel();
     var command = viewModel.SubmitNewNote;
-    
+
     Assert.False(
-      command.CanExecute(null), 
+      command.CanExecute(null),
       "Should not be executable with empty fields");
     viewModel.NewContent = "b";
     Assert.False(
@@ -29,11 +29,11 @@ public class TestAddNoteViewModel
       "Should be executable with title and content filled."
       );
   }
-  
+
   [Fact]
   public void ShouldFireIfSubmitCommandIsTrigger()
   {
-    var viewModel = new AddNoteViewModel();
+    var viewModel = new AlterNoteViewModel();
     bool wasFired = false;
     var expectedModel = new NoteModel
     {
@@ -52,6 +52,6 @@ public class TestAddNoteViewModel
       };
     viewModel.SubmitNewNote.Execute(null);
     Assert.True(wasFired, "Event Submit was not fired.");
-  } 
+  }
 
 }

@@ -6,14 +6,28 @@ using ReactiveUI;
 
 namespace NoteCollectionEditor.ViewModels;
 
-public class AddNoteViewModel : ViewModelBase
+public class AlterNoteViewModel : ViewModelBase
 {
   private string _newTitle;
   private string _newContent;
+  private string _acceptButtonText = "Accept";
+  private string _cancelButtonText = "Cancel";
 
   public event EventHandler<NoteModel>? Submit;
 
-  public ICommand SubmitNewNote { get; private set; }
+  public ICommand SubmitNewNote { get; }
+
+  public string AcceptButtonText
+  {
+    get => _acceptButtonText;
+    set => this.RaiseAndSetIfChanged(ref _acceptButtonText, value);
+  }
+
+  public string CancelButtonText
+  {
+    get => _cancelButtonText;
+    set => this.RaiseAndSetIfChanged(ref _cancelButtonText, value);
+  }
 
   public string NewTitle
   {
@@ -27,18 +41,22 @@ public class AddNoteViewModel : ViewModelBase
     set => this.RaiseAndSetIfChanged(ref _newContent, value);
   }
 
-  public AddNoteViewModel()
+  public AlterNoteViewModel() : this(String.Empty, String.Empty)
   {
-    _newTitle = "";
-    _newContent = "";
+  }
+
+  public AlterNoteViewModel(string title, string textBody)
+  {
+    _newTitle = title;
+    _newContent = textBody;
 
     var canBeSubmitted = this.WhenAnyValue(
       data => data.NewTitle,
       data => data.NewContent,
-      (title, content) =>
-        !string.IsNullOrWhiteSpace(title)
+      (newTitle, content) =>
+        !string.IsNullOrWhiteSpace(newTitle)
         && !string.IsNullOrWhiteSpace(content)
-      );
+    );
 
     SubmitNewNote = ReactiveCommand.Create(
       () => Submit?.Invoke(null, new NoteModel
@@ -49,7 +67,6 @@ public class AddNoteViewModel : ViewModelBase
       canBeSubmitted
     );
   }
-  
 
   public override string ToString()
   {

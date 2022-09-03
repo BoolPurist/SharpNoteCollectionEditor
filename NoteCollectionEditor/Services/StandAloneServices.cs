@@ -22,7 +22,7 @@ public static partial class ServicesOfApp
 
   private static void RegisterAddNoteViewModel(IMutableDependencyResolver container)
   {
-    container.Register(() => new AddNoteViewModel());
+    container.Register(() => new AlterNoteViewModel());
   }
 
   private static void RegisterINoteListRepository(IMutableDependencyResolver container)

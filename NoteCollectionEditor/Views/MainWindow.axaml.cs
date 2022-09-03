@@ -1,12 +1,7 @@
-
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
-using NoteCollectionEditor.Services;
-using ReactiveUI;
-using Splat;
 
 namespace NoteCollectionEditor.Views
 {
@@ -14,27 +9,24 @@ namespace NoteCollectionEditor.Views
   {
     // TODO: Find a way to calculate this depending on the layout.
     private const double OffsetHeightScrollViewerNotes = 150;
-    
+
     public MainWindow()
     {
       InitializeComponent();
       DataContext = this;
-      
     }
-    
-    
 
 
     private async void OnClickSpawnAddNoteWindow(object? sender, RoutedEventArgs e)
     {
-      var windowAddingNote = new AddNoteView();
+      var windowAddingNote = new AlterNoteWindow();
+      windowAddingNote.SetAcceptButtonText("Add Note.");
       var newNote = await windowAddingNote.ShowDialog<NoteModel>(this);
       if (newNote != null)
       {
         // Add new note to view model.
         ListOfNotes.Data.AddNoteCommand.Execute(newNote);
       }
-      
     }
 
 
