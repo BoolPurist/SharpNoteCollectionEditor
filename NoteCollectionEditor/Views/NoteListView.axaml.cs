@@ -1,23 +1,31 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DynamicData.Binding;
+
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
+using Splat;
 
 namespace NoteCollectionEditor.Views;
+
 
 public partial class NoteListView : UserControl
 {
   public NoteListViewModel Data { get; }
 
+  private readonly ILogger _logger;
+
   public NoteListVisualBindings VisualData { get; private set; }
 
   public NoteListView()
   {
+    _logger = ServicesOfApp.Resolver.GetRequiredService<ILogger>();
     Data = ServicesOfApp.Resolver.GetRequiredService<NoteListViewModel>();
     VisualData = new NoteListVisualBindings();
     InitializeForDesign();
@@ -46,8 +54,29 @@ public partial class NoteListView : UserControl
     AvaloniaXamlLoader.Load(this);
   }
 
-  private void OnClick_EditNode(object? sender, RoutedEventArgs e)
+  private async void OnClick_EditNode(object? sender, RoutedEventArgs e)
   {
-    Console.WriteLine((sender as Button)?.Tag);
+    if (sender is Button {Tag: int} button )
+    {
+      int editId = (int) button.Tag;
+      var toEdit = Data.Notes[editId];
+
+      var mainWindow = ApplicationExtension.GetCurrentMainWindow();
+      if (mainWindow == null)
+      {
+        _logger.LogError($"{nameof(OnClick_EditNode)}: Could not retrieve window of a note list user control.");
+      }
+
+      var edited = await AlterNoteWindow.CreateForEdit(toEdit)
+        .ShowDialog<NoteModel>(mainWindow);
+      edited.Id = editId;
+      Data.EditNoteCommand.Execute(edited);
+    }
+    else
+    {
+      _logger.LogError($"{nameof(OnClick_EditNode)}: sender is not of type button with tag property of type int.");
+    }
   }
+
+
 }

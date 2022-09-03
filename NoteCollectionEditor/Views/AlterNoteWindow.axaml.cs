@@ -18,6 +18,15 @@ public partial class AlterNoteWindow : Window
   public AlterNoteViewModel Data { get; set; }
 
 
+  public static AlterNoteWindow CreateForEdit(NoteModel modelToEdit)
+  {
+    var editorDialog = new AlterNoteWindow(
+      modelToEdit.Title ?? String.Empty,
+      modelToEdit.Content ?? String.Empty
+      );
+    editorDialog.SetAcceptButtonText("Confirm Edit");
+    return editorDialog;
+  }
 
   public AlterNoteWindow() : this(String.Empty, String.Empty)
   {

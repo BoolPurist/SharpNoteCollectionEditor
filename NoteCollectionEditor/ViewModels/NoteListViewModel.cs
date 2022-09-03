@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using DynamicData;
 using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -26,7 +24,7 @@ public class NoteListViewModel : ReactiveObject
     {
       AdjustIdToPosition(value);
       _notes = value;
-      this.RaisePropertyChanged(nameof(Notes));
+      this.RaisePropertyChanged();
     }
   }
 
@@ -64,6 +62,7 @@ public class NoteListViewModel : ReactiveObject
     _dataSource = repository;
     _logger = logger;
     AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
+    EditNoteCommand = ReactiveCommand.Create<NoteModel>(EditNote);
     LoadNotesIn = ReactiveCommand.CreateFromTask(LoadNotes);
   }
 
@@ -71,7 +70,9 @@ public class NoteListViewModel : ReactiveObject
   /// Takes a NoteModel as parameter and
   /// adds it as new entity to the collection of notes.
   /// </summary>
-  public ICommand AddNoteCommand { get; private set; }
+  public ICommand AddNoteCommand { get;  }
+
+  public ICommand EditNoteCommand { get; }
 
   public ReactiveCommand<Unit, Unit> LoadNotesIn { get; private set; }
 
@@ -111,6 +112,13 @@ public class NoteListViewModel : ReactiveObject
     toAdd.Id = _notes.Count;
     Notes.Add(toAdd);
     _logger.LogDebug("Note has been added.");
+    OnNotesChanged();
+  }
+
+  private void EditNote(NoteModel toEdit)
+  {
+    _notes[toEdit.Id] = toEdit;
+    _logger.LogDebug($"Changed note at {toEdit.Id} to \n{toEdit}");
     OnNotesChanged();
   }
 

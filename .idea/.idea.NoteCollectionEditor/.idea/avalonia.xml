@@ -14,6 +14,7 @@
         <entry key="NoteCollectionEditor/Styles/NoteStyles.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Styles/ReadOnlyText.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AddNoteView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/Views/AlterNoteWindow.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AlterNoteWindowBase.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/MainWindow.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/NoteListView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
