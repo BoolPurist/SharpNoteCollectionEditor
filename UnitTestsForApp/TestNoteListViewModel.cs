@@ -163,4 +163,36 @@ public class TestNoteListViewModel
 
     static NoteModel CreateEdited() => new NoteModel {Title = "New Title", Content = "New Content", Id = editId};
   }
+
+  [Fact]
+  public async Task ShouldDeleteSpecificNote()
+  {
+    const int deleteIndex = 1;
+    const int expectedCount = 2;
+
+    var expectedNotesLeft = new List<NoteModel>()
+    {
+      new NoteModel {Title = "First", Content = "1. Content", Id = 0},
+      new NoteModel {Title = "Third", Content = "3. Content", Id = 1}
+    };
+
+    var testEnvironment = CreateEnvironmentForTests();
+    var viewModel = testEnvironment.ViewModel;
+    await viewModel.CommandLoadNotes();
+
+    viewModel.CommandDeleteNote(deleteIndex);
+
+    var leftNotes = viewModel.Notes;
+
+    Assert.Equal(expectedCount, leftNotes.Count);
+    CompareNoteForAssert(expectedNotesLeft[0], leftNotes[0]);
+    CompareNoteForAssert(expectedNotesLeft[1], leftNotes[1]);
+
+    void CompareNoteForAssert(NoteModel expected, NoteModel actual)
+    {
+      Assert.Equal(expected.Title, actual.Title);
+      Assert.Equal(expected.Content, actual.Content);
+      Assert.Equal(expected.Id, actual.Id);
+    }
+  }
 }

@@ -56,7 +56,7 @@ public class NoteListViewModel : ReactiveObject
   private readonly ILogger _logger;
   private bool _errorInLoading;
   private bool _isLoading;
-  private ObservableCollection<NoteModel> _notes = new ObservableCollection<NoteModel>();
+  private ObservableCollection<NoteModel> _notes = new ();
   private bool _isSaving;
 
   public NoteListViewModel(INoteListRepository repository, ILogger logger)
