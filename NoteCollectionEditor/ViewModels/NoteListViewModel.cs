@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Metadata;
 using DynamicData;
@@ -138,6 +139,8 @@ public class NoteListViewModel : ReactiveObject
     _logger.LogDebug($"Removed note at {deleteId}");
     OnNotesChanged();
   }
+
+  public string CreateExportJson() => JsonSerializer.Serialize(_notes);
 
   private void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
   {

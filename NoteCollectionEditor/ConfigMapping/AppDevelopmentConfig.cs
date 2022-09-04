@@ -1,6 +1,6 @@
 namespace NoteCollectionEditor.ConfigMapping;
 
-public class NoteDataSourceConfig
+public class AppDevelopmentConfig
 {
   public bool LoadCrashes { get; set; }
   public int LoadDelay { get; set; }

@@ -13,8 +13,8 @@ public class DevelopmentNoteListJsonFileSource : NoteListJsonFileSource
 
   public DevelopmentNoteListJsonFileSource(IAppConfigs configs, ILogger logger) : base(configs, logger)
   {
-    _loadingDelay = Configs.DataSource.LoadDelay;
-    _savingDelay = Configs.DataSource.SaveDelay;
+    _loadingDelay = Configs.DevelopmentConfiguration.LoadDelay;
+    _savingDelay = Configs.DevelopmentConfiguration.SaveDelay;
   }
 
   public override async Task SaveAll(IEnumerable<NoteModel> toSave)

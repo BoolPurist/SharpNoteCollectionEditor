@@ -21,8 +21,8 @@ public class NoteListFakeInMemorySource : INoteListRepository
     IAppConfigs configs)
   {
     _data = data;
-    ThrowErrorInLoading = configs.DataSource.LoadCrashes;
-    LoadDelay = configs.DataSource.LoadDelay;
+    ThrowErrorInLoading = configs.DevelopmentConfiguration.LoadCrashes;
+    LoadDelay = configs.DevelopmentConfiguration.LoadDelay;
   }
 
   public async Task<IEnumerable<NoteModel>> LoadAll()

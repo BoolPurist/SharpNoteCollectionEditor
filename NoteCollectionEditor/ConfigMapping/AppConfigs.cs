@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Avalonia.Controls.Shapes;
 using Microsoft.Extensions.Configuration;
+using NoteCollectionEditor.Extensions;
 using Path = System.IO.Path;
 
 namespace NoteCollectionEditor.ConfigMapping;
@@ -10,7 +11,7 @@ public class AppConfigs : IAppConfigs
 {
   private const string SectionNameForPathToNoteListSource = "NoteListDataName";
 
-  public NoteDataSourceConfig DataSource { get; set; } = new();
+  public AppDevelopmentConfig DevelopmentConfiguration { get; set; } = new();
   public string PathToNoteSource { get; private set; } = String.Empty;
 
   private AppConfigs()
@@ -35,9 +36,14 @@ public class AppConfigs : IAppConfigs
 #endif
       .Build();
 
-    appConfig.DataSource = GetSectionAsBindingByType<NoteDataSourceConfig>(config);
+    if (EnvironmentUtils.IsInDevelopment())
+    {
+      appConfig.DevelopmentConfiguration = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
+    }
+
     appConfig.PathToNoteSource = GetSectionAsBinding<string>(config, SectionNameForPathToNoteListSource);
     appConfig.PathToNoteSource = Path.Join(Environment.CurrentDirectory, appConfig.PathToNoteSource);
+
     return appConfig;
   }
 

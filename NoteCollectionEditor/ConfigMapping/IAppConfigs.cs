@@ -2,7 +2,7 @@ namespace NoteCollectionEditor.ConfigMapping;
 
 public interface IAppConfigs
 {
-  public NoteDataSourceConfig DataSource { get; }
+  public AppDevelopmentConfig DevelopmentConfiguration { get; }
   public string PathToNoteSource { get; }
   
 }

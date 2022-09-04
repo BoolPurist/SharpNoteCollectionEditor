@@ -16,6 +16,7 @@
         <entry key="NoteCollectionEditor/Views/AddNoteView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AlterNoteWindow.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AlterNoteWindowBase.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/Views/Dialogs/AskPopUpDialog.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/MainWindow.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/NoteListView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
       </map>

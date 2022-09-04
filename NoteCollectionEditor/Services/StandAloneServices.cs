@@ -35,7 +35,7 @@ public static partial class ServicesOfApp
     else
     {
       var configs = Resolver.GetRequiredService<IAppConfigs>();
-      bool workWithFile = configs.DataSource.WithFile;
+      bool workWithFile = configs.DevelopmentConfiguration.WithFile;
 
       if (workWithFile)
       {

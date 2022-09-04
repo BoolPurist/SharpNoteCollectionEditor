@@ -26,8 +26,10 @@
                   HotKey="{StaticResource LoadHotKey}"
                   Command="{Binding Data.CommandLoadNotes, ElementName=ListOfNotes}"/>
         <Separator />
-        <MenuItem Header="_Import" />
-        <MenuItem Header="_Export" />
+        <MenuItem Header="_Import"
+                  Command="{Binding CommandSpawnImportDialogForNotes}"/>
+        <MenuItem Header="_Export"
+                  Command="{Binding CommandSpawnExportDialogForNotes}"/>
       </MenuItem>
 
     </Menu>
