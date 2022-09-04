@@ -18,11 +18,6 @@ public static partial class ServicesOfApp
     Register();
   }
 
-  public static void RegisterForUnitTest()
-  {
-    Register();
-  }
-
   private static void Register()
   {
     lock (Locker)

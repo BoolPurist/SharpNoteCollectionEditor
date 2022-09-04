@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -12,7 +11,7 @@ public static partial class ServicesOfApp
 {
   private static void RegisterLogger(IMutableDependencyResolver container)
   {
-    container.RegisterConstant<ILogger>( new ConsoleLogger() { Level = LogLevel.Debug });
+    container.RegisterConstant<ILogger>(new ConsoleLogger() {Level = LogLevel.Debug});
   }
 
   private static void RegisterAppConfig(IMutableDependencyResolver container)
@@ -27,11 +26,40 @@ public static partial class ServicesOfApp
 
   private static void RegisterINoteListRepository(IMutableDependencyResolver container)
   {
-    container.Register<INoteListRepository>(CreateFakeSource);
-    NoteListFakeInMemorySource CreateFakeSource() => new (
+    if (!EnvironmentUtils.IsInDevelopment())
+    {
+      var jsonDataSource = CreateJsonFileDataSource();
+      container.RegisterConstant<INoteListRepository>(jsonDataSource);
+      jsonDataSource.EnsureNeededFiles();
+    }
+    else
+    {
+      var configs = Resolver.GetRequiredService<IAppConfigs>();
+      bool workWithFile = configs.DataSource.WithFile;
+
+      if (workWithFile)
+      {
+        var jsonDataSource = CreateJsonFileDataSource();
+        container.RegisterConstant<INoteListRepository>(jsonDataSource);
+        jsonDataSource.SaveAllSync(FakeData());
+      }
+      else
+      {
+        container.Register<INoteListRepository>(CreateFakeSource);
+      }
+    }
+
+
+    NoteListFakeInMemorySource CreateFakeSource() => new(
       FakeData(),
       Resolver.GetRequiredService<IAppConfigs>()
     );
+
+    NoteListJsonFileSource CreateJsonFileDataSource() =>
+      new (
+        Resolver.GetRequiredService<IAppConfigs>(),
+        Resolver.GetRequiredService<ILogger>()
+        );
 
 #pragma warning disable CS8321
     IEnumerable<NoteModel> FakeData()
@@ -41,10 +69,9 @@ public static partial class ServicesOfApp
       {
         new NoteModel {Title = "First", Content = "First Content"},
         new NoteModel {Title = "Second", Content = "Second Content"},
-        new NoteModel {Title = "Third", Content = new string('x', 200)},
-        new NoteModel {Title = "Fourth", Content = new string('x', 400)}
+        new NoteModel {Title = "Third", Content = new string('y', 10)},
+        new NoteModel {Title = "Fourth", Content = new string('z', 10)}
       };
     }
   }
-
 }

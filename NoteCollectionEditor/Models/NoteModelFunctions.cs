@@ -6,4 +6,5 @@ public partial class NoteModel
   {
     return $"Title: {Title}, Content: {Content}";
   }
+
 }

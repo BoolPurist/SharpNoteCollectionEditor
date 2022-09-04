@@ -12,17 +12,27 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="NoteCollectionEditor"
         LayoutUpdated="OnWindowSizeChanged">
-    
-        
+
+
     <StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Command="{Binding Data.SaveNotes, ElementName=ListOfNotes}">
+          <Image Source="../Assets/floppy-disk.png"
+                 Width="64"
+                 Height="64"/>
+        </Button>
         <Button
-            Margin="10"
-            HorizontalAlignment="Right"
-            Click="OnClickSpawnAddNoteWindow"
-            Content="{DynamicResource AddIcon}"
-        />
+          Margin="10"
+          HorizontalAlignment="Right"
+          Click="OnClickSpawnAddNoteWindow"
+        >
+          <Image Source="../Assets/AddIcon.png"
+                 Width="64"
+                 Height="64"/>
+        </Button>
+      </StackPanel>
         <views:NoteListView Name="ListOfNotes"></views:NoteListView>
     </StackPanel>
 
-    
+
 </Window>

@@ -8,4 +8,6 @@ namespace NoteCollectionEditor.Services;
 public interface INoteListRepository
 {
   Task<IEnumerable<NoteModel>> LoadAll();
+
+  Task SaveAll(IEnumerable<NoteModel> toSave);
 }

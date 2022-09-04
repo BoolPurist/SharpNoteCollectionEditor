@@ -27,7 +27,7 @@ public class TestNoteListViewModel
 
   private static EnvironmentForNoteListViewModel CreateEnvironmentForTests(IEnumerable<NoteModel> toLoad)
   {
-    var data = new NoteListFakeInMemorySource(toLoad, AppConfigs.CreateNotesFromFile());
+    var data = new NoteListFakeInMemorySource(toLoad, AppConfigs.CreateWithoutConfigFile());
     var fakeLogger = new InMemoryLogger();
     var viewModel = new NoteListViewModel(data, fakeLogger);
     return new EnvironmentForNoteListViewModel(

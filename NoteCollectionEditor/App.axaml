@@ -11,11 +11,6 @@
     <FluentTheme Mode="Light" />
   </Application.Styles>
   <Application.Resources>
-    <Image
-      Width="64"
-      Height="64"
-      x:Key="AddIcon"
-      Source="./Assets/AddIcon.png" />
     <SolidColorBrush x:Key="NoteColor" Color="#FF9200" />
   </Application.Resources>
 </Application>

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Metadata;
 using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -12,8 +14,6 @@ using ReactiveUI;
 using Splat;
 
 namespace NoteCollectionEditor.ViewModels;
-
-
 
 public class NoteListViewModel : ReactiveObject
 {
@@ -56,6 +56,7 @@ public class NoteListViewModel : ReactiveObject
   private bool _errorInLoading;
   private bool _isLoading;
   private ObservableCollection<NoteModel> _notes = new ObservableCollection<NoteModel>();
+  private bool _isSaving;
 
   public NoteListViewModel(INoteListRepository repository, ILogger logger)
   {
@@ -72,7 +73,7 @@ public class NoteListViewModel : ReactiveObject
   /// Takes a NoteModel as parameter and
   /// adds it as new entity to the collection of notes.
   /// </summary>
-  public ICommand AddNoteCommand { get;  }
+  public ICommand AddNoteCommand { get; }
 
   public ICommand EditNoteCommand { get; }
 
@@ -109,6 +110,30 @@ public class NoteListViewModel : ReactiveObject
     {
       HandleLoadingError(exception);
     }
+  }
+
+  public bool IsSaving
+  {
+    get => _isSaving;
+    private set => this.RaiseAndSetIfChanged(ref _isSaving, value);
+  }
+
+  [DependsOn(nameof(IsSaving))]
+  public bool CanSaveNotes(object parameter) => !IsSaving;
+
+  private readonly object _dummy = new ();
+  public async Task SaveNotes()
+  {
+    if (!CanSaveNotes(_dummy))
+    {
+      _logger.LogWarning($"Command was triggered despite of {nameof(CanSaveNotes)} being false.");
+      return;
+    }
+
+    _logger.LogDebug("Starting saving notes");
+    IsSaving = true;
+    await _dataSource.SaveAll(_notes.ToList());
+    IsSaving = false;
   }
 
   private void AddNote(NoteModel toAdd)
