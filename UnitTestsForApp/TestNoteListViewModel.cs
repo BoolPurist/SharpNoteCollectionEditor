@@ -13,7 +13,7 @@ public class TestNoteListViewModel
     InMemoryLogger Logger,
     NoteListFakeInMemorySource FakeSource,
     NoteListViewModel ViewModel
-    );
+  );
 
   private static List<NoteModel> ExampleNotesForLoading => new List<NoteModel>
   {
@@ -44,11 +44,10 @@ public class TestNoteListViewModel
     var viewModel = env.ViewModel;
     var expected = await env.FakeSource.LoadAll();
 
-    await viewModel.LoadNotesIn.Execute().GetAwaiter();
+    await viewModel.CommandLoadNotes();
     Assert.Equal(expected, viewModel.Notes);
     Assert.False(viewModel.NoNotesFoundInNormalCase);
     AssertIfIdAscending(viewModel.Notes);
-
   }
 
   private void AssertIfIdAscending(IEnumerable<NoteModel> toAssert)
@@ -78,7 +77,7 @@ public class TestNoteListViewModel
     var viewModel = env.ViewModel;
     data.ThrowErrorInLoading = true;
 
-    await viewModel.LoadNotesIn.Execute().GetAwaiter();
+    await viewModel.CommandLoadNotes();
     Assert.False(viewModel.IsLoading, "Should not indicate loading if error happened.");
     Assert.True(viewModel.ErrorInLoading, "Should indicate error.");
     Assert.False(viewModel.NoNotesFoundInNormalCase);
@@ -88,9 +87,9 @@ public class TestNoteListViewModel
   public void ShouldAddNote()
   {
     var viewModel = CreateEnvironmentForTests().ViewModel;
-    var expectedAdded = new NoteModel { Title = "Added", Content = "Content"};
+    var expectedAdded = new NoteModel {Title = "Added", Content = "Content"};
     var actualNotes = viewModel.Notes;
-    viewModel.AddNoteCommand.Execute(expectedAdded);
+    viewModel.CommandAddNote(expectedAdded);
     Assert.False(viewModel.ErrorInLoading, "No loading error should happened");
     Assert.Single(actualNotes);
     Assert.Equal(expectedAdded, actualNotes.First());
@@ -102,17 +101,17 @@ public class TestNoteListViewModel
   public async Task ShouldAddNoteToLoadedOnes()
   {
     // Data
-    var toAdd = new NoteModel { Title = "Added", Content = "Content"};
+    var toAdd = new NoteModel {Title = "Added", Content = "Content"};
     var loadedDate = ExampleNotesForLoading;
-    var expectedEndResult = loadedDate.Concat(new [] { toAdd });
+    var expectedEndResult = loadedDate.Concat(new[] {toAdd});
 
     // Set up
     var env = CreateEnvironmentForTests(loadedDate);
     var viewModel = env.ViewModel;
 
     // Act
-    await viewModel.LoadNotesIn.Execute().GetAwaiter();
-    viewModel.AddNoteCommand.Execute(toAdd);
+    await viewModel.CommandLoadNotes();
+    viewModel.CommandAddNote(toAdd);
 
     // Assert
     Assert.False(viewModel.ErrorInLoading, "No error in loading should happened.");
@@ -133,7 +132,7 @@ public class TestNoteListViewModel
     Assert.False(notes.IsLoading, "Should indicate loading if loading has not started yet !");
     Assert.True(notes.NoNotesFoundInNormalCase);
     // Act
-    var loadingState = notes.LoadNotesIn.Execute().GetAwaiter();
+    var loadingState = notes.CommandLoadNotes();
     await Task.Delay(waitingTime / 2);
     // Assert during act
     Assert.True(notes.IsLoading, "Should indicate loading while still loading.");
@@ -152,11 +151,10 @@ public class TestNoteListViewModel
 
     var testEnvironment = CreateEnvironmentForTests();
     var viewModel = testEnvironment.ViewModel;
-    await viewModel.LoadNotesIn.Execute().GetAwaiter();
+    await viewModel.CommandLoadNotes();
     var replacement = CreateEdited();
 
-
-    viewModel.EditNoteCommand.Execute(replacement);
+    viewModel.CommandEditNote(replacement);
 
     var actualNote = viewModel.Notes[editId];
     Assert.Equal(editId, replacement.Id);
@@ -165,7 +163,4 @@ public class TestNoteListViewModel
 
     static NoteModel CreateEdited() => new NoteModel {Title = "New Title", Content = "New Content", Id = editId};
   }
-
-
-
 }

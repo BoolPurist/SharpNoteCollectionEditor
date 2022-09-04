@@ -67,13 +67,13 @@ public partial class NoteListView : UserControl
     if (edited == null) return;
 
     edited.Id = idForDelete;
-    Data.EditNoteCommand.Execute(edited);
+    Data.CommandEditNote(edited);
   }
 
   // ReSharper disable once UnusedMember.Local
   private void CommandSpawnDialogDeleteNode(int idForDelete)
   {
-    Data.DeleteCommand.Execute(idForDelete);
+    Data.CommandDeleteNote(idForDelete);
   }
 
 }

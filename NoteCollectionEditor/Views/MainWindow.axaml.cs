@@ -28,7 +28,7 @@ namespace NoteCollectionEditor.Views
       if (newNote != null)
       {
         // Add new note to view model.
-        ListOfNotes.Data.AddNoteCommand.Execute(newNote);
+        ListOfNotes.Data.CommandAddNote(newNote);
       }
     }
 
@@ -43,7 +43,7 @@ namespace NoteCollectionEditor.Views
     {
       if (!Design.IsDesignMode)
       {
-        ListOfNotes.Data.LoadNotesIn.Execute();
+        ListOfNotes.Data.CommandLoadNotes();
       }
     }
   }

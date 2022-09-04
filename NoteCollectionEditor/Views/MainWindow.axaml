@@ -17,7 +17,7 @@
 
     <StackPanel>
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-        <Button Command="{Binding Data.SaveNotes, ElementName=ListOfNotes}">
+        <Button Command="{Binding Data.CommandSaveNotes, ElementName=ListOfNotes}">
           <Image Source="../Assets/floppy-disk.png"
                  Width="64"
                  Height="64"/>

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia.Metadata;
 using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
@@ -17,6 +15,14 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class NoteListViewModel : ReactiveObject
 {
+  public string ErrorLoadingMessage => "Unable to load notes";
+
+  /// <summary>
+  /// True if no notes are found in a normal case.
+  /// Normal case means no notes are loaded/saved and no error occured during loading/saving.
+  /// </summary>
+  public bool NoNotesFoundInNormalCase => !ErrorInLoading && !IsLoading && Notes.Count == 0;
+
   public ObservableCollection<NoteModel> Notes
   {
     get => _notes;
@@ -27,8 +33,6 @@ public class NoteListViewModel : ReactiveObject
       this.RaisePropertyChanged();
     }
   }
-
-  public string ErrorLoadingMessage { get; } = "Unable to load notes";
 
   public bool IsLoading
   {
@@ -42,14 +46,11 @@ public class NoteListViewModel : ReactiveObject
     set => this.RaiseAndSetIfChanged(ref _errorInLoading, value);
   }
 
-  /// <summary>
-  /// True if no notes are found in a normal case.
-  /// Normal case means no notes are loaded/saved and no error occured during loading/saving.
-  /// </summary>
-  public bool NoNotesFoundInNormalCase => !ErrorInLoading && !IsLoading && Notes.Count == 0;
-
-  private void NotifyIfNotesWereFound()
-    => this.RaisePropertyChanged(nameof(NoNotesFoundInNormalCase));
+  public bool IsSaving
+  {
+    get => _isSaving;
+    private set => this.RaiseAndSetIfChanged(ref _isSaving, value);
+  }
 
   private readonly INoteListRepository _dataSource;
   private readonly ILogger _logger;
@@ -62,46 +63,13 @@ public class NoteListViewModel : ReactiveObject
   {
     _dataSource = repository;
     _logger = logger;
-
-    AddNoteCommand = ReactiveCommand.Create<NoteModel>(AddNote);
-    EditNoteCommand = ReactiveCommand.Create<NoteModel>(EditNote);
-    DeleteCommand = ReactiveCommand.Create<int>(DeleteNote);
-    LoadNotesIn = ReactiveCommand.CreateFromTask(LoadNotes);
   }
 
-  /// <summary>
-  /// Takes a NoteModel as parameter and
-  /// adds it as new entity to the collection of notes.
-  /// </summary>
-  public ICommand AddNoteCommand { get; }
-
-  public ICommand EditNoteCommand { get; }
-
-  public ICommand DeleteCommand { get; }
-
-  public ReactiveCommand<Unit, Unit> LoadNotesIn { get; private set; }
-
-  private void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
-  {
-    int newNextId = 0;
-    foreach (var note in toAdjust)
-    {
-      note.Id = newNextId++;
-    }
-  }
-
-  private void HandleLoadingError(Exception thrown)
-  {
-    OnLoadingError();
-    _logger.LogExceptionAsError(thrown, "Error in loading");
-  }
-
-  private async Task LoadNotes()
+  public async Task CommandLoadNotes()
   {
     try
     {
       OnStartLoading();
-
       var notes = await _dataSource.LoadAll();
       Notes = new ObservableCollectionExtended<NoteModel>(notes);
       OnLoadingFinished();
@@ -112,21 +80,14 @@ public class NoteListViewModel : ReactiveObject
     }
   }
 
-  public bool IsSaving
-  {
-    get => _isSaving;
-    private set => this.RaiseAndSetIfChanged(ref _isSaving, value);
-  }
-
   [DependsOn(nameof(IsSaving))]
-  public bool CanSaveNotes(object parameter) => !IsSaving;
+  public bool CanCommandSaveNotes(object parameter) => !IsSaving;
 
-  private readonly object _dummy = new ();
-  public async Task SaveNotes()
+  public async Task CommandSaveNotes()
   {
-    if (!CanSaveNotes(_dummy))
+    if (!CanCommandSaveNotes(null!))
     {
-      _logger.LogWarning($"Command was triggered despite of {nameof(CanSaveNotes)} being false.");
+      _logger.LogWarning($"Command was triggered despite of {nameof(CanCommandSaveNotes)} being false.");
       return;
     }
 
@@ -136,7 +97,7 @@ public class NoteListViewModel : ReactiveObject
     IsSaving = false;
   }
 
-  private void AddNote(NoteModel toAdd)
+  public void CommandAddNote(NoteModel toAdd)
   {
     toAdd.Id = _notes.Count;
     Notes.Add(toAdd);
@@ -144,19 +105,37 @@ public class NoteListViewModel : ReactiveObject
     OnNotesChanged();
   }
 
-  private void EditNote(NoteModel toEdit)
+  public void CommandEditNote(NoteModel toEdit)
   {
     _notes[toEdit.Id] = toEdit;
     _logger.LogDebug($"Changed note at {toEdit.Id} to \n{toEdit}");
     OnNotesChanged();
   }
 
-  private void DeleteNote(int deleteId)
+  public void CommandDeleteNote(int deleteId)
   {
     _notes.RemoveAt(deleteId);
     AdjustIdToPosition(_notes);
     _logger.LogDebug($"Removed note at {deleteId}");
     OnNotesChanged();
+  }
+
+  private void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
+  {
+    int newNextId = 0;
+    foreach (var note in toAdjust)
+    {
+      note.Id = newNextId++;
+    }
+  }
+
+  private void NotifyIfNotesWereFound()
+    => this.RaisePropertyChanged(nameof(NoNotesFoundInNormalCase));
+
+  private void HandleLoadingError(Exception thrown)
+  {
+    OnLoadingError();
+    _logger.LogExceptionAsError(thrown, "Error in loading");
   }
 
   private void OnNotesChanged()
