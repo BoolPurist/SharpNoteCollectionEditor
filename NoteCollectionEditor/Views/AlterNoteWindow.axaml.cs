@@ -67,7 +67,7 @@ public partial class AlterNoteWindow : Window
     AvaloniaXamlLoader.Load(this);
   }
 
-  private void OnClosed(EventArgs e)
+  protected override void OnClosed(EventArgs e)
   {
     base.OnClosed(e);
     Data.Submit -= OnSubmit;

@@ -12,6 +12,7 @@
   </Application.Styles>
   <Application.Resources>
     <SolidColorBrush x:Key="NoteColor" Color="#FF9200" />
+    <SolidColorBrush x:Key="WarningBoxForegroundColor" Color="#c7bb10"/>
 
     <KeyGesture x:Key="SaveHotKey">Ctrl+S</KeyGesture>
     <KeyGesture x:Key="LoadHotKey">Ctrl+L</KeyGesture>

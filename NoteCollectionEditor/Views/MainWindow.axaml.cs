@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Avalonia;
@@ -9,6 +10,7 @@ using Avalonia.Interactivity;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
+using NoteCollectionEditor.ViewModels;
 using NoteCollectionEditor.Views.Dialogs;
 using Splat;
 
@@ -21,6 +23,7 @@ namespace NoteCollectionEditor.Views
     private const string AddNoteButtonText = "Add Note.";
     private const string InitialNameForExportedNoteJsonFile = "exported_notes.json";
 
+    private NoteListViewModel _viewModel;
 
     private readonly ILogger _logger;
 
@@ -28,6 +31,8 @@ namespace NoteCollectionEditor.Views
     {
       _logger = ServicesOfApp.Resolver.GetRequiredService<ILogger>();
       InitializeComponent();
+
+      _viewModel = ListOfNotes.Data;
     }
 
 
@@ -39,18 +44,45 @@ namespace NoteCollectionEditor.Views
       if (newNote != null)
       {
         // Add new note to view model.
-        ListOfNotes.Data.CommandAddNote(newNote);
+        _viewModel.CommandAddNote(newNote);
       }
     }
 
     public async Task CommandSpawnImportDialogForNotes()
     {
-      var fileDialog = new OpenFileDialog
+      var loadDialog = CreateLoadDialog();
+      var pathToLoad = await loadDialog.ShowAsync(this);
+
+      // User has canceled import.
+      if (pathToLoad == null) return;
+
+      var contentForImport = await File.ReadAllTextAsync(pathToLoad.First());
+
+      var hasImported = _viewModel.ImportNoteListFromJson(contentForImport);
+
+      if (!hasImported)
       {
-        AllowMultiple = false
-      };
-      fileDialog.Filters.Add(new FileDialogFilter {Name = "json file", Extensions = {"json"}});
-      await fileDialog.ShowAsync(this);
+        await CreateErrorPopUp().ShowDialog(this);
+      }
+
+      OpenFileDialog CreateLoadDialog()
+      {
+        var fileDialog = new OpenFileDialog
+        {
+          AllowMultiple = false
+        };
+        fileDialog.Filters.Add(new FileDialogFilter {Name = "json file", Extensions = {"json"}});
+        return fileDialog;
+      }
+
+      ErrorMessagePopUpDialog CreateErrorPopUp()
+      {
+        var errorPopup = new ErrorMessagePopUpDialog
+        {
+          ErrorText = "File for import is not valid"
+        };
+        return errorPopup;
+      }
     }
 
     public async Task CommandSpawnExportDialogForNotes()
@@ -66,12 +98,12 @@ namespace NoteCollectionEditor.Views
       {
         var popUp = CreateWarningDialog();
         // Ask user if he/she really wants to override the file.
-        exportIt  = await popUp.ShowDialog<bool>(this);
+        exportIt = await popUp.ShowDialog<bool>(this);
       }
 
-      if(!exportIt) return;
+      if (!exportIt) return;
 
-      var exportContent = ListOfNotes.Data.CreateExportJson();
+      var exportContent = _viewModel.CreateExportJson();
       await File.WriteAllTextAsync(pathToExport, exportContent);
       _logger.LogInfo($"Exported note list to path {pathToExport}");
 
@@ -97,7 +129,7 @@ namespace NoteCollectionEditor.Views
     {
       if (!Design.IsDesignMode)
       {
-        await ListOfNotes.Data.CommandLoadNotes();
+        await _viewModel.CommandLoadNotes();
       }
     }
   }

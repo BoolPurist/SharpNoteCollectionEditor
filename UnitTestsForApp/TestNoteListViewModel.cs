@@ -194,7 +194,6 @@ public class TestNoteListViewModel
   {
     const int expectedCount = 3;
     const int deleteIndex = 1;
-    const int expectedIndexForAdded = 2;
 
     var toAdd = new NoteModel {Title = "New Title", Content = "New Content", Id = 2};
     var forEdit = new NoteModel {Title = "Changed Title", Content = "Changed Content", Id = 1};

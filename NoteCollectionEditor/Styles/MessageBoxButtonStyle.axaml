@@ -1,0 +1,17 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <Button Classes="MessageBoxBtn"
+              Content="Message" />
+    </Border>
+  </Design.PreviewWith>
+
+  <Style Selector="Button.MessageBoxBtn">
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="FontSize" Value="20" />
+    <Setter Property="Padding" Value="10" />
+    <Setter Property="BorderBrush" Value="Black" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+</Styles>

@@ -6,17 +6,22 @@
         <entry key="NoteCollectionEditor/App.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/InfoTextBoxIndicator.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/LoadingBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/ControlTemplates/MessageBoxText.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/NoNotesFoundBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/SeparatorInNote.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/SeperatorInNote.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/ControlTemplates/WarningBox.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/ControlTemplates/aa.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/DesingMocks/NoteListViewMock.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/Styles/MessageBoxButtonStyle.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Styles/NoteStyles.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Styles/ReadOnlyText.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/Styles/WarningText.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AddNoteView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AlterNoteWindow.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/AlterNoteWindowBase.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/Dialogs/AskPopUpDialog.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
+        <entry key="NoteCollectionEditor/Views/Dialogs/ErrorMessagePopUpDialog.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/MainWindow.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
         <entry key="NoteCollectionEditor/Views/NoteListView.axaml" value="NoteCollectionEditor/NoteCollectionEditor.csproj" />
       </map>

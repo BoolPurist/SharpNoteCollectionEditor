@@ -66,7 +66,7 @@ public class NoteListViewModel : ReactiveObject
   private readonly ILogger _logger;
   private bool _errorInLoading;
   private bool _isLoading;
-  private readonly ObservableCollection<NoteModel> _notes = new ();
+  private readonly ObservableCollection<NoteModel> _notes = new();
   private bool _isSaving;
 
   public NoteListViewModel(INoteListRepository repository, ILogger logger)
@@ -82,7 +82,8 @@ public class NoteListViewModel : ReactiveObject
   {
     if (!CanCommandLoadNotes(null!))
     {
-      _logger.LogWarning($"Command {nameof(CommandLoadNotes)} was triggered despite of {nameof(CanCommandLoadNotes)} being false.");
+      _logger.LogWarning(
+        $"Command {nameof(CommandLoadNotes)} was triggered despite of {nameof(CanCommandLoadNotes)} being false.");
       return;
     }
 
@@ -106,7 +107,8 @@ public class NoteListViewModel : ReactiveObject
   {
     if (!CanCommandSaveNotes(null!))
     {
-      _logger.LogWarning($"Command {nameof(CommandSaveNotes)} was triggered despite of {nameof(CanCommandSaveNotes)} being false.");
+      _logger.LogWarning(
+        $"Command {nameof(CommandSaveNotes)} was triggered despite of {nameof(CanCommandSaveNotes)} being false.");
       return;
     }
 
@@ -141,6 +143,29 @@ public class NoteListViewModel : ReactiveObject
   }
 
   public string CreateExportJson() => JsonSerializer.Serialize(_notes);
+
+  public bool ImportNoteListFromJson(string json)
+  {
+    try
+    {
+      var importedNoteList = JsonSerializer.Deserialize<List<NoteModel>>(json);
+      if (importedNoteList == null)
+      {
+        _logger.LogError($"Imported note list has valid format but is still null !");
+        return false;
+      }
+      SetNoteCollection(importedNoteList);
+    }
+    catch (JsonException exception)
+    {
+      _logger.LogInfo(
+        $"File as json could not be converted to a List of type {nameof(NoteModel)}.\n{exception.Message}"
+      );
+      return false;
+    }
+
+    return true;
+  }
 
   private void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
   {
