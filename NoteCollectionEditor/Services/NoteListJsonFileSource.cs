@@ -13,41 +13,40 @@ namespace NoteCollectionEditor.Services;
 
 public class NoteListJsonFileSource : INoteListRepository
 {
-  private readonly IAppConfigs _configs;
-  private readonly ILogger _logger;
+  protected readonly IAppConfigs Configs;
+  protected readonly ILogger Logger;
 
   public NoteListJsonFileSource(IAppConfigs configs, ILogger logger)
   {
-    _configs = configs;
-    _logger = logger;
+    Configs = configs;
+    Logger = logger;
   }
 
-
-  public async Task<IEnumerable<NoteModel>> LoadAll()
+  public virtual async Task<IEnumerable<NoteModel>> LoadAll()
   {
-    string content = await File.ReadAllTextAsync(_configs.PathToNoteSource);
+    string content = await File.ReadAllTextAsync(Configs.PathToNoteSource);
     return JsonSerializer.Deserialize<List<NoteModel>>(content) ?? Enumerable.Empty<NoteModel>();
+  }
+
+  public virtual async Task SaveAll(IEnumerable<NoteModel> toSave)
+  {
+    string toWrite = GetSerialized(toSave);
+    await File.WriteAllTextAsync(Configs.PathToNoteSource, toWrite);
+    Logger.LogInfo($"Save notes at {Configs.PathToNoteSource}");
   }
 
   public void EnsureNeededFiles()
   {
-    if (!File.Exists(_configs.PathToNoteSource))
+    if (!File.Exists(Configs.PathToNoteSource))
     {
       SaveAllSync(Enumerable.Empty<NoteModel>());
     }
   }
 
-  public async Task SaveAll(IEnumerable<NoteModel> toSave)
-  {
-    string toWrite = GetSerialized(toSave);
-    await File.WriteAllTextAsync(_configs.PathToNoteSource, toWrite);
-    _logger.LogInfo($"Save notes at {_configs.PathToNoteSource}");
-  }
-
   public void SaveAllSync(IEnumerable<NoteModel> toSave)
   {
     string toWrite = GetSerialized(toSave);
-    File.WriteAllText(_configs.PathToNoteSource, toWrite);
+    File.WriteAllText(Configs.PathToNoteSource, toWrite);
   }
 
   private readonly JsonSerializerOptions _prettyJsonOption = new()

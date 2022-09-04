@@ -39,7 +39,7 @@ public static partial class ServicesOfApp
 
       if (workWithFile)
       {
-        var jsonDataSource = CreateJsonFileDataSource();
+        var jsonDataSource = CreateDevJsonFileDataSource();
         container.RegisterConstant<INoteListRepository>(jsonDataSource);
         jsonDataSource.SaveAllSync(FakeData());
       }
@@ -60,6 +60,12 @@ public static partial class ServicesOfApp
         Resolver.GetRequiredService<IAppConfigs>(),
         Resolver.GetRequiredService<ILogger>()
         );
+
+    DevelopmentNoteListJsonFileSource CreateDevJsonFileDataSource() =>
+      new (
+        Resolver.GetRequiredService<IAppConfigs>(),
+        Resolver.GetRequiredService<ILogger>()
+      );
 
 #pragma warning disable CS8321
     IEnumerable<NoteModel> FakeData()

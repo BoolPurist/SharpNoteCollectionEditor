@@ -79,7 +79,6 @@ public class NoteListViewModel : ReactiveObject
     try
     {
       OnStartLoading();
-      await Task.Delay(3000);
       var notes = await _dataSource.LoadAll();
       Notes = new ObservableCollectionExtended<NoteModel>(notes);
       OnLoadingFinished();
@@ -103,7 +102,6 @@ public class NoteListViewModel : ReactiveObject
 
     _logger.LogDebug("Starting saving notes");
     IsSaving = true;
-    await Task.Delay(3000);
     await _dataSource.SaveAll(_notes.ToList());
 
     IsSaving = false;
