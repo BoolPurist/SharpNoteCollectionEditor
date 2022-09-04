@@ -120,7 +120,6 @@ public class NoteListViewModel : ReactiveObject
   {
     toAdd.Id = _notes.Count;
     _notes.Add(toAdd);
-    this.RaisePropertyChanged(nameof(Notes));
     _logger.LogDebug("Note has been added.");
     OnNotesChanged();
   }
@@ -128,7 +127,6 @@ public class NoteListViewModel : ReactiveObject
   public void CommandEditNote(NoteModel toEdit)
   {
     _notes[toEdit.Id] = toEdit;
-    this.RaisePropertyChanged(nameof(Notes));
     _logger.LogDebug($"Changed note at {toEdit.Id} to \n{toEdit}");
     OnNotesChanged();
   }
@@ -136,7 +134,6 @@ public class NoteListViewModel : ReactiveObject
   public void CommandDeleteNote(int deleteId)
   {
     _notes.RemoveAt(deleteId);
-    this.RaisePropertyChanged(nameof(Notes));
     AdjustIdToPosition(_notes);
     _logger.LogDebug($"Removed note at {deleteId}");
     OnNotesChanged();
