@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Metadata;
+using DynamicData;
 using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -22,7 +24,16 @@ public class NoteListViewModel : ReactiveObject
   /// </summary>
   public bool NoNotesFoundInNormalCase => !ErrorInLoading && !IsLoading && Notes.Count == 0;
 
-  public ReadOnlyObservableCollection<NoteModel> Notes => new (_notes);
+  private ReadOnlyObservableCollection<NoteModel>? _notesProxyOutside;
+
+  public ReadOnlyObservableCollection<NoteModel> Notes
+  {
+    get
+    {
+      _notesProxyOutside ??= new ReadOnlyObservableCollection<NoteModel>(_notes);
+      return _notesProxyOutside;
+    }
+  }
 
   public bool IsLoading
   {
@@ -44,7 +55,8 @@ public class NoteListViewModel : ReactiveObject
 
   public void SetNoteCollection(IEnumerable<NoteModel> newCollection)
   {
-    _notes = new ObservableCollectionExtended<NoteModel>(newCollection);
+    _notes.Clear();
+    _notes.AddRange(newCollection);
     AdjustIdToPosition(_notes);
     this.RaisePropertyChanged(nameof(Notes));
   }
@@ -53,7 +65,7 @@ public class NoteListViewModel : ReactiveObject
   private readonly ILogger _logger;
   private bool _errorInLoading;
   private bool _isLoading;
-  private ObservableCollection<NoteModel> _notes = new ();
+  private readonly ObservableCollection<NoteModel> _notes = new ();
   private bool _isSaving;
 
   public NoteListViewModel(INoteListRepository repository, ILogger logger)
