@@ -6,8 +6,6 @@ using Path = System.IO.Path;
 
 namespace NoteCollectionEditor.ConfigMapping;
 
-
-
 public class AppConfigs : IAppConfigs
 {
   private const string SectionNameForPathToNoteListSource = "NoteListDataName";

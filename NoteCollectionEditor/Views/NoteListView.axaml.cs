@@ -33,13 +33,11 @@ public partial class NoteListView : UserControl
 
     Data.ErrorInLoading = true;
     Data.IsLoading = false;
-    Data.Notes = new ObservableCollectionExtended<NoteModel>(
-      new[]
-      {
-        new NoteModel {Title = "XXX", Content = new string('y', 200)},
-        new NoteModel {Title = "Xth Title", Content = "Some Content"}
-      }
-    );
+    Data.SetNoteCollection(new[]
+    {
+      new NoteModel {Title = "XXX", Content = new string('y', 200)},
+      new NoteModel {Title = "Xth Title", Content = "Some Content"}
+    });
   }
 
 

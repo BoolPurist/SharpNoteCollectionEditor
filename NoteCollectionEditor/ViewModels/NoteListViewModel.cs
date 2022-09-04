@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Metadata;
 using DynamicData.Binding;
@@ -23,16 +22,7 @@ public class NoteListViewModel : ReactiveObject
   /// </summary>
   public bool NoNotesFoundInNormalCase => !ErrorInLoading && !IsLoading && Notes.Count == 0;
 
-  public ObservableCollection<NoteModel> Notes
-  {
-    get => _notes;
-    set
-    {
-      AdjustIdToPosition(value);
-      _notes = value;
-      this.RaisePropertyChanged();
-    }
-  }
+  public ReadOnlyObservableCollection<NoteModel> Notes => new (_notes);
 
   public bool IsLoading
   {
@@ -50,6 +40,13 @@ public class NoteListViewModel : ReactiveObject
   {
     get => _isSaving;
     private set => this.RaiseAndSetIfChanged(ref _isSaving, value);
+  }
+
+  public void SetNoteCollection(IEnumerable<NoteModel> newCollection)
+  {
+    _notes = new ObservableCollectionExtended<NoteModel>(newCollection);
+    AdjustIdToPosition(_notes);
+    this.RaisePropertyChanged(nameof(Notes));
   }
 
   private readonly INoteListRepository _dataSource;
@@ -80,7 +77,7 @@ public class NoteListViewModel : ReactiveObject
     {
       OnStartLoading();
       var notes = await _dataSource.LoadAll();
-      Notes = new ObservableCollectionExtended<NoteModel>(notes);
+      SetNoteCollection(notes);
       OnLoadingFinished();
     }
     catch (Exception exception)
@@ -102,7 +99,7 @@ public class NoteListViewModel : ReactiveObject
 
     _logger.LogDebug("Starting saving notes");
     IsSaving = true;
-    await _dataSource.SaveAll(_notes.ToList());
+    await _dataSource.SaveAll(_notes);
 
     IsSaving = false;
   }
@@ -110,7 +107,8 @@ public class NoteListViewModel : ReactiveObject
   public void CommandAddNote(NoteModel toAdd)
   {
     toAdd.Id = _notes.Count;
-    Notes.Add(toAdd);
+    _notes.Add(toAdd);
+    this.RaisePropertyChanged(nameof(Notes));
     _logger.LogDebug("Note has been added.");
     OnNotesChanged();
   }
@@ -118,6 +116,7 @@ public class NoteListViewModel : ReactiveObject
   public void CommandEditNote(NoteModel toEdit)
   {
     _notes[toEdit.Id] = toEdit;
+    this.RaisePropertyChanged(nameof(Notes));
     _logger.LogDebug($"Changed note at {toEdit.Id} to \n{toEdit}");
     OnNotesChanged();
   }
@@ -125,6 +124,7 @@ public class NoteListViewModel : ReactiveObject
   public void CommandDeleteNote(int deleteId)
   {
     _notes.RemoveAt(deleteId);
+    this.RaisePropertyChanged(nameof(Notes));
     AdjustIdToPosition(_notes);
     _logger.LogDebug($"Removed note at {deleteId}");
     OnNotesChanged();
