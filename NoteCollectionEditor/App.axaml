@@ -12,5 +12,8 @@
   </Application.Styles>
   <Application.Resources>
     <SolidColorBrush x:Key="NoteColor" Color="#FF9200" />
+
+    <KeyGesture x:Key="SaveHotKey">Ctrl+S</KeyGesture>
+    <KeyGesture x:Key="LoadHotKey">Ctrl+L</KeyGesture>
   </Application.Resources>
 </Application>

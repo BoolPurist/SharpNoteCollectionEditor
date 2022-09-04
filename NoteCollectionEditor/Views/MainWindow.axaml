@@ -15,25 +15,40 @@
         LayoutUpdated="OnWindowSizeChanged">
 
 
-    <StackPanel>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-        <Button Command="{Binding Data.CommandSaveNotes, ElementName=ListOfNotes}">
-          <Image Source="../Assets/floppy-disk.png"
-                 Width="64"
-                 Height="64"/>
-        </Button>
-        <Button
-          Margin="10"
-          HorizontalAlignment="Right"
-          Command="{Binding SpawnDialogForAddNote}"
-        >
-          <Image Source="../Assets/AddIcon.png"
-                 Width="64"
-                 Height="64"/>
-        </Button>
-      </StackPanel>
-        <views:NoteListView Name="ListOfNotes"></views:NoteListView>
+  <StackPanel>
+    <Menu Background="Gray">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Save"
+                  HotKey="{StaticResource SaveHotKey}"
+                  Command="{Binding Data.CommandSaveNotes, ElementName=ListOfNotes}"
+                  />
+        <MenuItem Header="_Load Last Save"
+                  HotKey="{StaticResource LoadHotKey}"
+                  Command="{Binding Data.CommandLoadNotes, ElementName=ListOfNotes}"/>
+        <Separator />
+        <MenuItem Header="_Import" />
+        <MenuItem Header="_Export" />
+      </MenuItem>
+
+    </Menu>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button Command="{Binding Data.CommandSaveNotes, ElementName=ListOfNotes}">
+        <Image Source="../Assets/floppy-disk.png"
+               Width="64"
+               Height="64" />
+      </Button>
+      <Button
+        Margin="10"
+        HorizontalAlignment="Right"
+        Command="{Binding SpawnDialogForAddNote}">
+        <Image Source="../Assets/AddIcon.png"
+               Width="64"
+               Height="64" />
+      </Button>
     </StackPanel>
+    <views:NoteListView Name="ListOfNotes"/>
+  </StackPanel>
 
 
 </Window>

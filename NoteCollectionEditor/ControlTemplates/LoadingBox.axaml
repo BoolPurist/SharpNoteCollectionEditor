@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ControlTemplate x:Key="LoadingBox" TargetType="ContentControl">
+    <ControlTemplate x:Key="InfoBox" TargetType="ContentControl">
         <Border Background="Blue"
                 Padding="20"
                 BorderThickness="5"

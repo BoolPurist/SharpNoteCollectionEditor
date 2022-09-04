@@ -65,11 +65,21 @@ public class NoteListViewModel : ReactiveObject
     _logger = logger;
   }
 
+  [DependsOn(nameof(IsLoading)), DependsOn(nameof(IsSaving))]
+  public bool CanCommandLoadNotes(object parameter) => !IsLoading && !IsSaving;
+
   public async Task CommandLoadNotes()
   {
+    if (!CanCommandLoadNotes(null!))
+    {
+      _logger.LogWarning($"Command {nameof(CommandLoadNotes)} was triggered despite of {nameof(CanCommandLoadNotes)} being false.");
+      return;
+    }
+
     try
     {
       OnStartLoading();
+      await Task.Delay(3000);
       var notes = await _dataSource.LoadAll();
       Notes = new ObservableCollectionExtended<NoteModel>(notes);
       OnLoadingFinished();
@@ -80,20 +90,22 @@ public class NoteListViewModel : ReactiveObject
     }
   }
 
-  [DependsOn(nameof(IsSaving))]
-  public bool CanCommandSaveNotes(object parameter) => !IsSaving;
+  [DependsOn(nameof(IsSaving)), DependsOn(nameof(IsLoading))]
+  public bool CanCommandSaveNotes(object parameter) => !IsSaving && !IsLoading;
 
   public async Task CommandSaveNotes()
   {
     if (!CanCommandSaveNotes(null!))
     {
-      _logger.LogWarning($"Command was triggered despite of {nameof(CanCommandSaveNotes)} being false.");
+      _logger.LogWarning($"Command {nameof(CommandSaveNotes)} was triggered despite of {nameof(CanCommandSaveNotes)} being false.");
       return;
     }
 
     _logger.LogDebug("Starting saving notes");
     IsSaving = true;
+    await Task.Delay(3000);
     await _dataSource.SaveAll(_notes.ToList());
+
     IsSaving = false;
   }
 

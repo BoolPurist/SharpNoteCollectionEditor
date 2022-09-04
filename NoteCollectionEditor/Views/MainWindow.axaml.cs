@@ -11,7 +11,7 @@ namespace NoteCollectionEditor.Views
   public partial class MainWindow : Window
   {
     // TODO: Find a way to calculate this depending on the layout.
-    private const double OffsetHeightScrollViewerNotes = 150;
+    private const double OffsetHeightScrollViewerNotes = 200;
     private const string AddNoteButtonText = "Add Note.";
 
     public MainWindow()
@@ -39,11 +39,11 @@ namespace NoteCollectionEditor.Views
       ListOfNotes.VisualData.ViewHeight = newViewHeightOfNotes;
     }
 
-    private void TopLevel_OnOpened(object? sender, EventArgs e)
+    private async void TopLevel_OnOpened(object? sender, EventArgs e)
     {
       if (!Design.IsDesignMode)
       {
-        ListOfNotes.Data.CommandLoadNotes();
+        await ListOfNotes.Data.CommandLoadNotes();
       }
     }
   }
