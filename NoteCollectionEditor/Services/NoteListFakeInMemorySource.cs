@@ -14,6 +14,8 @@ public class NoteListFakeInMemorySource : INoteListRepository
   public int LoadDelay { get; set; }
   private bool HasLoadDelay => LoadDelay != 0;
 
+  public List<NoteModel> Data => new (_data);
+
   public NoteListFakeInMemorySource(
     IEnumerable<NoteModel> data,
     IAppConfigs configs)

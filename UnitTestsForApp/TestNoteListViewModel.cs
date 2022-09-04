@@ -187,12 +187,49 @@ public class TestNoteListViewModel
     Assert.Equal(expectedCount, leftNotes.Count);
     CompareNoteForAssert(expectedNotesLeft[0], leftNotes[0]);
     CompareNoteForAssert(expectedNotesLeft[1], leftNotes[1]);
+  }
 
-    void CompareNoteForAssert(NoteModel expected, NoteModel actual)
+  [Fact]
+  public async Task ShouldSaveEditedAddedAndDeleteNote()
+  {
+    const int expectedCount = 3;
+    const int deleteIndex = 1;
+    const int expectedIndexForAdded = 2;
+
+    var toAdd = new NoteModel {Title = "New Title", Content = "New Content", Id = 2};
+    var forEdit = new NoteModel {Title = "Changed Title", Content = "Changed Content", Id = 1};
+
+    var expectedLeftNotes = new List<NoteModel>()
     {
-      Assert.Equal(expected.Title, actual.Title);
-      Assert.Equal(expected.Content, actual.Content);
-      Assert.Equal(expected.Id, actual.Id);
-    }
+      new NoteModel {Title = "First", Content = "1. Content", Id = 0},
+      forEdit,
+      toAdd
+    };
+
+    // Arrange
+    var testEnvironment = CreateEnvironmentForTests();
+    var viewModel = testEnvironment.ViewModel;
+    await viewModel.CommandLoadNotes();
+    viewModel.CommandDeleteNote(deleteIndex);
+    viewModel.CommandAddNote(toAdd);
+    viewModel.CommandEditNote(forEdit);
+
+    await viewModel.CommandSaveNotes();
+
+    // Assert
+    var saveLocation = testEnvironment.FakeSource;
+    var actualSavedNotes = saveLocation.Data;
+
+    Assert.Equal(expectedCount, actualSavedNotes.Count);
+    CompareNoteForAssert(expectedLeftNotes[0], actualSavedNotes[0]);
+    CompareNoteForAssert(expectedLeftNotes[1], actualSavedNotes[1]);
+    CompareNoteForAssert(expectedLeftNotes[2], actualSavedNotes[2]);
+  }
+
+  private void CompareNoteForAssert(NoteModel expected, NoteModel actual)
+  {
+    Assert.Equal(expected.Title, actual.Title);
+    Assert.Equal(expected.Content, actual.Content);
+    Assert.Equal(expected.Id, actual.Id);
   }
 }
