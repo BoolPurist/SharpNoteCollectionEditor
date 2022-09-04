@@ -17,11 +17,10 @@ namespace NoteCollectionEditor.Views
     public MainWindow()
     {
       InitializeComponent();
-      DataContext = this;
     }
 
 
-    private async void OnClickSpawnAddNoteWindow(object? sender, RoutedEventArgs e)
+    public async Task SpawnDialogForAddNote()
     {
       var windowAddingNote = new AlterNoteWindow();
       windowAddingNote.SetAcceptButtonText(AddNoteButtonText);

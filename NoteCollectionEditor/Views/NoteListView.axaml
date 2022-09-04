@@ -5,6 +5,7 @@
              xmlns:models="clr-namespace:NoteCollectionEditor.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1000"
              x:Class="NoteCollectionEditor.Views.NoteListView"
+             Name="NoteListFrontendView"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
   <UserControl.Styles>
@@ -70,7 +71,8 @@
                       Margin="10"
                       HorizontalAlignment="Right"
                       Tag="{Binding Id}"
-                      Click="OnClick_EditNode">
+                      Command="{Binding CommandSpawnDialogEditNode, ElementName=NoteListFrontendView}"
+                      CommandParameter="{Binding Id}">
                       <Image Source="../Assets/pencil-solid.png"></Image>
                     </Button>
                     <Button
@@ -79,7 +81,8 @@
                       Margin="10"
                       HorizontalAlignment="Right"
                       Tag="{Binding Id}"
-                      Click="OnClick_DeleteNode">
+                      Command="{Binding CommandSpawnDialogDeleteNode, ElementName=NoteListFrontendView}"
+                      CommandParameter="{Binding Id}">
                       <Image Source="../Assets/trash-solid.png"></Image>
                     </Button>
                   </StackPanel>

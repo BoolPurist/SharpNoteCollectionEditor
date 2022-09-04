@@ -1,9 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
@@ -41,7 +37,7 @@ public partial class NoteListView : UserControl
       new[]
       {
         new NoteModel {Title = "XXX", Content = new string('y', 200)},
-        new NoteModel {Title = "xxxx", Content = "asdfsdf"}
+        new NoteModel {Title = "Xth Title", Content = "Some Content"}
       }
     );
   }
@@ -52,44 +48,33 @@ public partial class NoteListView : UserControl
     AvaloniaXamlLoader.Load(this);
   }
 
-  private async void OnClick_EditNode(object? sender, RoutedEventArgs e)
+
+  // ReSharper disable once UnusedMember.Local
+  private async Task CommandSpawnDialogEditNode(int idForDelete)
   {
-    if (sender is Button {Tag: int} button)
+    var mainWindow = ApplicationExtension.GetCurrentMainWindow();
+    if (mainWindow == null)
     {
-      var mainWindow = ApplicationExtension.GetCurrentMainWindow();
-      if (mainWindow == null)
-      {
-        _logger.LogError($"{nameof(OnClick_EditNode)}: Could not retrieve window of a note list user control.");
-        return;
-      }
-
-      int editId = (int) button.Tag;
-      var toEdit = Data.Notes[editId];
-
-      var edited = await AlterNoteWindow.CreateForEdit(toEdit)
-        .ShowDialog<NoteModel>(mainWindow);
-
-      if (edited == null) return;
-
-      edited.Id = editId;
-      Data.EditNoteCommand.Execute(edited);
+      _logger.LogError($"{nameof(CommandSpawnDialogEditNode)}: Could not retrieve window of a note list user control.");
+      return;
     }
-    else
-    {
-      _logger.LogError($"{nameof(OnClick_EditNode)}: sender is not of type button with tag property of type int.");
-    }
+
+    var toEdit = Data.Notes[idForDelete];
+
+    var edited = await AlterNoteWindow.CreateForEdit(toEdit)
+      .ShowDialog<NoteModel>(mainWindow);
+
+    if (edited == null) return;
+
+    edited.Id = idForDelete;
+    Data.EditNoteCommand.Execute(edited);
   }
 
-  private void OnClick_DeleteNode(object? sender, RoutedEventArgs e)
+  // ReSharper disable once UnusedMember.Local
+  private void CommandSpawnDialogDeleteNode(int idForDelete)
   {
-    if (sender is Button {Tag: int} button)
-    {
-      int deleteId = (int) button.Tag;
-      Data.DeleteCommand.Execute(deleteId);
-    }
-    else
-    {
-      _logger.LogError($"{nameof(OnClick_DeleteNode)}: sender is not of type button with tag property of type int.");
-    }
+    Data.DeleteCommand.Execute(idForDelete);
   }
+
 }
+
