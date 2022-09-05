@@ -1,11 +1,19 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style Selector="TextBox.ReadOnlyTextBox">
-        <Setter Property="IsReadOnly" Value="True"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="AcceptsReturn" Value="True"/>
-        <Setter Property="TextAlignment" Value="Center"/>
-    </Style>
+  <Style Selector="TextBox.ReadOnlyTextBox">
+    <Setter Property="IsReadOnly" Value="True" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="AcceptsReturn" Value="True" />
+    <Setter Property="TextAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBox.ReadOnlyTextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="TextBox.ReadOnlyTextBox:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
 </Styles>

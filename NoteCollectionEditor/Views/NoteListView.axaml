@@ -91,7 +91,7 @@
                     </StackPanel>
                     <TextBox
                       Classes="ReadOnlyTextBox"
-                      FontSize="20"
+                      FontSize="30"
                       FontWeight="Bold"
                       Text="{Binding Title}" />
                     <Separator
@@ -100,6 +100,7 @@
                       Classes="ReadOnlyTextBox"
                       TextAlignment="Left"
                       FontSize="15"
+                      FontWeight="Bold"
                       Margin="0,0,0,15"
                       Text="{Binding Content}" />
                   </StackPanel>

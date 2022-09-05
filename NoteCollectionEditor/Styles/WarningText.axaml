@@ -17,6 +17,10 @@
     <Setter Property="AcceptsReturn" Value="True"/>
     <Setter Property="TextAlignment" Value="Center"/>
     <Setter Property="FontSize" Value="20"/>
+
+  </Style>
+  <Style Selector="TextBox.WarningText:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="Transparent" />
   </Style>
 </Styles>
 
