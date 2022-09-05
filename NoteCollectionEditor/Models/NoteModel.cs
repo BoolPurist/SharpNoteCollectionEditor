@@ -26,6 +26,7 @@ public partial class NoteModel : INotifyPropertyChanged
     set => SetField(ref _content, value);
   }
 
+  [JsonIgnore]
   public int Id
   {
     get => _id;
