@@ -69,7 +69,8 @@ namespace NoteCollectionEditor.Views
       {
         var fileDialog = new OpenFileDialog
         {
-          AllowMultiple = false
+          AllowMultiple = false,
+          Title = "Import a note list"
         };
         fileDialog.Filters.Add(new FileDialogFilter {Name = "json file", Extensions = {"json"}});
         return fileDialog;
@@ -108,7 +109,11 @@ namespace NoteCollectionEditor.Views
       _logger.LogInfo($"Exported note list to path {pathToExport}");
 
       SaveFileDialog CreateDialogForSaving()
-        => new() {InitialFileName = InitialNameForExportedNoteJsonFile};
+        => new()
+        {
+          InitialFileName = InitialNameForExportedNoteJsonFile,
+          Title = "Export current note list"
+        };
 
       AskPopUpDialog CreateWarningDialog()
         => new()
