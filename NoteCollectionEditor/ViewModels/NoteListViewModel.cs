@@ -167,7 +167,7 @@ public class NoteListViewModel : ReactiveObject
     return true;
   }
 
-  private void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
+  private static void AdjustIdToPosition(IEnumerable<NoteModel> toAdjust)
   {
     int newNextId = 0;
     foreach (var note in toAdjust)
