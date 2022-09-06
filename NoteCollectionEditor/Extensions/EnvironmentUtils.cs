@@ -1,3 +1,7 @@
+using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+
 namespace NoteCollectionEditor.Extensions;
 
 public static class EnvironmentUtils
@@ -10,4 +14,6 @@ public static class EnvironmentUtils
     return false;
 #endif
   }
+
+
 }

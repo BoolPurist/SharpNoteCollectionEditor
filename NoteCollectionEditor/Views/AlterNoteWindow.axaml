@@ -42,6 +42,7 @@
                         Title:
                     </TextBlock>
                     <TextBox Classes="InputField"
+                             Name="ContentInputBox"
                              Watermark="Enter a title"
                              Text="{Binding Data.NewTitle}" />
                     <Separator Template="{DynamicResource SeparatorInNoteTemplate}"/>

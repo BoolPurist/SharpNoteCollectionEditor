@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using NoteCollectionEditor.Extensions;
@@ -72,4 +73,5 @@ public partial class AlterNoteWindow : Window
     base.OnClosed(e);
     Data.Submit -= OnSubmit;
   }
+
 }

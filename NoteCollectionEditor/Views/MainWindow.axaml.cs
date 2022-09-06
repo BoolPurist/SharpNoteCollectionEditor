@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
+using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
@@ -27,9 +28,14 @@ namespace NoteCollectionEditor.Views
 
     private readonly ILogger _logger;
 
+    private readonly string _defaultImportExportPath;
+
     public MainWindow()
     {
       _logger = ServicesOfApp.Resolver.GetRequiredService<ILogger>();
+      var config = ServicesOfApp.Resolver.GetRequiredService<IAppConfigs>();
+      _defaultImportExportPath = config.GetDefaultPathExportImport();
+
       InitializeComponent();
 
       _viewModel = ListOfNotes.Data;
@@ -70,7 +76,8 @@ namespace NoteCollectionEditor.Views
         var fileDialog = new OpenFileDialog
         {
           AllowMultiple = false,
-          Title = "Import a note list"
+          Title = "Import a note list",
+          Directory = $"{_defaultImportExportPath}/"
         };
         fileDialog.Filters.Add(new FileDialogFilter {Name = "json file", Extensions = {"json"}});
         return fileDialog;
@@ -112,7 +119,9 @@ namespace NoteCollectionEditor.Views
         => new()
         {
           InitialFileName = InitialNameForExportedNoteJsonFile,
-          Title = "Export current note list"
+          Title = "Export current note list",
+          Directory = _defaultImportExportPath,
+
         };
 
       AskPopUpDialog CreateWarningDialog()

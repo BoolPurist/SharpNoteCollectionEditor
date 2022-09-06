@@ -38,7 +38,12 @@ public class AlterNoteViewModel : ViewModelBase
   public string NewContent
   {
     get => _newContent;
-    set => this.RaiseAndSetIfChanged(ref _newContent, value);
+    set
+    {
+      Console.WriteLine(value);
+      this.RaiseAndSetIfChanged(ref _newContent, value);
+
+    }
   }
 
   public AlterNoteViewModel() : this(String.Empty, String.Empty)

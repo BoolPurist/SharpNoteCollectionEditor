@@ -51,6 +51,7 @@ public partial class NoteListView : UserControl
   private async Task CommandSpawnDialogEditNode(int idForDelete)
   {
     var mainWindow = ApplicationExtension.GetCurrentMainWindow();
+
     if (mainWindow == null)
     {
       _logger.LogError($"{nameof(CommandSpawnDialogEditNode)}: Could not retrieve window of a note list user control.");
@@ -58,6 +59,7 @@ public partial class NoteListView : UserControl
     }
 
     var toEdit = Data.Notes[idForDelete];
+
 
     var edited = await AlterNoteWindow.CreateForEdit(toEdit)
       .ShowDialog<NoteModel>(mainWindow);

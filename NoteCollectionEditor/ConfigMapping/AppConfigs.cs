@@ -14,6 +14,7 @@ public class AppConfigs : IAppConfigs
   public AppDevelopmentConfig DevelopmentConfiguration { get; set; } = new();
   public string PathToNoteSource { get; private set; } = String.Empty;
 
+
   private AppConfigs()
   {
 
@@ -59,6 +60,19 @@ public class AppConfigs : IAppConfigs
     var boundSection = root.GetSection(nameSection).Get<T>();
     Debug.Assert(boundSection != null);
     return boundSection;
+  }
+
+  public string GetDefaultPathExportImport()
+  {
+    if (EnvironmentUtils.IsInDevelopment())
+    {
+      var projectPath = ProjectSourcePath.GetPathToProject();
+      var relativeExportPath = DevelopmentConfiguration.PathToDataDump;
+      var exportPath = Path.Join(projectPath, relativeExportPath);
+      return exportPath;
+    }
+
+    return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
   }
 
 

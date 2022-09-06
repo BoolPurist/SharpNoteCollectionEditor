@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
@@ -11,22 +12,34 @@ namespace NoteCollectionEditor.Views.Dialogs;
 /// </summary>
 public partial class AskPopUpDialog : Window
 {
-  public static readonly StyledProperty<string> WarningTextProperty =
-    AvaloniaProperty.Register<AskPopUpDialog, string>(nameof(WarningText), defaultValue: "Attention ! Proceed with caution. Do you want to continue  ?");
+  public static readonly DirectProperty<AskPopUpDialog, string> WarningTextProperty =
+    AvaloniaProperty.RegisterDirect<AskPopUpDialog, string>(
+      nameof(WarningText),
+      text => text.WarningText,
+      (text, value) => text.WarningText = value
+      );
 
-  public static readonly StyledProperty<string> ConfirmDespiteWarningTextProperty =
-    AvaloniaProperty.Register<AskPopUpDialog, string>(nameof(ConfirmDespiteWarningText), defaultValue: "Continue despite this warning");
+  public static readonly DirectProperty<AskPopUpDialog, string> ConfirmDespiteWarningTextProperty =
+    AvaloniaProperty.RegisterDirect<AskPopUpDialog, string>(
+      nameof(WarningText),
+      text => text.WarningText,
+      (text, value) => text.WarningText = value
+    );
+
+  private string _warningText = "Attention ! Proceed with caution. Do you want to continue  ?";
 
   public string WarningText
   {
-    get => GetValue(WarningTextProperty);
-    set => SetValue(WarningTextProperty, value);
+    get => _warningText;
+    set => SetAndRaise(WarningTextProperty, ref _warningText, value);
   }
+
+  private string _confirmDespiteWarningText = "Okay";
 
   public string ConfirmDespiteWarningText
   {
-    get => GetValue(ConfirmDespiteWarningTextProperty);
-    set => SetValue(ConfirmDespiteWarningTextProperty, value);
+    get => _confirmDespiteWarningText;
+    set => SetAndRaise(ConfirmDespiteWarningTextProperty,ref _confirmDespiteWarningText, value);
   }
 
   public AskPopUpDialog()

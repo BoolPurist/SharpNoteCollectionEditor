@@ -7,4 +7,6 @@ public class AppDevelopmentConfig
   public int SaveDelay { get; set; }
 
   public bool WithFile { get; set; }
+
+  public string PathToDataDump { get; set; }
 }
