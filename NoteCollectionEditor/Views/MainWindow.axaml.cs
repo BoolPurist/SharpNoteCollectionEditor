@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,13 +29,12 @@ namespace NoteCollectionEditor.Views
 
     private readonly ILogger _logger;
 
-    private readonly string _defaultImportExportPath;
+    private readonly IPathStoreImportExport _importExportPathHistory;
 
     public MainWindow()
     {
       _logger = ServicesOfApp.Resolver.GetRequiredService<ILogger>();
-      var config = ServicesOfApp.Resolver.GetRequiredService<IAppConfigs>();
-      _defaultImportExportPath = config.GetDefaultPathExportImport();
+      _importExportPathHistory = ServicesOfApp.Resolver.GetRequiredService<IPathStoreImportExport>();
 
       InitializeComponent();
 
@@ -62,7 +62,8 @@ namespace NoteCollectionEditor.Views
       // User has canceled import.
       if (pathToLoad == null) return;
 
-      var contentForImport = await File.ReadAllTextAsync(pathToLoad.First());
+      string importPath = pathToLoad.First();
+      var contentForImport = await File.ReadAllTextAsync(importPath);
 
       var hasImported = _viewModel.ImportNoteListFromJson(contentForImport);
 
@@ -71,14 +72,17 @@ namespace NoteCollectionEditor.Views
         await CreateErrorPopUp().ShowDialog(this);
       }
 
+      _importExportPathHistory.SetImportFromFullPath(importPath);
+
       OpenFileDialog CreateLoadDialog()
       {
         var fileDialog = new OpenFileDialog
         {
           AllowMultiple = false,
           Title = "Import a note list",
-          Directory = $"{_defaultImportExportPath}/"
+          Directory = _importExportPathHistory.ImportDirectoryPath
         };
+        Debug.Assert(fileDialog.Filters != null);
         fileDialog.Filters.Add(new FileDialogFilter {Name = "json file", Extensions = {"json"}});
         return fileDialog;
       }
@@ -113,14 +117,15 @@ namespace NoteCollectionEditor.Views
 
       var exportContent = _viewModel.CreateExportJson();
       await File.WriteAllTextAsync(pathToExport, exportContent);
+      _importExportPathHistory.SetExportFromFullPath(pathToExport);
       _logger.LogInfo($"Exported note list to path {pathToExport}");
 
       SaveFileDialog CreateDialogForSaving()
         => new()
         {
-          InitialFileName = InitialNameForExportedNoteJsonFile,
+          InitialFileName = _importExportPathHistory.LastSavedName,
           Title = "Export current note list",
-          Directory = _defaultImportExportPath,
+          Directory = _importExportPathHistory.ExportDirectoryPath,
 
         };
 

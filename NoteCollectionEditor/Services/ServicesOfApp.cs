@@ -1,4 +1,5 @@
 using System;
+using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.ViewModels;
 using Splat;
@@ -41,6 +42,7 @@ public static partial class ServicesOfApp
   {
     RegisterLogger(services);
     RegisterAppConfig(services);
+    RegisterImportExportPaths(services);
     RegisterINoteListRepository(services);
     RegisterAddNoteViewModel(services);
   }
@@ -52,4 +54,12 @@ public static partial class ServicesOfApp
       Resolver.GetRequiredService<ILogger>()
     ));
   }
+
+  private static void RegisterImportExportPaths(IMutableDependencyResolver container)
+  {
+    container.RegisterConstant<IPathStoreImportExport>(
+      new PathStoreForImportExportService(Resolver.GetRequiredService<IAppConfigs>())
+      );
+  }
+
 }

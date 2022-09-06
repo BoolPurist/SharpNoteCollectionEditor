@@ -9,6 +9,7 @@ namespace NoteCollectionEditor.Services;
 
 public static partial class ServicesOfApp
 {
+
   private static void RegisterLogger(IMutableDependencyResolver container)
   {
     container.RegisterConstant<ILogger>(new ConsoleLogger() {Level = LogLevel.Debug});
