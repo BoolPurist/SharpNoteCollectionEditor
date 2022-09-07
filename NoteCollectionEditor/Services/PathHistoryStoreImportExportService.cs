@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using NoteCollectionEditor.ConfigMapping;
-using NoteCollectionEditor.Extensions;
 
 namespace NoteCollectionEditor.Services;
 

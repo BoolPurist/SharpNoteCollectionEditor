@@ -2,13 +2,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Interactivity;
-using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
@@ -23,9 +18,7 @@ namespace NoteCollectionEditor.Views
     // TODO: Find a way to calculate this depending on the layout.
     private const double OffsetHeightScrollViewerNotes = 200;
     private const string AddNoteButtonText = "Add Note.";
-    private const string InitialNameForExportedNoteJsonFile = "exported_notes.json";
-
-    private NoteListViewModel _viewModel;
+    private readonly NoteListViewModel _viewModel;
 
     private readonly ILogger _logger;
 
@@ -138,13 +131,24 @@ namespace NoteCollectionEditor.Views
     }
 
 
-    private void OnWindowSizeChanged(object? sender, EventArgs e)
+
+    private void OnWindowSizeChanged(
+      // ReSharper disable once UnusedParameter.Local
+      object? sender,
+      // ReSharper disable once UnusedParameter.Local
+      EventArgs e)
     {
       double newViewHeightOfNotes = Math.Max(0, Height - OffsetHeightScrollViewerNotes);
       ListOfNotes.VisualData.ViewHeight = newViewHeightOfNotes;
     }
 
-    private async void TopLevel_OnOpened(object? sender, EventArgs e)
+
+    private async void TopLevel_OnOpened(
+      // ReSharper disable once UnusedParameter.Local
+      object? sender,
+      // ReSharper disable once UnusedParameter.Local
+      EventArgs e
+      )
     {
       if (!Design.IsDesignMode)
       {
