@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;

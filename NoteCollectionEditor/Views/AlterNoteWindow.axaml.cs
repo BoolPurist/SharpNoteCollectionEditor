@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using NoteCollectionEditor.Extensions;
@@ -33,7 +32,7 @@ public partial class AlterNoteWindow : Window
   {
   }
 
-  public AlterNoteWindow(string startTitle, string startContent)
+  private AlterNoteWindow(string startTitle, string startContent)
   {
     InitializeComponent();
 

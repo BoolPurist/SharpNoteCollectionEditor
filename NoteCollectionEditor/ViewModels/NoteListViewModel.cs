@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Metadata;
 using DynamicData;
-using DynamicData.Binding;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;

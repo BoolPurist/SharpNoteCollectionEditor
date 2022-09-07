@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using ReactiveUI;
 
 namespace NoteCollectionEditor.Models;
 
@@ -35,12 +32,13 @@ public partial class NoteModel : INotifyPropertyChanged
 
   public event PropertyChangedEventHandler? PropertyChanged;
 
-  protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+  private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
   {
     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
   }
 
-  protected void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+  // ReSharper disable once RedundantAssignment
+  private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
   {
     field = value;
     OnPropertyChanged(propertyName);

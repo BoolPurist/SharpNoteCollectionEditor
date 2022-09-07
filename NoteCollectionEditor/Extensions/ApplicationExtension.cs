@@ -6,7 +6,7 @@ namespace NoteCollectionEditor.Extensions;
 
 public static class ApplicationExtension
 {
-  public static Window? GetMainWindow(this Application app)
+  private static Window? GetMainWindow(this Application app)
   {
     if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
     {

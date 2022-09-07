@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Avalonia.Controls.Shapes;
 using Microsoft.Extensions.Configuration;
 using NoteCollectionEditor.Extensions;
 using Path = System.IO.Path;
@@ -11,7 +10,7 @@ public class AppConfigs : IAppConfigs
 {
   private const string SectionNameForPathToNoteListSource = "NoteListDataName";
 
-  public AppDevelopmentConfig DevelopmentConfiguration { get; set; } = new();
+  public AppDevelopmentConfig DevelopmentConfiguration { get; private set; } = new();
   public string PathToNoteSource { get; private set; } = String.Empty;
 
 

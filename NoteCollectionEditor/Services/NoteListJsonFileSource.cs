@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Xml;
 using NoteCollectionEditor.ConfigMapping;
 using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
@@ -14,12 +13,12 @@ namespace NoteCollectionEditor.Services;
 public class NoteListJsonFileSource : INoteListRepository
 {
   protected readonly IAppConfigs Configs;
-  protected readonly ILogger Logger;
+  private readonly ILogger _logger;
 
   public NoteListJsonFileSource(IAppConfigs configs, ILogger logger)
   {
     Configs = configs;
-    Logger = logger;
+    _logger = logger;
   }
 
   public virtual async Task<IEnumerable<NoteModel>> LoadAll()
@@ -32,7 +31,7 @@ public class NoteListJsonFileSource : INoteListRepository
   {
     string toWrite = GetSerialized(toSave);
     await File.WriteAllTextAsync(Configs.PathToNoteSource, toWrite);
-    Logger.LogInfo($"Save notes at {Configs.PathToNoteSource}");
+    _logger.LogInfo($"Save notes at {Configs.PathToNoteSource}");
   }
 
   public void EnsureNeededFiles()
