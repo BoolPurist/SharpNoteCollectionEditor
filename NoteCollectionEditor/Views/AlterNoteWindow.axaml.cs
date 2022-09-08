@@ -8,22 +8,33 @@ using NoteCollectionEditor.Models;
 using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
 
-
 namespace NoteCollectionEditor.Views;
 
 public partial class AlterNoteWindow : Window
 {
+  public AlterNoteViewModel Data { get; }
 
+  public static readonly DirectProperty<AlterNoteWindow, bool> SpawnWithInsertTopOptionProperty =
+    AvaloniaProperty.RegisterDirect<AlterNoteWindow, bool>(
+      nameof(SpawnWithInsertTopOption),
+      win => win.SpawnWithInsertTopOption,
+      (win, value) => win.SpawnWithInsertTopOption = value
+    );
 
-  public AlterNoteViewModel Data { get; set; }
+  private bool _spawnWithInsertTopOption;
 
+  public bool SpawnWithInsertTopOption
+  {
+    get => _spawnWithInsertTopOption;
+    set => SetAndRaise(SpawnWithInsertTopOptionProperty,ref _spawnWithInsertTopOption, value);
+  }
 
   public static AlterNoteWindow CreateForEdit(NoteModel modelToEdit)
   {
     var editorDialog = new AlterNoteWindow(
       modelToEdit.Title ?? String.Empty,
       modelToEdit.Content ?? String.Empty
-      );
+    );
     editorDialog.SetAcceptButtonText("Confirm Edit");
     return editorDialog;
   }
@@ -42,17 +53,23 @@ public partial class AlterNoteWindow : Window
     Data.NewContent = startContent;
     Data.NewTitle = startTitle;
 
+    InitializeForDesign();
+
 #if DEBUG
     this.AttachDevTools();
 #endif
   }
 
-  public void SetAcceptButtonText(string newText) => Data.AcceptButtonText = newText;
-
-  private void OnSubmit(object? sender, NoteModel toSubmit)
+  private void InitializeForDesign()
   {
-    Close(new NoteModel() { Content = toSubmit.Content, Title = toSubmit.Title} );
+    if (!Design.IsDesignMode) return;
+
+    Data.NewTitle = "New Title";
+    Data.NewContent = "...";
+    SpawnWithInsertTopOption = true;
   }
+
+  public void SetAcceptButtonText(string newText) => Data.AcceptButtonText = newText;
 
   // ReSharper disable once UnusedParameter.Local
   protected void OnClickCancel(object? sender, RoutedEventArgs e)
@@ -61,6 +78,13 @@ public partial class AlterNoteWindow : Window
     if (Design.IsDesignMode) return;
     Close(null);
   }
+
+  private void OnSubmit(object? sender, NoteModel toSubmit)
+  {
+    Close(new NoteModel() {Content = toSubmit.Content, Title = toSubmit.Title});
+  }
+
+
 
   private void InitializeComponent()
   {
@@ -72,5 +96,4 @@ public partial class AlterNoteWindow : Window
     base.OnClosed(e);
     Data.Submit -= OnSubmit;
   }
-
 }

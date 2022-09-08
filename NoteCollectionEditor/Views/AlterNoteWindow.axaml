@@ -7,75 +7,78 @@
         Title="AddNoteView"
         xmlns:views="using:NoteCollectionEditor.Views"
         x:DataType="views:AlterNoteWindow"
-        x:CompileBindings="True"
-        >
+        x:CompileBindings="True">
 
-    <Window.Styles>
-        <StyleInclude Source="/Styles/NoteStyles.axaml"/>
-        <Style Selector="TextBlock.HeadLine">
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style Selector="Button">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style Selector="TextBox.InputField">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-    </Window.Styles>
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+  <Window.Styles>
+    <StyleInclude Source="/Styles/NoteStyles.axaml" />
+    <Style Selector="TextBlock.HeadLine">
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="TextBox.InputField">
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+  </Window.Styles>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/ControlTemplates/SeperatorInNote.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
 
-        <StackPanel Margin="20" Spacing="10">
-            <Border Classes="NoteBorder"
-                    Padding="10"
-                    Background="{DynamicResource NoteColor}"
-                    >
-                <StackPanel Spacing="10" Margin="0,0,0,10">
-                    <TextBlock Classes="HeadLine">
-                        Title:
-                    </TextBlock>
-                    <TextBox Classes="InputField"
-                             Name="ContentInputBox"
-                             Watermark="Enter a title"
-                             Text="{Binding Data.NewTitle}" />
-                    <Separator Template="{DynamicResource SeparatorInNoteTemplate}"/>
-                    <TextBlock Classes="HeadLine">
-                        Content:
-                    </TextBlock>
-                    <TextBox Classes="InputField"
-                             Watermark="Enter some content"
-                             Text="{Binding Data.NewContent}" />
-                </StackPanel>
-            </Border>
-            <Grid HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="15" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button
-                    Content="{Binding Data.AcceptButtonText}"
-                    Name="ApplyNewNoteButton"
-                    Grid.Column="0"
-                    Command="{Binding Data.SubmitNewNote}"
-                    Background="Green"
-                >
-                </Button>
-                <Button
-                    Content="{Binding Data.CancelButtonText}"
-                    Grid.Column="2"
-                    Click="OnClickCancel"
-                    Background="Red"
-                >
+  <StackPanel Margin="20" Spacing="10">
+    <Border Classes="NoteBorder"
+            Padding="10"
+            Background="{DynamicResource NoteColor}">
+      <StackPanel Spacing="10" Margin="0,0,0,10">
+        <TextBlock Classes="HeadLine">
+          Title:
+        </TextBlock>
+        <TextBox Classes="InputField"
+                 Name="ContentInputBox"
+                 Watermark="Enter a title"
+                 Text="{Binding Data.NewTitle}" />
+        <Separator Template="{DynamicResource SeparatorInNoteTemplate}" />
+        <TextBlock Classes="HeadLine">
+          Content:
+        </TextBlock>
+        <TextBox Classes="InputField"
+                 Watermark="Enter some content"
+                 Text="{Binding Data.NewContent}" />
+      </StackPanel>
+    </Border>
+    <Grid HorizontalAlignment="Stretch">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="15" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Button
+        Content="{Binding Data.AcceptButtonText}"
+        Name="ApplyNewNoteButton"
+        Grid.Column="0"
+        Command="{Binding Data.SubmitNewNote}"
+        Background="Green">
+      </Button>
+      <Button
+        Content="{Binding Data.CancelButtonText}"
+        Grid.Column="2"
+        Click="OnClickCancel"
+        Background="Red">
 
-                </Button>
-            </Grid>
-        </StackPanel>
+      </Button>
+    </Grid>
+    <CheckBox  IsChecked="{Binding Data.InsertOnTop}"
+               IsVisible="{Binding  SpawnWithInsertTopOption}"
+               FontSize="20"
+               FontWeight="Bold"
+    >
+      Insert on the top of list
+    </CheckBox>
+  </StackPanel>
 </Window>

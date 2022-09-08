@@ -8,10 +8,7 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class AlterNoteViewModel : ViewModelBase
 {
-  private string _newTitle;
-  private string _newContent;
-  private string _acceptButtonText = "Accept";
-  private string _cancelButtonText = "Cancel";
+
 
   public event EventHandler<NoteModel>? Submit;
 
@@ -35,6 +32,17 @@ public class AlterNoteViewModel : ViewModelBase
     set => this.RaiseAndSetIfChanged(ref _newTitle, value);
   }
 
+
+  public bool InsertOnTop
+  {
+    get => _insertOnTop;
+    set
+    {
+      Console.WriteLine($"Setter: {nameof(InsertOnTop)}");
+      this.RaiseAndSetIfChanged(ref _insertOnTop, value);
+    }
+  }
+
   public string NewContent
   {
     get => _newContent;
@@ -45,6 +53,12 @@ public class AlterNoteViewModel : ViewModelBase
 
     }
   }
+
+  private string _newTitle;
+  private string _newContent;
+  private string _acceptButtonText = "Accept";
+  private string _cancelButtonText = "Cancel";
+  private bool _insertOnTop = true;
 
   public AlterNoteViewModel() : this(String.Empty, String.Empty)
   {

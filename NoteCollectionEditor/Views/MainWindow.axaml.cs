@@ -37,7 +37,7 @@ namespace NoteCollectionEditor.Views
 
     public async Task SpawnDialogForAddNote()
     {
-      var windowAddingNote = new AlterNoteWindow();
+      var windowAddingNote = new AlterNoteWindow() { SpawnWithInsertTopOption = true };
       windowAddingNote.SetAcceptButtonText(AddNoteButtonText);
       var newNote = await windowAddingNote.ShowDialog<NoteModel>(this);
       if (newNote != null)
