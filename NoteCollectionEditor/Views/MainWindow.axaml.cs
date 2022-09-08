@@ -43,7 +43,7 @@ namespace NoteCollectionEditor.Views
       if (newNote != null)
       {
         // Add new note to view model.
-        _viewModel.CommandAddNote(newNote);
+        _viewModel.CommandAddNoteOnBottom(newNote);
       }
     }
 
@@ -58,7 +58,7 @@ namespace NoteCollectionEditor.Views
       string importPath = pathToLoad.First();
       var contentForImport = await File.ReadAllTextAsync(importPath);
 
-      var hasImported = _viewModel.ImportNoteListFromJson(contentForImport);
+      var hasImported = _viewModel.CommandImportNoteListFromJson(contentForImport);
 
       if (!hasImported)
       {

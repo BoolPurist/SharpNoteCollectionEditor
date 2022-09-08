@@ -117,11 +117,19 @@ public class NoteListViewModel : ReactiveObject
     IsSaving = false;
   }
 
-  public void CommandAddNote(NoteModel toAdd)
+  public void CommandAddNoteOnBottom(NoteModel toAdd)
   {
     toAdd.Id = _notes.Count;
     _notes.Add(toAdd);
-    _logger.LogDebug("Note has been added.");
+    _logger.LogDebug($"Note has been added on the bottom at index {toAdd.Id}.");
+    OnNotesChanged();
+  }
+
+  public void CommandAddNoteOnTop(NoteModel toAdd)
+  {
+    toAdd.Id = _notes.Count;
+    _notes.Insert(0, toAdd);
+    _logger.LogDebug($"Note has been added on the top at index {toAdd.Id}.");
     OnNotesChanged();
   }
 
@@ -142,7 +150,7 @@ public class NoteListViewModel : ReactiveObject
 
   public string CreateExportJson() => JsonSerializer.Serialize(_notes);
 
-  public bool ImportNoteListFromJson(string json)
+  public bool CommandImportNoteListFromJson(string json)
   {
     try
     {
