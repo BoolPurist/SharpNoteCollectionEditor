@@ -37,13 +37,15 @@ namespace NoteCollectionEditor.Views
 
     public async Task SpawnDialogForAddNote()
     {
-      var windowAddingNote = new AlterNoteWindow() { SpawnWithInsertTopOption = true };
+      var windowAddingNote = new AlterNoteWindow { SpawnWithInsertTopOption = true };
       windowAddingNote.SetAcceptButtonText(AddNoteButtonText);
-      var newNote = await windowAddingNote.ShowDialog<NoteModel>(this);
-      if (newNote != null)
+      var result = await windowAddingNote.ShowDialog<CreateNoteDialogResult>(this);
+
+      if (result != null)
       {
-        // Add new note to view model.
-        _viewModel.CommandAddNoteOnBottom(newNote);
+        var newModel = result.ToModel();
+        if (result.InsertOnTop) _viewModel.CommandAddNoteOnTop(newModel);
+        else _viewModel.CommandAddNoteOnBottom(newModel);
       }
     }
 

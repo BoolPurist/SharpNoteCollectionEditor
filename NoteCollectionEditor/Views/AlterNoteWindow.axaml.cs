@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -12,7 +13,7 @@ namespace NoteCollectionEditor.Views;
 
 public partial class AlterNoteWindow : Window
 {
-  public AlterNoteViewModel Data { get; }
+  public AlterNoteViewModel Data { get; set; }
 
   public static readonly DirectProperty<AlterNoteWindow, bool> SpawnWithInsertTopOptionProperty =
     AvaloniaProperty.RegisterDirect<AlterNoteWindow, bool>(
@@ -49,7 +50,7 @@ public partial class AlterNoteWindow : Window
 
     Data = ServicesOfApp.Resolver.GetRequiredService<AlterNoteViewModel>();
     DataContext = this;
-    Data.Submit += OnSubmit;
+    Data.Submit += CommandSubmitAndClose;
     Data.NewContent = startContent;
     Data.NewTitle = startTitle;
 
@@ -79,12 +80,10 @@ public partial class AlterNoteWindow : Window
     Close(null);
   }
 
-  private void OnSubmit(object? sender, NoteModel toSubmit)
+  private void CommandSubmitAndClose()
   {
-    Close(new NoteModel() {Content = toSubmit.Content, Title = toSubmit.Title});
+    Close(new CreateNoteDialogResult(Data.NewTitle, Data.NewContent, Data.InsertOnTop));
   }
-
-
 
   private void InitializeComponent()
   {
@@ -94,6 +93,6 @@ public partial class AlterNoteWindow : Window
   protected override void OnClosed(EventArgs e)
   {
     base.OnClosed(e);
-    Data.Submit -= OnSubmit;
+    Data.Submit -= CommandSubmitAndClose;
   }
 }

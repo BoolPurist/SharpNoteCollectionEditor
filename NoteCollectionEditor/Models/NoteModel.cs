@@ -7,6 +7,8 @@ namespace NoteCollectionEditor.Models;
 
 public partial class NoteModel : INotifyPropertyChanged
 {
+  public event PropertyChangedEventHandler? PropertyChanged;
+
   private string? _title;
   private string? _content;
   private int _id = -1;
@@ -29,8 +31,6 @@ public partial class NoteModel : INotifyPropertyChanged
     get => _id;
     set => SetField(ref _id, value);
   }
-
-  public event PropertyChangedEventHandler? PropertyChanged;
 
   private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
   {

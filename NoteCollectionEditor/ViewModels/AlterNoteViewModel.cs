@@ -1,5 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Metadata;
 using NoteCollectionEditor.Models;
 using ReactiveUI;
 
@@ -8,11 +10,20 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class AlterNoteViewModel : ViewModelBase
 {
+  public event Action? Submit;
 
+  [DependsOn(nameof(FieldsAreValid))]
+  public bool CanSubmitCommand()
+  {
+    return FieldsAreValid;
+  }
 
-  public event EventHandler<NoteModel>? Submit;
+  public ICommand SomeCommand { get; }
 
-  public ICommand SubmitNewNote { get; }
+  public void  SubmitCommand()
+  {
+    Submit?.Invoke();
+  }
 
   public string AcceptButtonText
   {
@@ -29,8 +40,15 @@ public class AlterNoteViewModel : ViewModelBase
   public string NewTitle
   {
     get => _newTitle;
-    set => this.RaiseAndSetIfChanged(ref _newTitle, value);
+    set
+    {
+      this.RaiseAndSetIfChanged(ref _newTitle, value);
+      this.RaisePropertyChanged(nameof(FieldsAreValid));
+    }
   }
+
+  public bool FieldsAreValid => !string.IsNullOrWhiteSpace(_newTitle) &&
+                                !string.IsNullOrWhiteSpace(_newContent);
 
 
   public bool InsertOnTop
@@ -48,9 +66,8 @@ public class AlterNoteViewModel : ViewModelBase
     get => _newContent;
     set
     {
-      Console.WriteLine(value);
       this.RaiseAndSetIfChanged(ref _newContent, value);
-
+      this.RaisePropertyChanged(nameof(FieldsAreValid));
     }
   }
 
@@ -68,23 +85,6 @@ public class AlterNoteViewModel : ViewModelBase
   {
     _newTitle = title;
     _newContent = textBody;
-
-    var canBeSubmitted = this.WhenAnyValue(
-      data => data.NewTitle,
-      data => data.NewContent,
-      (newTitle, content) =>
-        !string.IsNullOrWhiteSpace(newTitle)
-        && !string.IsNullOrWhiteSpace(content)
-    );
-
-    SubmitNewNote = ReactiveCommand.Create(
-      () => Submit?.Invoke(null, new NoteModel
-      {
-        Title = NewTitle,
-        Content = NewContent
-      }),
-      canBeSubmitted
-    );
   }
 
   public override string ToString()

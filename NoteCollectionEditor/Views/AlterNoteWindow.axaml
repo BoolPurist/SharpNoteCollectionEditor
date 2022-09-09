@@ -4,10 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NoteCollectionEditor.Views.AlterNoteWindow"
+        xmlns:vm="clr-namespace:NoteCollectionEditor.ViewModels"
         Title="AddNoteView"
         xmlns:views="using:NoteCollectionEditor.Views"
         x:DataType="views:AlterNoteWindow"
-        x:CompileBindings="True">
+        >
 
   <Window.Styles>
     <StyleInclude Source="/Styles/NoteStyles.axaml" />
@@ -62,7 +63,7 @@
         Content="{Binding Data.AcceptButtonText}"
         Name="ApplyNewNoteButton"
         Grid.Column="0"
-        Command="{Binding Data.SubmitNewNote}"
+        Command="{Binding Data.SubmitCommand}"
         Background="Green">
       </Button>
       <Button
