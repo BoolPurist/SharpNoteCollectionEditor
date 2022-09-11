@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Metadata;
@@ -148,17 +149,21 @@ public class NoteListViewModel : ReactiveObject
     OnNotesChanged();
   }
 
-  public bool CanCommandMoveDownNote(int index)
+  [DependsOn(nameof(Notes))]
+  public bool CanCommandMoveDownNote(object index)
   {
-    var downIndex = index + 1;
-    int max = _notes.Count - 1;
+    Check.ThrowIfNoCastPossible<int>(index, nameof(index));
+
+    var downIndex = (int)index + 1;
+    int max = _notes.Count - 1; ;
     return downIndex <= max;
   }
 
-  public bool CanCommandMoveUpNote(int index)
+  public bool CanCommandMoveUpNote(object index)
   {
-    var max = _notes.Count - 1;
-    return index > 0;
+    Check.ThrowIfNoCastPossible<int>(index, nameof(index));
+
+    return (int)index > 0;
   }
 
   /// <summary>
@@ -173,6 +178,7 @@ public class NoteListViewModel : ReactiveObject
     int indexToUp = index - 1;
     (_notes[index], _notes[indexToUp]) = (_notes[indexToUp], _notes[index]);
     AdjustIdToPosition(_notes);
+    this.RaisePropertyChanged(nameof(Notes));
   }
 
   /// <summary>
@@ -187,6 +193,7 @@ public class NoteListViewModel : ReactiveObject
     int indexToUp = index + 1;
     (_notes[index], _notes[indexToUp]) = (_notes[indexToUp], _notes[index]);
     AdjustIdToPosition(_notes);
+    this.RaisePropertyChanged(nameof(Notes));
   }
 
   public string CreateExportJson() => JsonSerializer.Serialize(_notes);

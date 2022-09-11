@@ -17,6 +17,11 @@
       <Setter Property="Background" Value="Gray" />
       <Setter Property="Opacity" Value="0.30"></Setter>
     </Style>
+    <Style Selector="Button.NoteActionBtn">
+      <Setter Property="Width" Value="64" />
+      <Setter Property="Height" Value="64" />
+      <Setter Property="Margin" Value="10" />
+    </Style>
     <StyleInclude Source="/Styles/ReadOnlyText.axaml" />
     <StyleInclude Source="/Styles/NoteStyles.axaml" />
   </UserControl.Styles>
@@ -65,30 +70,41 @@
               <StackPanel>
                 <Border Classes="NoteBorder" Margin="20">
                   <StackPanel Classes="NoteContainer">
-                    <StackPanel
-                      Orientation="Horizontal"
-                      HorizontalAlignment="Right">
-                      <Button
-                        Width="64"
-                        Height="64"
-                        Margin="10"
+                    <DockPanel>
+                      <StackPanel HorizontalAlignment="Left"
+                                  Orientation="Horizontal">
+                        <Button Classes="NoteActionBtn"
+                                Command="{Binding Data.CommandMoveUpNote, ElementName=NoteListFrontendView}"
+                                CommandParameter="{Binding Id}">
+                          <Image Source="../Assets/arrowUp.png"/>
+                        </Button>
+                        <Button Classes="NoteActionBtn"
+                                Command="{Binding Data.CommandMoveDownNote, ElementName=NoteListFrontendView}"
+                                CommandParameter="{Binding Id}">
+                          <Image Source="../Assets/arrowUp.png">
+                            <Image.RenderTransform>
+                              <RotateTransform Angle="180"/>
+                            </Image.RenderTransform>
+                          </Image>
+                        </Button>
+                      </StackPanel>
+                      <StackPanel
                         HorizontalAlignment="Right"
-                        Tag="{Binding Id}"
-                        Command="{Binding CommandSpawnDialogEditNode, ElementName=NoteListFrontendView}"
-                        CommandParameter="{Binding Id}">
-                        <Image Source="../Assets/pencil-solid.png"></Image>
-                      </Button>
-                      <Button
-                        Width="64"
-                        Height="64"
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Tag="{Binding Id}"
-                        Command="{Binding CommandSpawnDialogDeleteNode, ElementName=NoteListFrontendView}"
-                        CommandParameter="{Binding Id}">
-                        <Image Source="../Assets/trash-solid.png"></Image>
-                      </Button>
-                    </StackPanel>
+                        Orientation="Horizontal">
+                        <Button Classes="NoteActionBtn"
+                                Tag="{Binding Id}"
+                                Command="{Binding CommandSpawnDialogEditNode, ElementName=NoteListFrontendView}"
+                                CommandParameter="{Binding Id}">
+                          <Image Source="../Assets/pencil-solid.png"></Image>
+                        </Button>
+                        <Button Classes="NoteActionBtn"
+                                Tag="{Binding Id}"
+                                Command="{Binding CommandSpawnDialogDeleteNode, ElementName=NoteListFrontendView}"
+                                CommandParameter="{Binding Id}">
+                          <Image Source="../Assets/trash-solid.png" />
+                        </Button>
+                      </StackPanel>
+                    </DockPanel>
                     <TextBox
                       Classes="ReadOnlyTextBox"
                       FontSize="30"
