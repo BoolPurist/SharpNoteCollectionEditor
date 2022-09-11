@@ -49,6 +49,12 @@ namespace NoteCollectionEditor.Views
       }
     }
 
+    public async Task CommandSpawnAboutPage()
+    {
+      var about = new AboutView();
+      await about.ShowDialog(this);
+    }
+
     public async Task CommandSpawnImportDialogForNotes()
     {
       var loadDialog = CreateLoadDialog();

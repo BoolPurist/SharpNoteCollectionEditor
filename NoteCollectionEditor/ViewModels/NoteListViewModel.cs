@@ -150,20 +150,22 @@ public class NoteListViewModel : ReactiveObject
   }
 
   [DependsOn(nameof(Notes))]
-  public bool CanCommandMoveDownNote(object index)
+  public bool CanCommandMoveDownNote(object? index)
   {
-    Check.ThrowIfNoCastPossible<int>(index, nameof(index));
+    if (index == null) return false;
 
-    var downIndex = (int)index + 1;
+    int castedIndex = Check.ThrowIfNoCastPossible<int>(index, nameof(index));
+    var downIndex = castedIndex + 1;
     int max = _notes.Count - 1; ;
     return downIndex <= max;
   }
 
-  public bool CanCommandMoveUpNote(object index)
+  public bool CanCommandMoveUpNote(object? index)
   {
-    Check.ThrowIfNoCastPossible<int>(index, nameof(index));
+    if (index == null) return false;
 
-    return (int)index > 0;
+    int castedIndex = Check.ThrowIfNoCastPossible<int>(index, nameof(index));
+    return castedIndex > 0;
   }
 
   /// <summary>

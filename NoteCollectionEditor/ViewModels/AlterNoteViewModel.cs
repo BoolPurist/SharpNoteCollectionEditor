@@ -18,8 +18,6 @@ public class AlterNoteViewModel : ViewModelBase
     return FieldsAreValid;
   }
 
-  public ICommand SomeCommand { get; }
-
   public void  SubmitCommand()
   {
     Submit?.Invoke();

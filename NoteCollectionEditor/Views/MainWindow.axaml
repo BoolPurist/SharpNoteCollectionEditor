@@ -31,6 +31,12 @@
         <MenuItem Header="_Export"
                   Command="{Binding CommandSpawnExportDialogForNotes}"/>
       </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="_About"
+                  Command="{Binding CommandSpawnAboutPage}"
+        />
+      </MenuItem>
+
 
     </Menu>
 

@@ -13,9 +13,9 @@ public class AppConfigs : IAppConfigs
   public AppDevelopmentConfig DevelopmentConfiguration { get; private set; } = new();
   public string PathToNoteSource { get; private set; } = String.Empty;
 
-  public string AppVersion { get; set; }
+  public string AppVersion { get; set; } = String.Empty;
 
-  public string AppLink { get; set; }
+  public string AppLink { get; set; } = String.Empty;
 
 
 
