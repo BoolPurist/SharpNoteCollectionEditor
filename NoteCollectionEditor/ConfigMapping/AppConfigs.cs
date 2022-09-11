@@ -13,11 +13,11 @@ public class AppConfigs : IAppConfigs
   public AppDevelopmentConfig DevelopmentConfiguration { get; private set; } = new();
   public string PathToNoteSource { get; private set; } = String.Empty;
 
+  public string AppVersion { get; set; }
 
-  private AppConfigs()
-  {
+  public string AppLink { get; set; }
 
-  }
+
 
   public static AppConfigs CreateWithoutConfigFile()
   {
@@ -43,6 +43,9 @@ public class AppConfigs : IAppConfigs
 
     appConfig.PathToNoteSource = GetSectionAsBinding<string>(config, SectionNameForPathToNoteListSource);
     appConfig.PathToNoteSource = Path.Join(Environment.CurrentDirectory, appConfig.PathToNoteSource);
+    appConfig.AppVersion = GetSectionAsBinding<string>(config, nameof(AppVersion));
+    appConfig.AppLink = GetSectionAsBinding<string>(config, nameof(AppLink));
+
 
     return appConfig;
   }
