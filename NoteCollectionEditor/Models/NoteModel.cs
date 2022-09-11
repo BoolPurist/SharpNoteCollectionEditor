@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -5,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace NoteCollectionEditor.Models;
 
 
-public partial class NoteModel : INotifyPropertyChanged
+public partial class NoteModel : INotifyPropertyChanged, IEquatable<NoteModel>
 {
   public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -25,6 +26,8 @@ public partial class NoteModel : INotifyPropertyChanged
     set => SetField(ref _content, value);
   }
 
+
+
   [JsonIgnore]
   public int Id
   {
@@ -42,5 +45,25 @@ public partial class NoteModel : INotifyPropertyChanged
   {
     field = value;
     OnPropertyChanged(propertyName);
+  }
+
+  public bool Equals(NoteModel? other)
+  {
+    if (ReferenceEquals(null, other)) return false;
+    if (ReferenceEquals(this, other)) return true;
+    return _title == other._title && _content == other._content && _id == other._id;
+  }
+
+  public override bool Equals(object? obj)
+  {
+    if (ReferenceEquals(null, obj)) return false;
+    if (ReferenceEquals(this, obj)) return true;
+    if (obj.GetType() != this.GetType()) return false;
+    return Equals((NoteModel) obj);
+  }
+
+  public override int GetHashCode()
+  {
+    return HashCode.Combine(Title, Content, Id);
   }
 }

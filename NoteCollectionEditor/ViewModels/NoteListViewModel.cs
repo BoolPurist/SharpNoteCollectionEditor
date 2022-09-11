@@ -148,6 +148,47 @@ public class NoteListViewModel : ReactiveObject
     OnNotesChanged();
   }
 
+  public bool CanCommandMoveDownNote(int index)
+  {
+    var downIndex = index + 1;
+    int max = _notes.Count - 1;
+    return downIndex <= max;
+  }
+
+  public bool CanCommandMoveUpNote(int index)
+  {
+    var max = _notes.Count - 1;
+    return index > 0;
+  }
+
+  /// <summary>
+  /// Moves note at index up  the list.
+  /// Swaps the chosen element with its left neighbor element.
+  /// </summary>
+  /// <example>
+  /// Example: index = 1: element goes to index 0 and the previous element at index 0 goes to index 1.
+  /// </example>
+  public void CommandMoveUpNote(int index)
+  {
+    int indexToUp = index - 1;
+    (_notes[index], _notes[indexToUp]) = (_notes[indexToUp], _notes[index]);
+    AdjustIdToPosition(_notes);
+  }
+
+  /// <summary>
+  /// Moves note at index down the list.
+  /// Swaps the chosen element with its right neighbor element.
+  /// </summary>
+  /// <example>
+  /// Example: index = 2: element goes to index 2 and the previous element at index 2 goes to index 1.
+  /// </example>
+  public void CommandMoveDownNote(int index)
+  {
+    int indexToUp = index + 1;
+    (_notes[index], _notes[indexToUp]) = (_notes[indexToUp], _notes[index]);
+    AdjustIdToPosition(_notes);
+  }
+
   public string CreateExportJson() => JsonSerializer.Serialize(_notes);
 
   public bool CommandImportNoteListFromJson(string json)
