@@ -10,83 +10,83 @@ namespace NoteCollectionEditor.ViewModels;
 
 public class AlterNoteViewModel : ViewModelBase
 {
-  public event Action? Submit;
+    public event Action? Submit;
 
-  [DependsOn(nameof(FieldsAreValid))]
-  public bool CanSubmitCommand()
-  {
-    return FieldsAreValid;
-  }
-
-  public void  SubmitCommand()
-  {
-    Submit?.Invoke();
-  }
-
-  public string AcceptButtonText
-  {
-    get => _acceptButtonText;
-    set => this.RaiseAndSetIfChanged(ref _acceptButtonText, value);
-  }
-
-  public string CancelButtonText
-  {
-    get => _cancelButtonText;
-    set => this.RaiseAndSetIfChanged(ref _cancelButtonText, value);
-  }
-
-  public string NewTitle
-  {
-    get => _newTitle;
-    set
+    [DependsOn(nameof(FieldsAreValid))]
+    public bool CanSubmitCommand()
     {
-      this.RaiseAndSetIfChanged(ref _newTitle, value);
-      this.RaisePropertyChanged(nameof(FieldsAreValid));
+        return FieldsAreValid;
     }
-  }
 
-  public bool FieldsAreValid => !string.IsNullOrWhiteSpace(_newTitle) &&
-                                !string.IsNullOrWhiteSpace(_newContent);
-
-
-  public bool InsertOnTop
-  {
-    get => _insertOnTop;
-    set
+    public void SubmitCommand()
     {
-      Console.WriteLine($"Setter: {nameof(InsertOnTop)}");
-      this.RaiseAndSetIfChanged(ref _insertOnTop, value);
+        Submit?.Invoke();
     }
-  }
 
-  public string NewContent
-  {
-    get => _newContent;
-    set
+    public string AcceptButtonText
     {
-      this.RaiseAndSetIfChanged(ref _newContent, value);
-      this.RaisePropertyChanged(nameof(FieldsAreValid));
+        get => _acceptButtonText;
+        set => this.RaiseAndSetIfChanged(ref _acceptButtonText, value);
     }
-  }
 
-  private string _newTitle;
-  private string _newContent;
-  private string _acceptButtonText = "Accept";
-  private string _cancelButtonText = "Cancel";
-  private bool _insertOnTop = true;
+    public string CancelButtonText
+    {
+        get => _cancelButtonText;
+        set => this.RaiseAndSetIfChanged(ref _cancelButtonText, value);
+    }
 
-  public AlterNoteViewModel() : this(String.Empty, String.Empty)
-  {
-  }
+    public string NewTitle
+    {
+        get => _newTitle;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _newTitle, value);
+            this.RaisePropertyChanged(nameof(FieldsAreValid));
+        }
+    }
 
-  public AlterNoteViewModel(string title, string textBody)
-  {
-    _newTitle = title;
-    _newContent = textBody;
-  }
+    public bool FieldsAreValid => !string.IsNullOrWhiteSpace(_newTitle) &&
+                                  !string.IsNullOrWhiteSpace(_newContent);
 
-  public override string ToString()
-  {
-    return $"NewTitle: {NewTitle}, NewContent {NewContent}";
-  }
+
+    public bool InsertOnTop
+    {
+        get => _insertOnTop;
+        set
+        {
+            Console.WriteLine($"Setter: {nameof(InsertOnTop)}");
+            this.RaiseAndSetIfChanged(ref _insertOnTop, value);
+        }
+    }
+
+    public string NewContent
+    {
+        get => _newContent;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _newContent, value);
+            this.RaisePropertyChanged(nameof(FieldsAreValid));
+        }
+    }
+
+    private string _newTitle;
+    private string _newContent;
+    private string _acceptButtonText = "Accept";
+    private string _cancelButtonText = "Cancel";
+    private bool _insertOnTop = true;
+
+    public AlterNoteViewModel() : this(String.Empty, String.Empty)
+    {
+    }
+
+    public AlterNoteViewModel(string title, string textBody)
+    {
+        _newTitle = title;
+        _newContent = textBody;
+    }
+
+    public override string ToString()
+    {
+        return $"NewTitle: {NewTitle}, NewContent {NewContent}";
+    }
 }
