@@ -1,7 +1,4 @@
-using System.Reactive.Linq;
-using NoteCollectionEditor.Extensions;
 using NoteCollectionEditor.Models;
-using NoteCollectionEditor.Services;
 using NoteCollectionEditor.ViewModels;
 
 namespace UnitTestsForApp;

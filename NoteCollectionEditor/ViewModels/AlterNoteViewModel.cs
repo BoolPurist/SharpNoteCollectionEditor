@@ -1,10 +1,6 @@
 using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia.Metadata;
-using NoteCollectionEditor.Models;
 using ReactiveUI;
-
 
 namespace NoteCollectionEditor.ViewModels;
 
