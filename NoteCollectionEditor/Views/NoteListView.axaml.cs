@@ -61,7 +61,7 @@ public partial class NoteListView : UserControl
 
 
         var edited = await AlterNoteWindow.CreateForEdit(toEdit)
-          .ShowDialog<CreateNoteDialogResult>(mainWindow);
+          .ShowDialog<ChangeNoteDialogResult>(mainWindow);
 
         if (edited == null) return;
 
