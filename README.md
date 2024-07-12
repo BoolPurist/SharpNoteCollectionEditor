@@ -23,3 +23,11 @@ See the [list](./NoteCollectionEditor/Assets/icons_origins.md) for more details
 - Searchbar to search through notes
 - Allow notes to be added on the top instead on the bottom of the list.
 
+## Development
+
+This project is build under .NET 6.0.424
+
+To start the application run the following
+```sh
+./run_app.ps1
+```
