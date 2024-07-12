@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,29 +15,32 @@ public class NoteListJsonFileSource : INoteListRepository
 {
   protected readonly IAppConfigs Configs;
   private readonly ILogger _logger;
+  private readonly string _pathToJsonSource;
 
   public NoteListJsonFileSource(IAppConfigs configs, ILogger logger)
   {
     Configs = configs;
     _logger = logger;
+    _pathToJsonSource = configs.PathToNoteSource;
+    _logger.LogInfo($"JSON path: {_pathToJsonSource}");
   }
 
   public virtual async Task<IEnumerable<NoteModel>> LoadAll()
   {
-    string content = await File.ReadAllTextAsync(Configs.PathToNoteSource);
+    string content = await File.ReadAllTextAsync(_pathToJsonSource);
     return JsonSerializer.Deserialize<List<NoteModel>>(content) ?? Enumerable.Empty<NoteModel>();
   }
 
   public virtual async Task SaveAll(IEnumerable<NoteModel> toSave)
   {
     string toWrite = GetSerialized(toSave);
-    await File.WriteAllTextAsync(Configs.PathToNoteSource, toWrite);
-    _logger.LogInfo($"Save notes at {Configs.PathToNoteSource}");
+    await File.WriteAllTextAsync(_pathToJsonSource, toWrite);
+    _logger.LogInfo($"Save notes at {_pathToJsonSource}");
   }
 
   public void EnsureNeededFiles()
   {
-    if (!File.Exists(Configs.PathToNoteSource))
+    if (!File.Exists(_pathToJsonSource))
     {
       SaveAllSync(Enumerable.Empty<NoteModel>());
     }
@@ -45,7 +49,7 @@ public class NoteListJsonFileSource : INoteListRepository
   public void SaveAllSync(IEnumerable<NoteModel> toSave)
   {
     string toWrite = GetSerialized(toSave);
-    File.WriteAllText(Configs.PathToNoteSource, toWrite);
+    File.WriteAllText(_pathToJsonSource, toWrite);
   }
 
   private readonly JsonSerializerOptions _prettyJsonOption = new()
@@ -60,6 +64,9 @@ public class NoteListJsonFileSource : INoteListRepository
     var options = EnvironmentUtils.IsInDevelopment() ? _prettyJsonOption : _normalJsonOptions;
     return JsonSerializer.Serialize(toSave, options);
   }
+
+
+
 
 
 }

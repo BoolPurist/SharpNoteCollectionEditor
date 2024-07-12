@@ -8,88 +8,103 @@ namespace NoteCollectionEditor.ConfigMapping;
 
 public class AppConfigs : IAppConfigs
 {
-    private const string SectionNameForPathToNoteListSource = "NoteListDataName";
+  private const string SectionNameDataFileName = "NoteListDataName";
+  private const string SectionNameRelativeDataPath = "PathToDataDump";
 
-    public AppDevelopmentConfig DevelopmentConfiguration { get; private set; } = new();
-    public string PathToNoteSource { get; private set; } = String.Empty;
+  public AppDevelopmentConfig DevelopmentConfiguration { get; private set; } = new();
+  public string PathToNoteSource { get; private set; } = String.Empty;
 
-    public string AppVersion { get; set; } = String.Empty;
+  public string AppVersion { get; set; } = String.Empty;
 
-    public string AppLink { get; set; } = String.Empty;
+  public string AppLink { get; set; } = String.Empty;
 
 
 
-    public static AppConfigs CreateWithoutConfigFile()
-    {
-        return new AppConfigs();
-    }
+  public static AppConfigs CreateWithoutConfigFile()
+  {
+    return new AppConfigs();
+  }
 
-    public static AppConfigs Create()
-    {
-        var appConfig = new AppConfigs();
+  public static AppConfigs Create()
+  {
+    var appConfig = new AppConfigs();
 
-        var config = new ConfigurationBuilder()
-          .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-          .AddJsonFile("appsettings.json")
+    var config = new ConfigurationBuilder()
+      .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+      .AddJsonFile("appsettings.json")
 #if DEBUG
-          .AddJsonFile("appsettings.develop.json")
+      .AddJsonFile("appsettings.develop.json")
 #endif
-          .Build();
+      .Build();
 
-        if (EnvironmentUtils.IsInDevelopment())
-        {
-            appConfig.DevelopmentConfiguration = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
-        }
-
-        var nameJsonDataFile = GetSectionAsBinding<string>(config, SectionNameForPathToNoteListSource);
-        appConfig.PathToNoteSource = Environment.CurrentDirectory;
-
-        ApplyDevelopmentSettings(appConfig, config);
-
-        appConfig.PathToNoteSource = Path.Join(appConfig.PathToNoteSource, nameJsonDataFile);
-
-        Console.WriteLine($"appConfig.PathToNoteSource: {appConfig.PathToNoteSource}");
-        appConfig.AppVersion = GetSectionAsBinding<string>(config, nameof(AppVersion));
-        appConfig.AppLink = GetSectionAsBinding<string>(config, nameof(AppLink));
-
-        return appConfig;
+    if (EnvironmentUtils.IsInDevelopment())
+    {
+      appConfig.DevelopmentConfiguration = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
     }
 
-    private static void ApplyDevelopmentSettings(AppConfigs appConfig, IConfigurationRoot config)
-    {
+    appConfig.PathToNoteSource = GetSectionAsBinding<string>(config, SectionNameDataFileName);
+
+    ApplyDevelopmentSettings(appConfig, config);
+
+    appConfig.AppVersion = GetSectionAsBinding<string>(config, nameof(AppVersion));
+    appConfig.AppLink = GetSectionAsBinding<string>(config, nameof(AppLink));
+
+    return appConfig;
+  }
+
+  private static void ApplyDevelopmentSettings(AppConfigs appConfig, IConfigurationRoot config)
+  {
 #if DEBUG
-        var appDevConfig = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
-        appConfig.PathToNoteSource = Path.Join(appConfig.PathToNoteSource, appDevConfig.PathToDataDump);
+    var appDevConfig = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
+    appConfig.PathToNoteSource = Path.Join(GetProjectPath(), appDevConfig.PathToDataDump, appConfig.PathToNoteSource);
+    Console.WriteLine($"appConfig.PathToNoteSource: {appConfig.PathToNoteSource}");
 #endif
-    }
+  }
 
-    private static T GetSectionAsBindingByType<T>(IConfigurationRoot root)
+  private static T GetSectionAsBindingByType<T>(IConfigurationRoot root)
+  {
+    var boundSection = root.GetSection(typeof(T).Name).Get<T>();
+    Debug.Assert(boundSection != null);
+    return boundSection;
+  }
+
+  private static T GetSectionAsBinding<T>(IConfigurationRoot root, string nameSection)
+  {
+    var boundSection = root.GetSection(nameSection).Get<T>();
+    Debug.Assert(boundSection != null);
+    return boundSection;
+  }
+
+  public string GetDefaultPathExportImport()
+  {
+    if (EnvironmentUtils.IsInDevelopment())
     {
-        var boundSection = root.GetSection(typeof(T).Name).Get<T>();
-        Debug.Assert(boundSection != null);
-        return boundSection;
+      var projectPath = ProjectSourcePath.GetPathToProject();
+      var relativeExportPath = DevelopmentConfiguration.PathToDataDump;
+      var exportPath = Path.Join(projectPath, relativeExportPath);
+      return exportPath;
     }
 
-    private static T GetSectionAsBinding<T>(IConfigurationRoot root, string nameSection)
-    {
-        var boundSection = root.GetSection(nameSection).Get<T>();
-        Debug.Assert(boundSection != null);
-        return boundSection;
-    }
+    return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+  }
 
-    public string GetDefaultPathExportImport()
-    {
-        if (EnvironmentUtils.IsInDevelopment())
-        {
-            var projectPath = ProjectSourcePath.GetPathToProject();
-            var relativeExportPath = DevelopmentConfiguration.PathToDataDump;
-            var exportPath = Path.Join(projectPath, relativeExportPath);
-            return exportPath;
-        }
+  private static string GetDataFolder() => EnvironmentUtils.IsInDevelopment() ? GetProjectPath()
+    // TODO: Implement for production the locating of the user's local data folder
+    : throw new NotImplementedException("Needs to fetch local data folder for to load from");
 
-        return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    }
+  private static string GetProjectPath()
+  {
 
+    // Taken from stackoverflow.com:
+    // https://stackoverflow.com/questions/816566/how-do-you-get-the-current-project-directory-from-c-sharp-code-when-creating-a-c
+    string workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+    // Getting from /bin/debug/netx.x to project root.
+    // It assumed an application is always placed under 3 folders deep.
+    // With assumption no null referencing will happen.
+    string projectDirectory = System.IO.Directory.GetParent(workingDirectory)!.Parent!.Parent!.Parent!.FullName;
+
+    return projectDirectory;
+  }
 
 
 }
