@@ -4,9 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
-        <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
         <PublishSingleFile>true</PublishSingleFile>
-        <SelfContained>true</SelfContained>
         <TrimMode>copyused</TrimMode>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     </PropertyGroup>

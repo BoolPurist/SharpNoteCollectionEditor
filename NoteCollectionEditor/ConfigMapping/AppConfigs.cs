@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using NoteCollectionEditor.Extensions;
 using Path = System.IO.Path;
@@ -13,10 +14,11 @@ public class AppConfigs : IAppConfigs
 
   public AppDevelopmentConfig DevelopmentConfiguration { get; private set; } = new();
   public string PathToNoteSource { get; private set; } = String.Empty;
+  public string NoteDataFileName { get; private set; } = String.Empty;
 
-  public string AppVersion { get; set; } = String.Empty;
+  public string AppVersion { get; private set; } = String.Empty;
 
-  public string AppLink { get; set; } = String.Empty;
+  public string AppLink { get; private set; } = String.Empty;
 
 
 
@@ -42,7 +44,8 @@ public class AppConfigs : IAppConfigs
       appConfig.DevelopmentConfiguration = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
     }
 
-    appConfig.PathToNoteSource = GetSectionAsBinding<string>(config, SectionNameDataFileName);
+    appConfig.NoteDataFileName = GetSectionAsBinding<string>(config, SectionNameDataFileName);
+
 
     ApplyDevelopmentSettings(appConfig, config);
 
@@ -56,8 +59,9 @@ public class AppConfigs : IAppConfigs
   {
 #if DEBUG
     var appDevConfig = GetSectionAsBindingByType<AppDevelopmentConfig>(config);
-    appConfig.PathToNoteSource = Path.Join(GetProjectPath(), appDevConfig.PathToDataDump, appConfig.PathToNoteSource);
-    Console.WriteLine($"appConfig.PathToNoteSource: {appConfig.PathToNoteSource}");
+    appConfig.PathToNoteSource = Path.Join(GetProjectPath(), appDevConfig.PathToDataDump, appConfig.NoteDataFileName);
+#else
+    appConfig.PathToNoteSource = Path.Join(GetCurrentExe(), appConfig.NoteDataFileName);
 #endif
   }
 
@@ -88,9 +92,7 @@ public class AppConfigs : IAppConfigs
     return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
   }
 
-  private static string GetDataFolder() => EnvironmentUtils.IsInDevelopment() ? GetProjectPath()
-    // TODO: Implement for production the locating of the user's local data folder
-    : throw new NotImplementedException("Needs to fetch local data folder for to load from");
+  private static string GetCurrentExe() => AppContext.BaseDirectory;
 
   private static string GetProjectPath()
   {
